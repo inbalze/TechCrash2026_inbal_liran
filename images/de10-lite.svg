@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" rx="16" fill="#1a2332"/>
+  <rect x="200" y="80" width="400" height="300" rx="8" fill="#0b1121" stroke="#2d3a4a" stroke-width="2"/>
+  <text x="400" y="220" text-anchor="middle" fill="#00c7b7" font-family="Inter, sans-serif" font-size="28" font-weight="800">DE10-Lite</text>
+  <text x="400" y="260" text-anchor="middle" fill="#94a3b8" font-family="Inter, sans-serif" font-size="16">Intel MAX 10 FPGA Board</text>
+  <!-- Switches -->
+  <g transform="translate(230, 310)">
+    <rect x="0" y="0" width="12" height="20" rx="2" fill="#00c7b7" opacity="0.6"/>
+    <rect x="18" y="0" width="12" height="20" rx="2" fill="#00c7b7" opacity="0.4"/>
+    <rect x="36" y="0" width="12" height="20" rx="2" fill="#00c7b7" opacity="0.8"/>
+    <rect x="54" y="0" width="12" height="20" rx="2" fill="#00c7b7" opacity="0.3"/>
+    <rect x="72" y="0" width="12" height="20" rx="2" fill="#00c7b7" opacity="0.7"/>
+    <rect x="90" y="0" width="12" height="20" rx="2" fill="#00c7b7" opacity="0.5"/>
+    <rect x="108" y="0" width="12" height="20" rx="2" fill="#00c7b7" opacity="0.6"/>
+    <rect x="126" y="0" width="12" height="20" rx="2" fill="#00c7b7" opacity="0.9"/>
+    <rect x="144" y="0" width="12" height="20" rx="2" fill="#00c7b7" opacity="0.4"/>
+    <rect x="162" y="0" width="12" height="20" rx="2" fill="#00c7b7" opacity="0.7"/>
+  </g>
+  <!-- LEDs -->
+  <g transform="translate(230, 290)">
+    <circle cx="6" cy="0" r="5" fill="#ef4444" opacity="0.8"/>
+    <circle cx="24" cy="0" r="5" fill="#ef4444" opacity="0.4"/>
+    <circle cx="42" cy="0" r="5" fill="#ef4444" opacity="0.9"/>
+    <circle cx="60" cy="0" r="5" fill="#ef4444" opacity="0.3"/>
+    <circle cx="78" cy="0" r="5" fill="#ef4444" opacity="0.7"/>
+    <circle cx="96" cy="0" r="5" fill="#ef4444" opacity="0.5"/>
+    <circle cx="114" cy="0" r="5" fill="#ef4444" opacity="0.8"/>
+    <circle cx="132" cy="0" r="5" fill="#ef4444" opacity="0.6"/>
+    <circle cx="150" cy="0" r="5" fill="#ef4444" opacity="0.4"/>
+    <circle cx="168" cy="0" r="5" fill="#ef4444" opacity="0.9"/>
+  </g>
+  <!-- Seven-segment displays -->
+  <g transform="translate(420, 280)" fill="none" stroke="#00c7b7" stroke-width="2" opacity="0.6">
+    <rect x="0" y="0" width="24" height="40" rx="3"/>
+    <rect x="30" y="0" width="24" height="40" rx="3"/>
+    <rect x="66" y="0" width="24" height="40" rx="3"/>
+    <rect x="96" y="0" width="24" height="40" rx="3"/>
+    <rect x="132" y="0" width="24" height="40" rx="3"/>
+    <rect x="162" y="0" width="24" height="40" rx="3"/>
+  </g>
+  <!-- VGA port -->
+  <rect x="300" y="400" width="60" height="30" rx="4" fill="#0071c5" opacity="0.4"/>
+  <text x="330" y="420" text-anchor="middle" fill="#94a3b8" font-family="Inter, sans-serif" font-size="10">VGA</text>
+  <!-- USB port -->
+  <rect x="440" y="400" width="50" height="25" rx="4" fill="#0071c5" opacity="0.4"/>
+  <text x="465" y="417" text-anchor="middle" fill="#94a3b8" font-family="Inter, sans-serif" font-size="10">USB</text>
+  <!-- Label -->
+  <text x="400" y="500" text-anchor="middle" fill="#64748b" font-family="Inter, sans-serif" font-size="14">50K Logic Elements • 50 MHz • VGA • ADC • Arduino Header</text>
+  <text x="400" y="530" text-anchor="middle" fill="#475569" font-family="Inter, sans-serif" font-size="12">Photo will be added — this is a placeholder illustration</text>
+</svg>

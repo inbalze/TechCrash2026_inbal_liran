@@ -1,0 +1,1004 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrashTech VLSI-2026 &mdash; Technion</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar">
+    <div class="navbar-brand">Crash<span>Tech</span> VLSI</div>
+    <ul class="nav-tabs" id="navTabs">
+        <li><a href="#home" class="active" data-page="home">Home</a></li>
+        <li><a href="#event" data-page="event">The Event</a></li>
+        <li><a href="#hardware" data-page="hardware">Hardware</a></li>
+        <li><a href="#getstarted" data-page="getstarted">Get Started</a></li>
+        <li><a href="#challenges" data-page="challenges">Practice Challenges</a></li>
+        <li><a href="#aitools" data-page="aitools">AI Tools</a></li>
+        <li><a href="#eventday" data-page="eventday">Event Day</a></li>
+        <li><a href="#leaderboard" data-page="leaderboard">Leaderboard</a></li>
+        <li><a href="https://github.com/avisalmon/TechCrash2026" target="_blank" rel="noopener" class="nav-github">GitHub</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">&#9776;</button>
+</nav>
+
+<!-- ============ HOME ============ -->
+<section class="page-section active" id="home">
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">24-Hour VLSI Hackathon</div>
+            <h1>Crash<span class="highlight">Tech</span> VLSI-2026</h1>
+            <p class="hero-sub">Where FPGA meets firmware. Build it. Prove it. Win it.</p>
+            <p class="hero-tagline">Solve as many hardware challenges as you can in 24 hours. Fastest team wins.</p>
+            <p class="hero-location"><strong>Technion</strong> &mdash; Israel Institute of Technology &nbsp;|&nbsp; June 4 &ndash; 5, 2026</p>
+
+            <!-- Countdown -->
+            <div class="countdown" id="countdown">
+                <div class="countdown-item">
+                    <span class="countdown-value" id="cd-days">--</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="cd-hours">--</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="cd-minutes">--</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="cd-seconds">--</span>
+                    <span class="countdown-label">Seconds</span>
+                </div>
+            </div>
+
+
+            <!-- CTA -->
+            <div class="cta-group">
+                <span class="btn btn-primary btn-disabled">Registration Closed &mdash; All Spots Filled</span>
+                <a href="#getstarted" class="btn btn-secondary" data-page="getstarted">Get Started</a>
+            </div>
+
+            <!-- Hardware Teaser -->
+            <div class="hero-hw-teaser">
+                <a href="#hardware" data-page="hardware" class="hero-hw-card">
+                    <img src="https://www.terasic.com.tw/attachment/archive/1021/image/DE10-Lite_45.jpg" alt="DE10-Lite FPGA Board">
+                    <span>DE10-Lite FPGA</span>
+                </a>
+                <span class="hero-hw-plus">+</span>
+                <a href="#hardware" data-page="hardware" class="hero-hw-card">
+                    <img src="images/esp32-kit.png" alt="ESP32 Controller Kit">
+                    <span>ESP32 Kit</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Philosophy -->
+    <div class="section-block">
+        <h2>What is CrashTech?</h2>
+        <p class="subtitle">A fast-paced engineering hackathon that crashes together FPGA hardware and embedded software.</p>
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon" data-icon="24h"></div>
+                <h3>24 Hours of Building</h3>
+                <p>Intense, focused engineering. No presentations &mdash; only working prototypes count.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="hw"></div>
+                <h3>Real Hardware</h3>
+                <p>DE10-Lite FPGA + ESP32 controller kit. Design digital circuits and firmware on real silicon.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="?"></div>
+                <h3>Self-Discovery</h3>
+                <p>No tutorials, no hand-holding. You learn by doing &mdash; using the internet, AI tools, and your own ingenuity.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="AI"></div>
+                <h3>AI-Assisted Engineering</h3>
+                <p>VS Code + GitHub Copilot are your teammates. Use AI skills to accelerate your development.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Flow -->
+    <div class="section-block">
+        <h2>How It Works</h2>
+        <p class="subtitle">From kit pickup to the final leaderboard &mdash; here's the journey.</p>
+        <div class="flow-steps">
+            <div class="flow-step">
+                <div class="flow-number">1</div>
+                <h4>Get Your Kit</h4>
+                <p>Receive your DE10-Lite FPGA and ESP32 kit 2 weeks before the event.</p>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">2</div>
+                <h4>Train &amp; Practice</h4>
+                <p>Install tools, explore skills, and tackle practice challenges on your own.</p>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">3</div>
+                <h4>Compete</h4>
+                <p>24 hours. Secret challenges revealed on demand. Build fast, score points.</p>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">4</div>
+                <h4>Win</h4>
+                <p>Judges verify. Points accumulate. Top teams take the crown.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="section-block">
+        <h2>Explore</h2>
+        <p class="subtitle">Jump to any section to start preparing.</p>
+        <div class="quick-links">
+            <a class="quick-link" href="#event" data-page="event">
+                <span class="quick-link-icon" data-icon="i"></span>
+                <span class="quick-link-label">The Event</span>
+            </a>
+            <a class="quick-link" href="#hardware" data-page="hardware">
+                <span class="quick-link-icon" data-icon="#"></span>
+                <span class="quick-link-label">Hardware</span>
+            </a>
+            <a class="quick-link" href="#getstarted" data-page="getstarted">
+                <span class="quick-link-icon" data-icon="&gt;"></span>
+                <span class="quick-link-label">Get Started</span>
+            </a>
+            <a class="quick-link" href="#challenges" data-page="challenges">
+                <span class="quick-link-icon" data-icon="*"></span>
+                <span class="quick-link-label">Practice Challenges</span>
+            </a>
+            <a class="quick-link" href="#aitools" data-page="aitools">
+                <span class="quick-link-icon" data-icon="AI"></span>
+                <span class="quick-link-label">AI Tools</span>
+            </a>
+            <a class="quick-link" href="#eventday" data-page="eventday">
+                <span class="quick-link-icon" data-icon="!"></span>
+                <span class="quick-link-label">Event Day</span>
+            </a>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+    </footer>
+</section>
+
+<!-- ============ THE EVENT ============ -->
+<section class="page-section" id="event">
+
+    <!-- Overview -->
+    <div class="section-block">
+        <h2>The Event</h2>
+        <p class="subtitle">CrashTech VLSI-2026 is a 24-hour chip-design hackathon at the Technion. Teams combine FPGA hardware and ESP32 firmware to solve real engineering challenges &mdash; fast.</p>
+    </div>
+
+    <!-- Schedule -->
+    <div class="section-block">
+        <h2>Schedule</h2>
+        <p class="subtitle">Two events leading up to the main hackathon.</p>
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon" data-icon="hw"></div>
+                <h3>FPGA Installation Party</h3>
+                <p><strong>May 13, 12:30 &ndash; 14:30</strong></p>
+                <p>Get your DE10-Lite and ESP32 kit. Install Quartus, PlatformIO, and all development tools &mdash; together, on-site.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="AI"></div>
+                <h3>Hands-on Co-Coding with AI</h3>
+                <p><strong>May 26, 18:00 &ndash; 20:00</strong></p>
+                <p>Live session: learn to use VS Code + GitHub Copilot for HDL and embedded firmware. Practice AI-assisted engineering workflows.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="24h"></div>
+                <h3>Chip Design Hackathon</h3>
+                <p><strong>June 4 (09:00) &ndash; June 5 (13:00)</strong></p>
+                <p>The main event. 24 hours of secret challenges, real hardware, and intense building. Points accumulate &mdash; top teams win.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- How it Works -->
+    <div class="section-block">
+        <h2>How the Hackathon Works</h2>
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon" data-icon="?"></div>
+                <h3>Secret Challenges</h3>
+                <p>Challenges are not revealed in advance. On event day, teams request challenges one at a time from the pool.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="#"></div>
+                <h3>Scoring</h3>
+                <p><strong>Completion:</strong> pass/fail + time. <strong>Performance:</strong> measured metric + time. Many small challenges &mdash; accumulate points.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="?"></div>
+                <h3>Self-Discovery</h3>
+                <p>No tutorials, no live support, no hand-holding. Use the internet, AI tools, and your own ingenuity to solve challenges.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="i"></div>
+                <h3>Judging</h3>
+                <p>Judges validate completion and measure results. Contact judges only for validation &mdash; not for help.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+    </footer>
+</section>
+
+<!-- ============ HARDWARE ============ -->
+<section class="page-section" id="hardware">
+
+    <!-- Header -->
+    <div class="section-block">
+        <h2>Your Hardware Kit</h2>
+        <p class="subtitle">Every team receives a DE10-Lite FPGA board and an ESP32 controller kit &mdash; two weeks before the event. Real silicon, real engineering.</p>
+    </div>
+
+    <!-- DE10-Lite -->
+    <div class="section-block hw-section">
+        <div class="hw-layout">
+            <div class="hw-image">
+                <img src="https://www.terasic.com.tw/attachment/archive/1021/image/DE10-Lite_45.jpg" alt="DE10-Lite FPGA Board">
+                <p class="hw-img-credit">Image: <a href="https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&No=1021" target="_blank" rel="noopener">Terasic DE10-Lite product page</a></p>
+            </div>
+            <div class="hw-info">
+                <div class="hw-badge">FPGA Board</div>
+                <h3>Intel DE10-Lite</h3>
+                <p class="hw-desc">A powerful yet accessible FPGA development board built around the Intel MAX 10 device. Perfect for digital design &mdash; from simple LED control to complete CPUs.</p>
+
+                <table class="spec-table">
+                    <tr><td class="spec-label">FPGA</td><td>Intel MAX 10 (10M50DAF484C7G) &mdash; 50K logic elements</td></tr>
+                    <tr><td class="spec-label">Clock</td><td>50 MHz onboard oscillator</td></tr>
+                    <tr><td class="spec-label">Switches</td><td>10× slide switches (active-high)</td></tr>
+                    <tr><td class="spec-label">Buttons</td><td>2× push-buttons (active-low, Schmitt trigger)</td></tr>
+                    <tr><td class="spec-label">LEDs</td><td>10× red LEDs</td></tr>
+                    <tr><td class="spec-label">7-Segment</td><td>6× displays (active-low, includes decimal point)</td></tr>
+                    <tr><td class="spec-label">VGA</td><td>4-bit per channel (R, G, B) &mdash; 640×480 @ 60Hz</td></tr>
+                    <tr><td class="spec-label">Arduino Header</td><td>16 I/O pins &mdash; connects to ESP32 and addon peripherals</td></tr>
+                    <tr><td class="spec-label">GPIO</td><td>36 general-purpose I/O pins</td></tr>
+                    <tr><td class="spec-label">ADC</td><td>6 analog channels (12-bit, onboard MAX 10 ADC)</td></tr>
+                    <tr><td class="spec-label">SDRAM</td><td>64 MB (16-bit bus)</td></tr>
+                    <tr><td class="spec-label">Accelerometer</td><td>Onboard ADXL345 via SPI</td></tr>
+                    <tr><td class="spec-label">Programming</td><td>USB-Blaster via USB cable (JTAG)</td></tr>
+                </table>
+
+                <div class="hw-tools">
+                    <h4>Development Tools</h4>
+                    <ul>
+                        <li><strong>Intel Quartus Prime Lite 17.1</strong> &mdash; FPGA design, compilation, and programming</li>
+                        <li><strong>ModelSim-Altera</strong> &mdash; simulation and waveform analysis</li>
+                        <li><strong>SystemVerilog / Verilog</strong> &mdash; hardware description language</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="section-block"><hr class="hw-divider"></div>
+
+    <!-- ESP32 -->
+    <div class="section-block hw-section">
+        <div class="hw-layout hw-layout-reverse">
+            <div class="hw-image">
+                <a href="images/esp32-kit.png" target="_blank"><img src="images/esp32-kit.png" alt="ESP32 Controller Kit"></a>
+            </div>
+            <div class="hw-info">
+                <div class="hw-badge">Controller Kit</div>
+                <h3>ESP32 Controller Kit</h3>
+                <p class="hw-desc">A breadboard-based kit built around the ESP32-WROOM-32 DevKit, featuring an OLED display, a push button, and a passive buzzer. Simple, hackable, and perfect for rapid prototyping.</p>
+
+                <table class="spec-table">
+                    <tr><td class="spec-label">MCU</td><td>ESP32-WROOM-32 (dual-core Xtensa LX6, 240 MHz)</td></tr>
+                    <tr><td class="spec-label">Board</td><td>ESP32 DevKit V1, 30-pin</td></tr>
+                    <tr><td class="spec-label">Flash</td><td>4 MB</td></tr>
+                    <tr><td class="spec-label">WiFi</td><td>802.11 b/g/n (2.4 GHz)</td></tr>
+                    <tr><td class="spec-label">Bluetooth</td><td>BLE 4.2 + Classic</td></tr>
+                    <tr><td class="spec-label">Display</td><td>SSD1306 OLED 128×64 (I2C, address 0x3C)</td></tr>
+                    <tr><td class="spec-label">Button</td><td>Push button on GPIO 4 (active LOW, internal pull-up)</td></tr>
+                    <tr><td class="spec-label">Buzzer</td><td>Passive buzzer on GPIO 23 (PWM tone output)</td></tr>
+                    <tr><td class="spec-label">I2C</td><td>SDA: GPIO 21, SCL: GPIO 22</td></tr>
+                    <tr><td class="spec-label">Logic</td><td>3.3V logic, powered via USB 5V through onboard regulator</td></tr>
+                    <tr><td class="spec-label">USB</td><td>Micro-USB for programming and power</td></tr>
+                </table>
+
+                <div class="hw-tools">
+                    <h4>Development Tools</h4>
+                    <ul>
+                        <li><strong>VS Code + PlatformIO</strong> &mdash; build, flash, and debug</li>
+                        <li><strong>Arduino framework</strong> &mdash; familiar C/C++ programming model</li>
+                        <li><strong>GitHub Copilot</strong> &mdash; AI-assisted firmware development</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How They Connect -->
+    <div class="section-block">
+        <h2>How They Connect</h2>
+        <p class="subtitle">The two boards communicate through wired interfaces &mdash; this is the core engineering challenge.</p>
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon" data-icon="TX"></div>
+                <h3>UART (Serial)</h3>
+                <p>TX/RX serial communication. Simple, proven, bidirectional. Connect FPGA GPIO pins to ESP32 UART pins.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="SPI"></div>
+                <h3>SPI</h3>
+                <p>High-speed synchronous bus. FPGA as master or slave, ESP32 on the other end. Great for fast data transfer.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="I2C"></div>
+                <h3>I2C</h3>
+                <p>Two-wire bus with addressing. Good for multi-device setups and sensor-like data exchange.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="IO"></div>
+                <h3>GPIO Direct</h3>
+                <p>Simple parallel wires &mdash; bit-bang your own protocol. Maximum flexibility, minimum abstraction.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- What You Receive -->
+    <div class="section-block">
+        <h2>What You Receive</h2>
+        <p class="subtitle">Each team gets the following kit, 2 weeks before the event.</p>
+        <div class="kit-checklist">
+            <div class="kit-item"> DE10-Lite FPGA board</div>
+            <div class="kit-item"> ESP32 controller kit with LCD</div>
+            <div class="kit-item"> USB cables for both boards</div>
+            <div class="kit-item"> Jumper wires for FPGA ↔ ESP32 connection</div>
+            <div class="kit-item"> Breadboard</div>
+            <div class="kit-item"> VGA monitor and cable &mdash; bring your own or use lab equipment</div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+    </footer>
+</section>
+
+<!-- ============ GET STARTED ============ -->
+<section class="page-section" id="getstarted">
+
+    <!-- Header -->
+    <div class="section-block">
+        <h2>Get Started</h2>
+        <p class="subtitle">Everything you need to go from unboxing to building. Follow the steps, explore on your own, and ask your AI copilot for help.</p>
+    </div>
+
+    <!-- Checklist -->
+    <div class="section-block">
+        <h3 class="section-heading">Your Setup Checklist</h3>
+        <p class="subtitle">Complete these steps in order. Each one builds on the previous.</p>
+
+        <div class="steps-list">
+
+            <!-- Step 1 -->
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Pick Up Your Hardware Kit</h4>
+                    <p>Collect your DE10-Lite FPGA board and ESP32 controller kit (with OLED, button, and buzzer). Check that you have USB cables, jumper wires, and a breadboard.</p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Install Quartus Prime Lite 17.1 (FPGA)</h4>
+                    <p>Download and install Intel Quartus Prime Lite 17.1 with ModelSim and MAX 10 device support. Install the USB-Blaster driver so you can program the DE10-Lite.</p>
+                    <div class="step-details">
+                        <ul>
+                            <li>Download: <a href="https://www.intel.com/content/www/us/en/software-kit/669444/intel-quartus-prime-lite-edition-design-software-version-17-1-for-windows.html" target="_blank" rel="noopener">Quartus Prime Lite 17.1 for Windows</a></li>
+                            <li>Select: Quartus + ModelSim + MAX 10 device support</li>
+                            <li>Install to: <code>C:\intelFPGA_lite\17.1\</code></li>
+                            <li>USB-Blaster driver: <code>C:\intelFPGA_lite\17.1\quartus\drivers\usb-blaster</code></li>
+                        </ul>
+                        <p class="step-tip">See the full guide in the <strong>de10lite-board-and-build</strong> skill</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Install VS Code + PlatformIO (ESP32)</h4>
+                    <p>Install Visual Studio Code, then add the PlatformIO extension. PlatformIO automatically downloads the ESP32 toolchain, compiler, and flasher.</p>
+                    <div class="step-details">
+                        <ul>
+                            <li>Download VS Code: <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener">code.visualstudio.com</a></li>
+                            <li>Install extension: search "PlatformIO IDE" in Extensions</li>
+                            <li>Install USB driver: CP2102 or CH340 (check Device Manager)</li>
+                        </ul>
+                        <p class="step-tip">See the full guide in the <strong>esp32-firmware</strong> skill</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Set Up GitHub Copilot</h4>
+                    <p>GitHub Copilot is your AI engineering teammate. Install the extension in VS Code and sign in with your GitHub account. Use it for SystemVerilog, C/C++, and everything in between.</p>
+                    <div class="step-details">
+                        <ul>
+                            <li>Install: search "GitHub Copilot" in VS Code Extensions</li>
+                            <li>Sign in with your GitHub account</li>
+                            <li>Free for students: <a href="https://education.github.com/pack" target="_blank" rel="noopener">GitHub Student Developer Pack</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="step-card">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h4>Test Your FPGA &mdash; LED Smoke Test</h4>
+                    <p>Create a minimal Quartus project that maps the 10 slide switches to the 10 LEDs. Compile, program the board, and flip switches. LEDs light up = your FPGA toolchain works.</p>
+                    <div class="step-details">
+                        <p class="step-tip">See the step-by-step project files in the <strong>de10lite-board-and-build</strong> skill → "Quick Smoke Test"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6 -->
+            <div class="step-card">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <h4>Test Your ESP32 &mdash; OLED + Button + Buzzer</h4>
+                    <p>Create a PlatformIO project that displays "CrashTech" on the OLED, detects button presses, and beeps the buzzer. Build, flash, and verify all three peripherals work.</p>
+                    <div class="step-details">
+                        <p class="step-tip">See the complete smoke test code in the <strong>esp32-firmware</strong> skill → "Smoke Test"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 7 -->
+            <div class="step-card">
+                <div class="step-number">7</div>
+                <div class="step-content">
+                    <h4>Connect FPGA ↔ ESP32</h4>
+                    <p>Wire the two boards together using jumper cables (UART, SPI, I2C, or direct GPIO). Send data from one to the other. This is the core skill for every challenge.</p>
+                    <div class="step-details">
+                        <p class="step-tip">Tip: Start simple: UART TX from FPGA GPIO → ESP32 RX pin. One wire + ground.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 8 -->
+            <div class="step-card">
+                <div class="step-number">8</div>
+                <div class="step-content">
+                    <h4>Try a Practice Challenge</h4>
+                    <p>Head to the <a href="#challenges" data-page="challenges">Practice Challenges</a> tab and take on the Internet Clock, Retro Arcade, or Volt Meter. No solutions provided &mdash; figure it out.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Skills Downloads -->
+    <div class="section-block">
+        <h3 class="section-heading">Download Skills</h3>
+        <p class="subtitle">Copilot Skills are knowledge packs that supercharge GitHub Copilot for specific tasks. Download and use them in VS Code.</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon" data-icon="FPGA"></div>
+                <h3>DE10-Lite Board &amp; Build</h3>
+                <p>Board overview, pin mapping, Quartus build flow, programming, simulation, design patterns, IP blocks.</p>
+                <a href="skills/de10lite-board-and-build/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="VGA"></div>
+                <h3>DE10-Lite VGA Graphics</h3>
+                <p>VGA 640×480 display, sprite engine, text screen, priority compositing, frame sync.</p>
+                <a href="skills/de10lite-vga-graphics/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="ADC"></div>
+                <h3>DE10-Lite Addon Peripherals</h3>
+                <p>ADC joystick, buttons, wheel potentiometer, LCD screen via Arduino header.</p>
+                <a href="skills/de10lite-addon-peripherals/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="ESP"></div>
+                <h3>ESP32 Firmware</h3>
+                <p>PlatformIO setup, OLED display, button input, buzzer, WiFi, I2C, build &amp; flash workflow.</p>
+                <a href="skills/esp32-firmware/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="PCB"></div>
+                <h3>KiCad Board Design</h3>
+                <p>PCB design from schematic to Gerber production files. Bonus skill for custom hardware.</p>
+                <a href="skills/kicad-board-design/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- External Resources -->
+    <div class="section-block">
+        <h3 class="section-heading">External Resources</h3>
+        <p class="subtitle">Datasheets, vendor docs, and references. Self-discovery starts here.</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon" data-icon="DOC"></div>
+                <h3>DE10-Lite User Manual</h3>
+                <p>Official Terasic documentation &mdash; pinout, schematics, and board reference.</p>
+                <a href="https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&No=1021" target="_blank" rel="noopener" class="card-link">Terasic Product Page →</a>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="DOC"></div>
+                <h3>ESP32-WROOM-32 Datasheet</h3>
+                <p>Espressif official datasheet &mdash; pinout, electrical specs, peripherals.</p>
+                <a href="https://www.espressif.com/en/products/modules/esp32" target="_blank" rel="noopener" class="card-link">Espressif ESP32 →</a>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="DOC"></div>
+                <h3>SSD1306 OLED Datasheet</h3>
+                <p>Display controller reference &mdash; I2C commands, initialization, pixel addressing.</p>
+                <a href="https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf" target="_blank" rel="noopener" class="card-link">Datasheet PDF →</a>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="DOC"></div>
+                <h3>PlatformIO Docs</h3>
+                <p>Official PlatformIO documentation &mdash; project config, libraries, boards.</p>
+                <a href="https://docs.platformio.org/en/latest/" target="_blank" rel="noopener" class="card-link">PlatformIO Docs →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Self-Discovery Reminder -->
+    <div class="section-block" style="text-align: center; padding-bottom: 4rem;">
+        <div style="max-width: 600px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">&#x2731;</div>
+            <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Self-Discovery Mode</h3>
+            <p style="color: var(--text-muted);">There are no tutorials, no instructors, and no support desk. You have the hardware, the tools, the skills, the internet, and AI. That's all you need. Figure it out &mdash; that's the game.</p>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+    </footer>
+</section>
+
+<!-- ============ PRACTICE CHALLENGES ============ -->
+<section class="page-section" id="challenges">
+
+    <!-- Header -->
+    <div class="section-block">
+        <h2>Practice Challenges</h2>
+        <p class="subtitle">Three open challenges to sharpen your skills before the event. No solutions provided &mdash; self-discovery applies here too. Pick one, wire up your boards, and build it.</p>
+    </div>
+
+    <!-- How It Works -->
+    <div class="section-block">
+        <h3 class="section-heading">How Scoring Works</h3>
+        <p class="subtitle">Every challenge uses <strong>Completion + Time</strong> scoring. You earn points for meeting each requirement, plus a speed bonus for finishing faster.</p>
+        <div class="scoring-breakdown">
+            <div class="scoring-item">
+                <div class="scoring-icon" data-icon="ok"></div>
+                <div>
+                    <strong>Completion Points</strong>
+                    <p>Each requirement met = points. Meet all requirements for full marks.</p>
+                </div>
+            </div>
+            <div class="scoring-item">
+                <div class="scoring-icon" data-icon=">>"></div>
+                <div>
+                    <strong>Speed Bonus</strong>
+                    <p>Faster completion = higher bonus. First team done gets maximum time bonus.</p>
+                </div>
+            </div>
+            <div class="scoring-item">
+                <div class="scoring-icon" data-icon="++"></div>
+                <div>
+                    <strong>Creativity Bonus</strong>
+                    <p>Some challenges award extra points for creative solutions and polish.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenge 1: Internet Clock -->
+    <div class="section-block">
+        <div class="challenge-card">
+            <div class="challenge-header">
+                <div class="challenge-badge badge-medium">Medium</div>
+                <h3 class="challenge-title">Internet Clock</h3>
+                <p class="challenge-subtitle">ESP32 + FPGA + WiFi &mdash; real-time clock on seven-segment displays</p>
+            </div>
+            <div class="challenge-body">
+                <p>Build a real-time clock powered by the internet. The ESP32 connects to a public time API over WiFi, retrieves the current time, and continuously transmits it to the DE10-Lite FPGA. The FPGA displays the live hours, minutes, and seconds on its six seven-segment displays.</p>
+
+                <div class="challenge-requirements">
+                    <h4>Requirements</h4>
+                    <ul>
+                        <li>ESP32 fetches the current time from a web API (e.g., WorldTimeAPI, NTP server)</li>
+                        <li>ESP32 transmits time data to the FPGA over a wired interface (UART, SPI, or I2C via GPIO/Arduino header)</li>
+                        <li>FPGA displays the time on HEX5-HEX0 in <code>HH.MM.SS</code> format</li>
+                        <li>Clock updates in real time (at least once per second)</li>
+                        <li>System works autonomously after power-on (no PC required after programming)</li>
+                    </ul>
+                </div>
+
+                <div class="challenge-skills">
+                    <h4>What You'll Learn</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">FPGA ↔ ESP32 Communication</span>
+                        <span class="skill-tag">WiFi &amp; HTTP/NTP</span>
+                        <span class="skill-tag">Serial Data on FPGA</span>
+                        <span class="skill-tag">Seven-Segment Driving</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenge 2: Retro Arcade -->
+    <div class="section-block">
+        <div class="challenge-card">
+            <div class="challenge-header">
+                <div class="challenge-badge badge-hard">Hard</div>
+                <h3 class="challenge-title">Retro Arcade</h3>
+                <p class="challenge-subtitle">FPGA Controls → ESP32 Game Engine &mdash; play on the OLED screen</p>
+            </div>
+            <div class="challenge-body">
+                <p>Create a playable retro-style game that runs on the ESP32 kit's OLED screen, where the game controls (movement, actions) come from the DE10-Lite FPGA's buttons and switches. The FPGA reads the physical inputs and sends control commands to the ESP32, which renders the game.</p>
+
+                <div class="challenge-requirements">
+                    <h4>Requirements</h4>
+                    <ul>
+                        <li>Game runs on the ESP32 kit's OLED screen (any retro game: Pong, Snake, Breakout, Space Invaders, etc.)</li>
+                        <li>Player controls are physically on the FPGA: buttons (KEY[0], KEY[1]), switches, or addon joystick</li>
+                        <li>FPGA reads inputs and transmits control commands to ESP32 over a wired interface</li>
+                        <li>Game must be playable &mdash; responsive controls, visible graphics, win/lose condition</li>
+                        <li>Bonus points for creativity, polish, and fun factor</li>
+                    </ul>
+                </div>
+
+                <div class="challenge-skills">
+                    <h4>What You'll Learn</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">FPGA → ESP32 Communication</span>
+                        <span class="skill-tag">Button &amp; Switch Input</span>
+                        <span class="skill-tag">Game Loop &amp; Graphics</span>
+                        <span class="skill-tag">Real-Time Input Handling</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenge 3: Volt Meter -->
+    <div class="section-block">
+        <div class="challenge-card">
+            <div class="challenge-header">
+                <div class="challenge-badge badge-medium">Medium</div>
+                <h3 class="challenge-title">Volt Meter</h3>
+                <p class="challenge-subtitle">FPGA ADC → ESP32 Display &mdash; measure and show real voltage</p>
+            </div>
+            <div class="challenge-body">
+                <p>Turn your hardware kit into a digital volt meter. The DE10-Lite FPGA uses its onboard ADC to probe an external voltage source (e.g., a battery, a potentiometer divider, or a power supply output). It measures the voltage and sends the reading to the ESP32, which displays the voltage value on its OLED screen.</p>
+
+                <div class="challenge-requirements">
+                    <h4>Requirements</h4>
+                    <ul>
+                        <li>FPGA reads voltage through its onboard ADC (MAX 10 ADC, channels available via GPIO/Arduino header)</li>
+                        <li>Measured voltage is transmitted from FPGA to ESP32 over a wired interface</li>
+                        <li>ESP32 displays the voltage on its OLED screen (e.g., "3.27 V") with at least 2 decimal places</li>
+                        <li>Display updates in real time (at least 2 updates per second)</li>
+                        <li>Measurement range: 0-3.3 V (the ADC reference voltage)</li>
+                    </ul>
+                </div>
+
+                <div class="challenge-safety">
+                    <h4>Safety</h4>
+                    <p>Do <strong>NOT</strong> connect voltages above 3.3 V to the ADC input. Doing so will permanently damage the FPGA.</p>
+                </div>
+
+                <div class="challenge-skills">
+                    <h4>What You'll Learn</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">MAX 10 Onboard ADC</span>
+                        <span class="skill-tag">Analog Measurement</span>
+                        <span class="skill-tag">FPGA → ESP32 Data TX</span>
+                        <span class="skill-tag">Formatted Numeric Display</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Self-Discovery Reminder -->
+    <div class="section-block" style="text-align: center; padding-bottom: 4rem;">
+        <div style="max-width: 600px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">&#x2731;</div>
+            <h3 style="color: var(--accent); margin-bottom: 0.5rem;">No Solutions Provided</h3>
+            <p style="color: var(--text-muted);">These challenges are open-ended by design. You have the requirements, the hardware, the skills, and AI. Explore, experiment, break things, and figure it out. That's how engineers learn.</p>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+    </footer>
+</section>
+
+<!-- ============ AI TOOLS ============ -->
+<section class="page-section" id="aitools">
+
+    <!-- Header -->
+    <div class="section-block">
+        <h2>AI Tools</h2>
+        <p class="subtitle">In CrashTech, AI isn't a shortcut &mdash; it's a core tool. You're expected to use it. The best teams will be the ones who learn to work <em>with</em> AI the fastest. Here's your toolkit.</p>
+
+        <div class="info-box warning">
+            <strong>&#x26a0;&#xfe0f; Copilot License Note:</strong> GitHub has recently reduced free Copilot access for student accounts (as of March 2026). We are working with Microsoft to secure full Copilot access for all hackathon participants during the event. Details will be updated here.
+        </div>
+    </div>
+
+    <!-- Why AI -->
+    <div class="section-block">
+        <h3 class="section-heading">Why AI in a Hardware Hackathon?</h3>
+        <div class="ai-why-grid">
+            <div class="ai-why-card">
+                <div class="ai-why-icon" data-icon=">>"></div>
+                <h4>Speed</h4>
+                <p>Generate boilerplate SystemVerilog modules, pin assignments, and C firmware in seconds instead of hours. More time building, less time typing.</p>
+            </div>
+            <div class="ai-why-card">
+                <div class="ai-why-icon" data-icon="?"></div>
+                <h4>Exploration</h4>
+                <p>Don't know how UART works? Ask Copilot to explain it and generate an example. AI lets you explore unfamiliar territory fast.</p>
+            </div>
+            <div class="ai-why-card">
+                <div class="ai-why-icon" data-icon="x"></div>
+                <h4>Debugging</h4>
+                <p>Paste a compile error or a timing waveform description &mdash; Copilot can help you reason through it and suggest fixes.</p>
+            </div>
+            <div class="ai-why-card">
+                <div class="ai-why-icon" data-icon="++"></div>
+                <h4>Learning</h4>
+                <p>No tutorials, no instructors. AI is your on-demand teacher. Ask it anything &mdash; from Quartus project setup to SPI protocol details.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- VS Code -->
+    <div class="section-block">
+        <h3 class="section-heading">Visual Studio Code</h3>
+        <p class="subtitle">Your main development environment for both FPGA and ESP32 work.</p>
+
+        <div class="ai-feature-list">
+            <div class="ai-feature">
+                <div class="ai-feature-icon" data-icon=">"></div>
+                <div>
+                    <strong>Multi-Language Editor</strong>
+                    <p>SystemVerilog for FPGA, C/C++ for ESP32, Python for scripts &mdash; all in one editor with syntax highlighting and IntelliSense.</p>
+                </div>
+            </div>
+            <div class="ai-feature">
+                <div class="ai-feature-icon" data-icon=">"></div>
+                <div>
+                    <strong>PlatformIO Extension</strong>
+                    <p>Build, flash, and monitor your ESP32 directly from VS Code. No command line needed.</p>
+                </div>
+            </div>
+            <div class="ai-feature">
+                <div class="ai-feature-icon" data-icon=">"></div>
+                <div>
+                    <strong>Integrated Terminal</strong>
+                    <p>Run Quartus commands, serial monitors, and git &mdash; all without leaving the editor.</p>
+                </div>
+            </div>
+            <div class="ai-feature">
+                <div class="ai-feature-icon" data-icon=">"></div>
+                <div>
+                    <strong>Git Built-In</strong>
+                    <p>Version control your project from day one. Commit often, branch freely, never lose work.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="ai-install-box">
+            <strong>Install:</strong> <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener">code.visualstudio.com</a> &mdash; free, all platforms.
+        </div>
+    </div>
+
+    <!-- GitHub Copilot -->
+    <div class="section-block">
+        <h3 class="section-heading">GitHub Copilot</h3>
+        <p class="subtitle">Your AI pair programmer, built into VS Code.</p>
+
+        <div class="ai-copilot-hero">
+            <div class="ai-copilot-modes">
+                <div class="ai-mode-card">
+                    <h4>Copilot Chat</h4>
+                    <p>Open the chat panel (<code>Ctrl+Shift+I</code>) and ask anything: "How do I create a UART receiver in SystemVerilog?", "Explain this error", "Generate a PlatformIO project for ESP32 with OLED".</p>
+                </div>
+                <div class="ai-mode-card">
+                    <h4>Inline Completions</h4>
+                    <p>Start typing code and Copilot suggests the rest. Write a comment describing what you want, press Tab, and watch it appear. Works with SystemVerilog, C, C++, and more.</p>
+                </div>
+                <div class="ai-mode-card">
+                    <h4>Copilot Edits</h4>
+                    <p>Select code, press <code>Ctrl+I</code>, and tell Copilot what to change: "Add a reset signal", "Convert this to a state machine", "Fix the timing". It edits your code in-place.</p>
+                </div>
+                <div class="ai-mode-card">
+                    <h4>Agent Mode</h4>
+                    <p>Give Copilot a high-level goal and let it work autonomously &mdash; it can read files, run terminal commands, search your codebase, and iterate until the task is done.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="ai-pro-tips">
+            <h4>Pro Tips for Effective Use</h4>
+            <ul>
+                <li><strong>Be specific:</strong> "Generate a SystemVerilog module that receives UART at 115200 baud on GPIO pin 12 and outputs 8-bit data" → better results than "make a UART".</li>
+                <li><strong>Provide context:</strong> Open relevant files in your editor. Copilot reads your open tabs to understand your project.</li>
+                <li><strong>Iterate:</strong> First answer not perfect? Say "make it synchronous" or "add error handling". Copilot refines.</li>
+                <li><strong>Attach files:</strong> In Chat, use <code>@workspace</code> to let Copilot search your entire project, or drag files into the chat.</li>
+                <li><strong>Ask it to explain:</strong> Don't just generate &mdash; ask "explain this code line by line" to actually learn.</li>
+            </ul>
+        </div>
+
+        <div class="ai-install-box">
+            <strong>Install:</strong> Search "GitHub Copilot" in VS Code Extensions → Install → Sign in with GitHub.
+        </div>
+    </div>
+
+    <!-- Copilot Skills -->
+    <div class="section-block">
+        <h3 class="section-heading">Copilot Skills</h3>
+        <p class="subtitle">Skills are downloadable knowledge packs that supercharge Copilot for specific hardware tasks. They teach Copilot about your exact boards, pinouts, and workflows.</p>
+
+        <div class="ai-skills-explain">
+            <div class="ai-skills-what">
+                <h4>What Are Skills?</h4>
+                <p>A Copilot Skill is a Markdown file (<code>SKILL.md</code>) containing structured domain knowledge -- pin mappings, code patterns, build commands, and design recipes. When placed in your workspace, Copilot reads it and becomes an expert on that topic.</p>
+            </div>
+            <div class="ai-skills-how">
+                <h4>How to Use Them</h4>
+                <ol>
+                    <li>Download the <code>SKILL.md</code> file from the links below</li>
+                    <li>Place it in your VS Code workspace (e.g., in a <code>skills/</code> folder or <code>.github/copilot/</code>)</li>
+                    <li>Open Copilot Chat and ask questions &mdash; Copilot automatically uses the skill as context</li>
+                    <li>Example: "Using the de10lite-board-and-build skill, create a new Quartus project with LED output"</li>
+                </ol>
+            </div>
+        </div>
+
+        <h4 class="ai-skills-available-title">Available Skills for CrashTech</h4>
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon" data-icon="FPGA"></div>
+                <h3>DE10-Lite Board &amp; Build</h3>
+                <p>Board overview, pin mapping, Quartus build flow, programming, simulation, design patterns, IP blocks.</p>
+                <a href="skills/de10lite-board-and-build/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="VGA"></div>
+                <h3>DE10-Lite VGA Graphics</h3>
+                <p>VGA 640×480 display, sprite engine, text screen, priority compositing, frame sync.</p>
+                <a href="skills/de10lite-vga-graphics/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="ADC"></div>
+                <h3>DE10-Lite Addon Peripherals</h3>
+                <p>ADC joystick, buttons, wheel potentiometer, LCD screen via Arduino header.</p>
+                <a href="skills/de10lite-addon-peripherals/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="ESP"></div>
+                <h3>ESP32 Firmware</h3>
+                <p>PlatformIO setup, OLED display, button input, buzzer, WiFi, I2C, build &amp; flash workflow.</p>
+                <a href="skills/esp32-firmware/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
+            </div>
+            <div class="card">
+                <div class="card-icon" data-icon="PCB"></div>
+                <h3>KiCad Board Design</h3>
+                <p>PCB design from schematic to Gerber production files. Bonus skill for custom hardware.</p>
+                <a href="skills/kicad-board-design/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Free Access for Students -->
+    <div class="section-block">
+        <h3 class="section-heading">Free Access for Students</h3>
+        <p class="subtitle">GitHub Copilot is free for verified students. Here's how to get it.</p>
+
+        <div class="steps-list">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>GitHub Student Developer Pack</h4>
+                    <p>Apply at <a href="https://education.github.com/pack" target="_blank" rel="noopener">education.github.com/pack</a> using your university email. You'll get GitHub Copilot, GitHub Pro, and 50+ other developer tools &mdash; all free.</p>
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Technion Students &mdash; Check for Credits</h4>
+                    <p>The Technion may offer GitHub or cloud credits through academic programs. Check with your faculty, the CS department, or the Technion IT services for any available student benefits or Azure/GitHub credits.</p>
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Sign In to VS Code</h4>
+                    <p>Once approved, open VS Code → click the Accounts icon (bottom-left) → Sign in with GitHub. Copilot activates automatically.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI is Expected -->
+    <div class="section-block" style="text-align: center; padding-bottom: 4rem;">
+        <div style="max-width: 640px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">&#x2731;</div>
+            <h3 style="color: var(--accent); margin-bottom: 0.5rem;">AI Is Expected, Not Optional</h3>
+            <p style="color: var(--text-muted);">Using AI tools is not just allowed in CrashTech &mdash; it's encouraged and expected. The challenges are designed to be solved faster with AI assistance. The teams that learn to collaborate with Copilot effectively will have a serious edge. Embrace it.</p>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+    </footer>
+</section>
+
+<!-- ============ EVENT DAY ============ -->
+<section class="page-section" id="eventday">
+    <div class="placeholder">
+        <div class="placeholder-icon" data-icon="!"></div>
+        <h2>Event Day</h2>
+        <p>Competition hub &mdash; challenges, scoring, and real-time updates. Active only during the 24-hour event.</p>
+    </div>
+</section>
+
+<!-- ============ LEADERBOARD ============ -->
+<section class="page-section" id="leaderboard">
+    <div class="placeholder">
+        <div class="placeholder-icon" data-icon="#"></div>
+        <h2>Leaderboard</h2>
+        <p>Real-time team standings and points breakdown. Live during the event.</p>
+    </div>
+</section>
+
+<!-- ============ REGISTER (closed) ============ -->
+<section class="page-section" id="register">
+    <div class="placeholder">
+        <div class="placeholder-icon" data-icon="+"></div>
+        <h2>Registration Closed</h2>
+        <p>All spots are filled. Thanks for the overwhelming interest &mdash; see you at CrashTech VLSI-2026.</p>
+    </div>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>

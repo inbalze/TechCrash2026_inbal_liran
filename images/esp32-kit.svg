@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" rx="16" fill="#1a2332"/>
+  <rect x="250" y="80" width="300" height="320" rx="12" fill="#0b1121" stroke="#2d3a4a" stroke-width="2"/>
+  <text x="400" y="200" text-anchor="middle" fill="#00c7b7" font-family="Inter, sans-serif" font-size="28" font-weight="800">ESP32</text>
+  <text x="400" y="235" text-anchor="middle" fill="#94a3b8" font-family="Inter, sans-serif" font-size="16">Controller Kit</text>
+  <!-- LCD screen -->
+  <rect x="290" y="260" width="220" height="100" rx="6" fill="#111827" stroke="#00c7b7" stroke-width="1" opacity="0.7"/>
+  <text x="400" y="305" text-anchor="middle" fill="#0071c5" font-family="Inter, sans-serif" font-size="12">Color LCD Touch Screen</text>
+  <text x="400" y="325" text-anchor="middle" fill="#475569" font-family="Inter, sans-serif" font-size="10">SPI • 240×320</text>
+  <!-- WiFi indicator -->
+  <g transform="translate(510, 100)">
+    <path d="M0 20 Q15 0 30 20" stroke="#00c7b7" stroke-width="2" fill="none" opacity="0.3"/>
+    <path d="M5 16 Q15 4 25 16" stroke="#00c7b7" stroke-width="2" fill="none" opacity="0.5"/>
+    <path d="M10 12 Q15 6 20 12" stroke="#00c7b7" stroke-width="2" fill="none" opacity="0.8"/>
+    <circle cx="15" cy="18" r="3" fill="#00c7b7"/>
+  </g>
+  <!-- USB-C port -->
+  <rect x="375" y="410" width="50" height="18" rx="9" fill="#0071c5" opacity="0.4"/>
+  <text x="400" y="423" text-anchor="middle" fill="#94a3b8" font-family="Inter, sans-serif" font-size="8">USB-C</text>
+  <!-- GPIO pins left -->
+  <g transform="translate(240, 120)">
+    <rect x="0" y="0" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="14" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="28" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="42" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="56" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="70" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="84" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="98" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+  </g>
+  <!-- GPIO pins right -->
+  <g transform="translate(556, 120)">
+    <rect x="0" y="0" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="14" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="28" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="42" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="56" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="70" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="84" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+    <rect x="0" y="98" width="4" height="8" rx="1" fill="#94a3b8" opacity="0.5"/>
+  </g>
+  <!-- Labels -->
+  <text x="400" y="490" text-anchor="middle" fill="#64748b" font-family="Inter, sans-serif" font-size="14">Dual-Core 240 MHz • WiFi • BLE • LCD Touch • Camera • SD Card</text>
+  <text x="400" y="520" text-anchor="middle" fill="#475569" font-family="Inter, sans-serif" font-size="12">Photo will be added — this is a placeholder illustration</text>
+</svg>

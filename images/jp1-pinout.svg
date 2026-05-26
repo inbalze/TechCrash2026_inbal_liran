@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 300" width="560" height="300" font-family="monospace" font-size="11">
+
+  <text x="280" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">DE10-Lite JP1 Header (40-pin, GPIO[35:0])</text>
+  <text x="280" y="40" text-anchor="middle" font-size="11" fill="#555">Looking down at the board — header near top-right edge</text>
+
+  <!-- Header body -->
+  <rect x="30" y="55" width="500" height="80" rx="6" fill="#2a2a2a" stroke="#888" stroke-width="2"/>
+
+  <!-- "PIN 1 MARKER" triangle on left -->
+  <polygon points="30,55 50,55 30,75" fill="#f0c040"/>
+  <text x="15" y="90" font-size="9" fill="#f0c040" transform="rotate(-90,15,90)">PIN 1</text>
+
+  <!-- Draw 20 column pairs. col spacing = 24px, start x=50 -->
+  <!-- Row top y=70 (odd pins), row bottom y=105 (even pins) -->
+
+  <!-- Columns 1-20 -->
+  <!-- Special colors: pin1=orange, pin2=orange, pin12=yellow(GND) -->
+
+  <!-- col 1: pin1 (top) pin2 (bottom) — FPGA TX pair -->
+  <circle cx="54"  cy="72" r="9" fill="#e07020" stroke="#fff" stroke-width="1.5"/>
+  <circle cx="54"  cy="108" r="9" fill="#e07020" stroke="#fff" stroke-width="1.5"/>
+  <text x="54"  cy="76" text-anchor="middle" y="76"  fill="#fff" font-weight="bold">1</text>
+  <text x="54"  cy="112" text-anchor="middle" y="112" fill="#fff" font-weight="bold">2</text>
+
+  <!-- cols 2-5: generic GPIO -->
+  <circle cx="78"  cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="78"  cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="78"  text-anchor="middle" y="76"  fill="#aaa">3</text>
+  <text x="78"  text-anchor="middle" y="112" fill="#aaa">4</text>
+
+  <circle cx="102" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="102" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="102" text-anchor="middle" y="76"  fill="#aaa">5</text>
+  <text x="102" text-anchor="middle" y="112" fill="#aaa">6</text>
+
+  <circle cx="126" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="126" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="126" text-anchor="middle" y="76"  fill="#aaa">7</text>
+  <text x="126" text-anchor="middle" y="112" fill="#aaa">8</text>
+
+  <circle cx="150" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="150" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="150" text-anchor="middle" y="76"  fill="#aaa">9</text>
+  <text x="150" text-anchor="middle" y="112" fill="#aaa">10</text>
+
+  <!-- col 6: pin11 (top) pin12=GND (bottom) -->
+  <circle cx="174" cy="72"  r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="174" cy="108" r="9" fill="#f0c040" stroke="#fff" stroke-width="1.5"/>
+  <text x="174" text-anchor="middle" y="76"  fill="#aaa">11</text>
+  <text x="174" text-anchor="middle" y="112" fill="#222" font-weight="bold">12</text>
+
+  <!-- cols 7-20: generic -->
+  <circle cx="198" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="198" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="198" text-anchor="middle" y="76"  fill="#aaa">13</text>
+  <text x="198" text-anchor="middle" y="112" fill="#aaa">14</text>
+
+  <circle cx="222" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="222" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="222" text-anchor="middle" y="76"  fill="#aaa">15</text>
+  <text x="222" text-anchor="middle" y="112" fill="#aaa">16</text>
+
+  <circle cx="246" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="246" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="246" text-anchor="middle" y="76"  fill="#aaa">17</text>
+  <text x="246" text-anchor="middle" y="112" fill="#aaa">18</text>
+
+  <circle cx="270" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="270" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="270" text-anchor="middle" y="76"  fill="#aaa">19</text>
+  <text x="270" text-anchor="middle" y="112" fill="#aaa">20</text>
+
+  <circle cx="294" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="294" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="294" text-anchor="middle" y="76"  fill="#aaa">21</text>
+  <text x="294" text-anchor="middle" y="112" fill="#aaa">22</text>
+
+  <circle cx="318" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="318" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="318" text-anchor="middle" y="76"  fill="#aaa">23</text>
+  <text x="318" text-anchor="middle" y="112" fill="#aaa">24</text>
+
+  <circle cx="342" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="342" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="342" text-anchor="middle" y="76"  fill="#aaa">25</text>
+  <text x="342" text-anchor="middle" y="112" fill="#aaa">26</text>
+
+  <circle cx="366" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="366" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="366" text-anchor="middle" y="76"  fill="#aaa">27</text>
+  <text x="366" text-anchor="middle" y="112" fill="#aaa">28</text>
+
+  <circle cx="390" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="390" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="390" text-anchor="middle" y="76"  fill="#aaa">29</text>
+  <text x="390" text-anchor="middle" y="112" fill="#aaa">30</text>
+
+  <circle cx="414" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="414" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="414" text-anchor="middle" y="76"  fill="#aaa">31</text>
+  <text x="414" text-anchor="middle" y="112" fill="#aaa">32</text>
+
+  <circle cx="438" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="438" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="438" text-anchor="middle" y="76"  fill="#aaa">33</text>
+  <text x="438" text-anchor="middle" y="112" fill="#aaa">34</text>
+
+  <circle cx="462" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="462" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="462" text-anchor="middle" y="76"  fill="#aaa">35</text>
+  <text x="462" text-anchor="middle" y="112" fill="#aaa">36</text>
+
+  <circle cx="486" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="486" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="486" text-anchor="middle" y="76"  fill="#aaa">37</text>
+  <text x="486" text-anchor="middle" y="112" fill="#aaa">38</text>
+
+  <circle cx="510" cy="72" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <circle cx="510" cy="108" r="9" fill="#444" stroke="#666" stroke-width="1"/>
+  <text x="510" text-anchor="middle" y="76"  fill="#aaa">39</text>
+  <text x="510" text-anchor="middle" y="112" fill="#aaa">40</text>
+
+  <!-- Labels below -->
+  <!-- Pin 1 label -->
+  <line x1="54" y1="64" x2="54" y2="50" stroke="#e07020" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="54" text-anchor="middle" y="48" fill="#e07020" font-weight="bold">GPIO[0]</text>
+  <text x="54" text-anchor="middle" y="36" fill="#e07020" font-size="10">(RX from ESP32)</text>
+
+  <!-- Pin 2 label -->
+  <line x1="54" y1="117" x2="54" y2="155" stroke="#e07020" stroke-width="2" stroke-dasharray="3,2"/>
+  <rect x="2" y="155" width="104" height="32" rx="4" fill="#e07020"/>
+  <text x="54" text-anchor="middle" y="169" fill="#fff" font-weight="bold">Pin 2 = GPIO[1]</text>
+  <text x="54" text-anchor="middle" y="181" fill="#fff" font-size="10">FPGA TX → ESP32 GPIO17</text>
+
+  <!-- Pin 12 label -->
+  <line x1="174" y1="117" x2="174" y2="155" stroke="#c09000" stroke-width="2" stroke-dasharray="3,2"/>
+  <rect x="122" y="155" width="104" height="32" rx="4" fill="#c09000"/>
+  <text x="174" text-anchor="middle" y="169" fill="#fff" font-weight="bold">Pin 12 = GND</text>
+  <text x="174" text-anchor="middle" y="181" fill="#fff" font-size="10">→ ESP32 GND</text>
+
+  <!-- Row labels -->
+  <text x="18" y="76"  text-anchor="middle" fill="#888" font-size="10">ODD</text>
+  <text x="18" y="112" text-anchor="middle" fill="#888" font-size="10">EVEN</text>
+
+  <!-- Legend -->
+  <circle cx="50"  cy="240" r="7" fill="#e07020"/>
+  <text x="63" y="245" fill="#222" font-size="12">UART pins (1 = RX in, 2 = TX out to ESP32)</text>
+  <circle cx="50"  cy="265" r="7" fill="#f0c040"/>
+  <text x="63" y="270" fill="#222" font-size="12">GND (pin 12) — connect to ESP32 GND</text>
+  <polygon points="30,55 50,55 30,75" fill="#f0c040"/>
+  <text x="63" y="292" fill="#555" font-size="11">Gold triangle on board silkscreen marks pin 1</text>
+
+</svg>

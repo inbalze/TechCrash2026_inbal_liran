@@ -1,0 +1,68 @@
+# Secret competition challenges -- NEVER publish
+challenges/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE / Editor
+.vscode/
+*.swp
+*.swo
+*~
+
+# Node (if site uses Node tooling)
+node_modules/
+dist/
+.env
+.env.*
+
+# Python (if any scripting)
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# FPGA build artifacts (Quartus)
+**/db/
+**/incremental_db/
+**/output_files/
+**/simulation/
+*.qws
+*.bak
+*.rpt
+
+# PlatformIO build / library cache
+**/.pio/
+
+# Secrets (per-project, not committed)
+**/secrets.h
+secrets.*
+
+# Generated public-challenge staging area. NEVER commit.
+# Built by scripts/build-challenges-public.ps1 from challenges/.
+# Published to participants via scripts/publish-challenges.ps1.
+challenges_public/
+
+# Organizer-only content (not for participant repo)
+organizer/
+
+# Organizer-only docs (concept notes, website spec, kits info, publication plan)
+docs/
+
+# Organizer-only projects scratch tree
+projects/
+
+# Organizer-only release checklist
+RELEASE_CHECKLIST.md
+
+# Copilot skills that are de-facto solutions to specific challenges -- do NOT ship
+.copilot/skills/adxl345-spi/
+.copilot/skills/max10-adc-fpga/
+.copilot/skills/fpga-dsp-frequency-detection/
+.copilot/skills/fp8-e4m3-and-pll-tuning/
+.copilot/skills/esp32-fpga-high-speed-link/
+.copilot/skills/python-pc-serial-bridge/
+.copilot/skills/challenge-publication/
+.copilot/skills/de10lite-vga-graphics/

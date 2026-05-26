@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alive Test Demo &mdash; Chip Design Hackathon 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0071c5;
+            --accent: #00c7b7;
+            --bg-dark: #0b1121;
+            --bg-section: #111827;
+            --bg-card: #1a2332;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-bright: #f1f5f9;
+            --border: #2d3a4a;
+            --radius: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 0.9rem; }
+        h1 { font-size: 2.2rem; color: var(--text-bright); margin-bottom: 0.5rem; }
+        .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+        h2 { font-size: 1.4rem; color: var(--accent); margin: 2rem 0 1rem; }
+        h3 { font-size: 1.1rem; color: var(--text-bright); margin: 1.5rem 0 0.5rem; }
+        p { margin-bottom: 1rem; }
+        ul { margin: 0.5rem 0 1rem 1.5rem; }
+        li { margin-bottom: 0.3rem; }
+        code {
+            background: var(--bg-card);
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--bg-dark);
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.2em 0.7em;
+            border-radius: 20px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        /* Block Diagram */
+        .diagram {
+            background: var(--bg-section);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        .diagram svg {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Wiring table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 0.6rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background: var(--bg-card);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        td { color: var(--text); }
+
+        /* Code block */
+        .code-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.2rem;
+            overflow-x: auto;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 1rem 0;
+            white-space: pre;
+        }
+
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .file-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+        }
+        .file-card h4 {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        .file-card p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <a href="../../index.html#getstarted" class="back-link">&larr; Back to Main Site</a>
+
+    <span class="badge">Working Demo</span>
+    <h1>Alive Test</h1>
+    <p class="subtitle">Bidirectional UART between DE10-Lite FPGA and ESP32 &mdash; verifies the full communication link is alive.</p>
+
+    <!-- ===== OVERVIEW ===== -->
+    <h2>What It Does</h2>
+    <p>A minimal system test that proves both directions of the FPGA-to-ESP32 link work:</p>
+    <ul>
+        <li><strong>FPGA &rarr; ESP32:</strong> The FPGA counts 0&rarr;9 on HEX0 (one digit per second) and transmits each digit as ASCII over UART.</li>
+        <li><strong>ESP32 &rarr; FPGA:</strong> The ESP32 counts 9&rarr;0 (countdown) and transmits each digit to the FPGA, which displays it on HEX1.</li>
+        <li>The ESP32 also shows both values on its OLED display, along with button states and potentiometer reading.</li>
+        <li>LEDs sweep left-to-right as a visual heartbeat indicator.</li>
+    </ul>
+
+    <!-- ===== BLOCK DIAGRAM ===== -->
+    <h2>Block Diagram</h2>
+    <div class="diagram">
+        <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg">
+            <!-- FPGA Block -->
+            <rect x="30" y="40" width="300" height="260" rx="12" fill="#1a2332" stroke="#0071c5" stroke-width="2"/>
+            <text x="180" y="72" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">DE10-Lite FPGA</text>
+
+            <!-- FPGA internals -->
+            <rect x="55" y="90" width="120" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="115" y="115" text-anchor="middle" fill="#00c7b7" font-size="11">1-sec Counter</text>
+
+            <rect x="55" y="145" width="120" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="115" y="170" text-anchor="middle" fill="#00c7b7" font-size="11">UART TX (9600)</text>
+
+            <rect x="55" y="200" width="120" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="115" y="225" text-anchor="middle" fill="#00c7b7" font-size="11">UART RX (9600)</text>
+
+            <rect x="195" y="90" width="120" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="255" y="115" text-anchor="middle" fill="#e2e8f0" font-size="11">HEX0 (TX digit)</text>
+
+            <rect x="195" y="145" width="120" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="255" y="170" text-anchor="middle" fill="#e2e8f0" font-size="11">HEX1 (RX digit)</text>
+
+            <rect x="195" y="200" width="120" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="255" y="225" text-anchor="middle" fill="#e2e8f0" font-size="11">LED Sweep</text>
+
+            <!-- Arrows inside FPGA -->
+            <path d="M175 110 L195 110" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <path d="M175 165 L195 165" stroke="#94a3b8" stroke-width="1.5"/>
+
+            <!-- ESP32 Block -->
+            <rect x="470" y="40" width="300" height="260" rx="12" fill="#1a2332" stroke="#00c7b7" stroke-width="2"/>
+            <text x="620" y="72" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">ESP32 DevKit</text>
+
+            <!-- ESP32 internals -->
+            <rect x="495" y="90" width="130" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="560" y="115" text-anchor="middle" fill="#00c7b7" font-size="11">Countdown 9&rarr;0</text>
+
+            <rect x="495" y="145" width="130" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="560" y="170" text-anchor="middle" fill="#00c7b7" font-size="11">UART2 TX (9600)</text>
+
+            <rect x="495" y="200" width="130" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="560" y="225" text-anchor="middle" fill="#00c7b7" font-size="11">UART2 RX (9600)</text>
+
+            <rect x="645" y="90" width="110" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="700" y="115" text-anchor="middle" fill="#e2e8f0" font-size="11">OLED Display</text>
+
+            <rect x="645" y="145" width="110" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="700" y="170" text-anchor="middle" fill="#e2e8f0" font-size="11">3 LEDs</text>
+
+            <rect x="645" y="200" width="110" height="40" rx="6" fill="#0b1121" stroke="#2d3a4a"/>
+            <text x="700" y="225" text-anchor="middle" fill="#e2e8f0" font-size="11">Buttons/Buzzer</text>
+
+            <!-- UART wires -->
+            <!-- TX: FPGA GPIO[1] -> ESP32 GPIO17 RX -->
+            <line x1="330" y1="165" x2="470" y2="220" stroke="#0071c5" stroke-width="2.5" stroke-dasharray="6 3"/>
+            <text x="400" y="182" text-anchor="middle" fill="#0071c5" font-size="10" font-weight="600">GPIO[1] &rarr; GPIO17</text>
+            <text x="400" y="196" text-anchor="middle" fill="#94a3b8" font-size="9">FPGA TX &rarr; ESP RX</text>
+
+            <!-- RX: ESP32 GPIO16 TX -> FPGA GPIO[0] -->
+            <line x1="470" y1="165" x2="330" y2="220" stroke="#00c7b7" stroke-width="2.5" stroke-dasharray="6 3"/>
+            <text x="400" y="240" text-anchor="middle" fill="#00c7b7" font-size="10" font-weight="600">GPIO16 &rarr; GPIO[0]</text>
+            <text x="400" y="254" text-anchor="middle" fill="#94a3b8" font-size="9">ESP TX &rarr; FPGA RX</text>
+
+            <!-- GND wire -->
+            <line x1="330" y1="280" x2="470" y2="280" stroke="#94a3b8" stroke-width="1.5"/>
+            <text x="400" y="296" text-anchor="middle" fill="#94a3b8" font-size="10">GND &mdash; GND</text>
+
+            <!-- Arrow marker -->
+            <defs>
+                <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                    <path d="M0,0 L8,3 L0,6 Z" fill="#94a3b8"/>
+                </marker>
+            </defs>
+        </svg>
+    </div>
+
+    <!-- ===== WIRING ===== -->
+    <h2>Wiring</h2>
+    <table>
+        <thead>
+            <tr><th>FPGA (DE10-Lite Arduino Header)</th><th>Wire</th><th>ESP32 DevKit</th><th>Function</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>IO0 &mdash; GPIO[0]</td><td>&larr;</td><td>GPIO16</td><td>ESP32 TX &rarr; FPGA RX</td></tr>
+            <tr><td>IO1 &mdash; GPIO[1]</td><td>&rarr;</td><td>GPIO17</td><td>FPGA TX &rarr; ESP32 RX</td></tr>
+            <tr><td>GND</td><td>&mdash;</td><td>GND</td><td>Common ground</td></tr>
+        </tbody>
+    </table>
+    <p><strong>Protocol:</strong> 9600 baud, 8N1, 3.3V logic levels (no level shifter needed).</p>
+
+    <!-- ===== FILES ===== -->
+    <h2>Project Files</h2>
+    <div class="file-list">
+        <div class="file-card">
+            <h4>FPGA RTL</h4>
+            <p><code>fpga/src/alive_test_top.sv</code></p>
+            <p>SystemVerilog top module with UART TX, UART RX, 7-segment driver, and LED sweep.</p>
+        </div>
+        <div class="file-card">
+            <h4>FPGA Project</h4>
+            <p><code>fpga/alive_test.qsf</code></p>
+            <p>Quartus pin assignments for DE10-Lite (MAX 10 FPGA).</p>
+        </div>
+        <div class="file-card">
+            <h4>ESP32 Firmware</h4>
+            <p><code>esp32/src/main.cpp</code></p>
+            <p>Arduino framework code: countdown TX, OLED display, buttons, buzzer, LEDs.</p>
+        </div>
+        <div class="file-card">
+            <h4>Pin Configuration</h4>
+            <p><code>projects/common/esp32/pin_config.h</code></p>
+            <p>Shared GPIO pin definitions for all ESP32 projects.</p>
+        </div>
+    </div>
+
+    <!-- ===== BUILD ===== -->
+    <h2>Build &amp; Flash</h2>
+    <h3>FPGA</h3>
+    <div class="code-block">cd demos/alive_test/fpga
+quartus_sh --flow compile alive_test
+quartus_pgm -m jtag -o "p;output_files/alive_test.sof"</div>
+
+    <h3>ESP32</h3>
+    <div class="code-block">cd demos/alive_test/esp32
+pio run -t upload</div>
+
+    <!-- ===== EXPECTED BEHAVIOR ===== -->
+    <h2>Expected Behavior</h2>
+    <ul>
+        <li><strong>HEX0</strong> (rightmost): Counts 0 &rarr; 9 &rarr; 0 &rarr; ... (one step per second)</li>
+        <li><strong>HEX1</strong> (second from right): Shows the ESP32 countdown (9 &rarr; 8 &rarr; ... &rarr; 0 &rarr; 9)</li>
+        <li><strong>HEX2-5</strong>: Blank (all segments off)</li>
+        <li><strong>LEDs</strong>: Sweep left-to-right</li>
+        <li><strong>ESP32 OLED</strong>: Shows "ALIVE TEST", button states, potentiometer bar, and <code>RX:&lt;digit&gt; TX:&lt;digit&gt;</code></li>
+    </ul>
+
+    <footer>
+        Chip Design Hackathon 2026 &mdash; ECE Faculty, Technion &mdash; <a href="../../index.html">Main Site</a>
+    </footer>
+
+</div>
+</body>
+</html>

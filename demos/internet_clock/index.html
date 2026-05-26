@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Clock Demo &mdash; Chip Design Hackathon 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0071c5;
+            --accent: #00c7b7;
+            --bg-dark: #0b1121;
+            --bg-section: #111827;
+            --bg-card: #1a2332;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-bright: #f1f5f9;
+            --border: #2d3a4a;
+            --radius: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 0.9rem; }
+        h1 { font-size: 2.2rem; color: var(--text-bright); margin-bottom: 0.5rem; }
+        .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+        h2 { font-size: 1.4rem; color: var(--accent); margin: 2rem 0 1rem; }
+        h3 { font-size: 1.1rem; color: var(--text-bright); margin: 1.5rem 0 0.5rem; }
+        p { margin-bottom: 1rem; }
+        ul { margin: 0.5rem 0 1rem 1.5rem; }
+        li { margin-bottom: 0.3rem; }
+        code {
+            background: var(--bg-card);
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--bg-dark);
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.2em 0.7em;
+            border-radius: 20px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .diagram {
+            background: var(--bg-section);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        .diagram svg {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 0.6rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background: var(--bg-card);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        td { color: var(--text); }
+        .code-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.2rem;
+            overflow-x: auto;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 1rem 0;
+            white-space: pre;
+        }
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .file-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+        }
+        .file-card h4 {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        .file-card p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="../../index.html" class="back-link">&larr; Back to main site</a>
+    <div class="badge">Demo</div>
+    <h1>Internet Clock</h1>
+    <p class="subtitle">ESP32 fetches real time from an NTP server over WiFi and sends it to the FPGA, which displays hours:minutes:seconds on the 7-segment displays.</p>
+
+    <h2>Block Diagram</h2>
+    <div class="diagram">
+        <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- WiFi / NTP Cloud -->
+            <ellipse cx="80" cy="100" rx="60" ry="35" fill="none" stroke="#00c7b7" stroke-width="2"/>
+            <text x="80" y="95" text-anchor="middle" fill="#e2e8f0" font-size="11" font-family="Inter">NTP Server</text>
+            <text x="80" y="112" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="Inter">pool.ntp.org</text>
+
+            <!-- WiFi arrow -->
+            <line x1="140" y1="100" x2="210" y2="100" stroke="#00c7b7" stroke-width="2" marker-end="url(#arrow)"/>
+            <text x="175" y="90" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="Inter">WiFi</text>
+
+            <!-- ESP32 -->
+            <rect x="210" y="70" width="140" height="60" rx="8" fill="#1a2332" stroke="#0071c5" stroke-width="2"/>
+            <text x="280" y="95" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600" font-family="Inter">ESP32</text>
+            <text x="280" y="112" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="Inter">GPIO16 TX (UART2)</text>
+
+            <!-- UART arrow -->
+            <line x1="350" y1="100" x2="440" y2="100" stroke="#00c7b7" stroke-width="2" marker-end="url(#arrow)"/>
+            <text x="395" y="88" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="Inter">UART 9600</text>
+            <text x="395" y="118" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="Inter">"HH:MM:SS\n"</text>
+
+            <!-- FPGA -->
+            <rect x="440" y="70" width="160" height="60" rx="8" fill="#1a2332" stroke="#0071c5" stroke-width="2"/>
+            <text x="520" y="95" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600" font-family="Inter">DE10-Lite FPGA</text>
+            <text x="520" y="112" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="Inter">Arduino IO0 (GPIO[0] RX)</text>
+
+            <!-- 7seg arrow -->
+            <line x1="600" y1="100" x2="660" y2="100" stroke="#00c7b7" stroke-width="2" marker-end="url(#arrow)"/>
+
+            <!-- 7-Segment Displays -->
+            <rect x="660" y="75" width="120" height="50" rx="6" fill="#1a2332" stroke="#f59e0b" stroke-width="2"/>
+            <text x="720" y="97" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="700" font-family="monospace">12:34:56</text>
+            <text x="720" y="115" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="Inter">HEX5..HEX0</text>
+
+            <!-- Arrow marker -->
+            <defs>
+                <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                    <path d="M0,0 L8,3 L0,6 Z" fill="#00c7b7"/>
+                </marker>
+            </defs>
+        </svg>
+    </div>
+
+    <h2>How It Works</h2>
+    <ol style="margin: 0.5rem 0 1rem 1.5rem;">
+        <li>ESP32 connects to WiFi hotspot and syncs with an NTP time server</li>
+        <li>Every second, ESP32 sends the current time as ASCII <code>"HH:MM:SS\r\n"</code> over UART2 (GPIO16)</li>
+        <li>FPGA receives the serial stream on GPIO[0] at 9600 baud</li>
+        <li>An ASCII parser extracts the 6 digit values from the time string</li>
+        <li>On newline, the parsed digits commit to the 7-segment display drivers</li>
+        <li>HEX5:HEX4 = hours, HEX3:HEX2 = minutes, HEX1:HEX0 = seconds</li>
+    </ol>
+
+    <h2>Wiring</h2>
+    <table>
+        <tr><th>ESP32 Pin</th><th>Wire</th><th>DE10-Lite Pin</th><th>Function</th></tr>
+        <tr><td>GPIO16</td><td>&rarr;</td><td>Arduino IO0 (GPIO[0])</td><td>UART TX &rarr; RX</td></tr>
+        <tr><td>GND</td><td>&mdash;</td><td>Arduino GND</td><td>Common ground</td></tr>
+    </table>
+    <p><strong>Note:</strong> Only 2 wires needed for this demo (TX + GND). The Arduino header has male pins, so use simple male-male jumper wires. Both boards run at 3.3V logic, no level shifter required.</p>
+
+    <h2>Reset</h2>
+    <p>Flip <code>SW[9]</code> down (0) then up (1) to reset the FPGA parser. All displays will blank until the next valid time string arrives.</p>
+
+    <h2>Project Files</h2>
+    <div class="file-list">
+        <div class="file-card">
+            <h4>esp32/src/main.cpp</h4>
+            <p>WiFi + NTP client, sends time string over UART2 every second</p>
+        </div>
+        <div class="file-card">
+            <h4>fpga/src/internet_clock_top.sv</h4>
+            <p>Top module: UART RX, ASCII parser, 7-segment commit logic</p>
+        </div>
+        <div class="file-card">
+            <h4>fpga/src/uart_rx.sv</h4>
+            <p>Parameterized UART receiver (50 MHz, 9600 baud, 8N1)</p>
+        </div>
+        <div class="file-card">
+            <h4>fpga/src/seven_segment.sv</h4>
+            <p>BCD to active-low 7-segment decoder with blank input</p>
+        </div>
+        <div class="file-card">
+            <h4>esp32/platformio.ini</h4>
+            <p>PlatformIO config (ESP32, Arduino framework)</p>
+        </div>
+        <div class="file-card">
+            <h4>fpga/internet_clock_top.qsf</h4>
+            <p>Quartus pin assignments for DE10-Lite</p>
+        </div>
+    </div>
+
+    <h2>Build &amp; Flash</h2>
+    <h3>FPGA</h3>
+    <div class="code-block">cd demos/internet_clock/fpga
+quartus_sh --flow compile internet_clock_top
+quartus_pgm -m jtag -o "p;output_files/internet_clock_top.sof"</div>
+
+    <h3>ESP32</h3>
+    <div class="code-block">cd demos/internet_clock/esp32
+# Set proxy if behind Intel firewall:
+set HTTP_PROXY=http://proxy-iil.intel.com:912
+set HTTPS_PROXY=http://proxy-iil.intel.com:912
+
+pio run -t upload</div>
+
+    <h2>Expected Behavior</h2>
+    <ul>
+        <li>After power-on, 7-segment displays are blank (waiting for first valid time)</li>
+        <li>ESP32 serial monitor shows WiFi connection, NTP sync, then time every second</li>
+        <li>Once synced, FPGA displays update every second showing Israel local time</li>
+        <li>Time survives WiFi disconnects (ESP32 internal RTC keeps counting)</li>
+    </ul>
+
+    <h2>Customization Ideas</h2>
+    <ul>
+        <li>Change <code>GMT_OFFSET</code> and <code>DST_OFFSET</code> in main.cpp for your timezone</li>
+        <li>Add decimal points on HEX4 and HEX2 as colon separators (set seg[7]=0)</li>
+        <li>Use SW[0] to toggle 12h/24h format</li>
+        <li>Add alarm functionality with KEY[0] and the buzzer</li>
+    </ul>
+</div>
+</body>
+</html>
