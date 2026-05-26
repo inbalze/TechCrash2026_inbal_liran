@@ -12,7 +12,7 @@
 
   <!-- Background -->
   <rect width="1400" height="680" fill="#0d0d1a" rx="12"/>
-  <text fill="#666" font-size="13" font-weight="600" x="500" y="24" text-anchor="middle">CrashTech VLSI-2026 Ã¢â‚¬â€ ESP32 Kit Wiring Diagram</text>
+  <text fill="#666" font-size="13" font-weight="600" x="500" y="24" text-anchor="middle">VLSI Hackathon 2026 — ESP32 Kit Wiring Diagram</text>
 
   <!-- ==================== ESP32 BOARD ==================== -->
   <rect x="365" y="52" width="170" height="488" fill="#1a1a2e" stroke="#3a3a5c" stroke-width="2" rx="10"/>

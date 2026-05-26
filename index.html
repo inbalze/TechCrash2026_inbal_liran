@@ -207,14 +207,14 @@
         <div class="card-grid">
             <div class="card">
                 <div class="card-icon" data-icon="hw"></div>
-                <h3>FPGA Installation Party</h3>
-                <p><strong>May 13, 12:30 &ndash; 14:30</strong></p>
-                <p>Get your DE10-Lite and ESP32 kit. Install Quartus, PlatformIO, and all development tools &mdash; together, on-site.</p>
+                <h3>FPGA Installation Party ✓</h3>
+                <p><strong>May 13, 12:30 &ndash; 14:30</strong> (completed)</p>
+                <p>Got your DE10-Lite and ESP32 kit. Installed Quartus, PlatformIO, and all development tools on-site.</p>
             </div>
             <div class="card">
                 <div class="card-icon" data-icon="AI"></div>
-                <h3>Hands-on Co-Coding with AI</h3>
-                <p><strong>May 26, 18:00 &ndash; 20:00</strong></p>
+                <h3>Hands-on Co-Coding with AI ✓</h3>
+                <p><strong>May 26, 18:00 &ndash; 20:00</strong> (today!)</p>
                 <p>Live session: learn to use VS Code + GitHub Copilot for HDL and embedded firmware. Practice AI-assisted engineering workflows.</p>
             </div>
             <div class="card">
@@ -387,7 +387,7 @@
         <p class="subtitle">Each team gets the following kit, 2 weeks before the event.</p>
         <div class="kit-checklist">
             <div class="kit-item"> DE10-Lite FPGA board</div>
-            <div class="kit-item"> ESP32 controller kit with LCD</div>
+            <div class="kit-item"> ESP32 controller kit with OLED</div>
             <div class="kit-item"> USB cables for both boards</div>
             <div class="kit-item"> Jumper wires for FPGA ↔ ESP32 connection</div>
             <div class="kit-item"> Breadboard</div>
@@ -517,51 +517,14 @@
                 <div class="step-number">8</div>
                 <div class="step-content">
                     <h4>Try a Practice Challenge</h4>
-                    <p>Head to the <a href="#challenges" data-page="challenges">Practice Challenges</a> tab and take on the Internet Clock, Retro Arcade, or Volt Meter. No solutions provided &mdash; figure it out.</p>
+                    <p>Head to the <a href="#challenges" data-page="challenges">Practice Challenges</a> tab and try the Internet Clock challenge. No solutions provided &mdash; figure it out.</p>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- Skills Downloads -->
-    <div class="section-block">
-        <h3 class="section-heading">Download Skills</h3>
-        <p class="subtitle">Copilot Skills are knowledge packs that supercharge GitHub Copilot for specific tasks. Download and use them in VS Code.</p>
 
-        <div class="card-grid">
-            <div class="card">
-                <div class="card-icon" data-icon="FPGA"></div>
-                <h3>DE10-Lite Board &amp; Build</h3>
-                <p>Board overview, pin mapping, Quartus build flow, programming, simulation, design patterns, IP blocks.</p>
-                <a href="skills/de10lite-board-and-build/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
-            </div>
-            <div class="card">
-                <div class="card-icon" data-icon="VGA"></div>
-                <h3>DE10-Lite VGA Graphics</h3>
-                <p>VGA 640×480 display, sprite engine, text screen, priority compositing, frame sync.</p>
-                <a href="skills/de10lite-vga-graphics/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
-            </div>
-            <div class="card">
-                <div class="card-icon" data-icon="ADC"></div>
-                <h3>DE10-Lite Addon Peripherals</h3>
-                <p>ADC joystick, buttons, wheel potentiometer, LCD screen via Arduino header.</p>
-                <a href="skills/de10lite-addon-peripherals/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
-            </div>
-            <div class="card">
-                <div class="card-icon" data-icon="ESP"></div>
-                <h3>ESP32 Firmware</h3>
-                <p>PlatformIO setup, OLED display, button input, buzzer, WiFi, I2C, build &amp; flash workflow.</p>
-                <a href="skills/esp32-firmware/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
-            </div>
-            <div class="card">
-                <div class="card-icon" data-icon="PCB"></div>
-                <h3>KiCad Board Design</h3>
-                <p>PCB design from schematic to Gerber production files. Bonus skill for custom hardware.</p>
-                <a href="skills/kicad-board-design/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
-            </div>
-        </div>
-    </div>
 
     <!-- External Resources -->
     <div class="section-block">
@@ -616,7 +579,7 @@
     <!-- Header -->
     <div class="section-block">
         <h2>Practice Challenges</h2>
-        <p class="subtitle">Three open challenges to sharpen your skills before the event. No solutions provided &mdash; self-discovery applies here too. Pick one, wire up your boards, and build it.</p>
+        <p class="subtitle">A practice challenge to sharpen your skills before the event. No solutions provided &mdash; self-discovery applies here too. Wire up your boards and build it.</p>
     </div>
 
     <!-- How It Works -->
@@ -683,80 +646,7 @@
         </div>
     </div>
 
-    <!-- Challenge 2: Retro Arcade -->
-    <div class="section-block">
-        <div class="challenge-card">
-            <div class="challenge-header">
-                <div class="challenge-badge badge-hard">Hard</div>
-                <h3 class="challenge-title">Retro Arcade</h3>
-                <p class="challenge-subtitle">FPGA Controls → ESP32 Game Engine &mdash; play on the OLED screen</p>
-            </div>
-            <div class="challenge-body">
-                <p>Create a playable retro-style game that runs on the ESP32 kit's OLED screen, where the game controls (movement, actions) come from the DE10-Lite FPGA's buttons and switches. The FPGA reads the physical inputs and sends control commands to the ESP32, which renders the game.</p>
 
-                <div class="challenge-requirements">
-                    <h4>Requirements</h4>
-                    <ul>
-                        <li>Game runs on the ESP32 kit's OLED screen (any retro game: Pong, Snake, Breakout, Space Invaders, etc.)</li>
-                        <li>Player controls are physically on the FPGA: buttons (KEY[0], KEY[1]), switches, or addon joystick</li>
-                        <li>FPGA reads inputs and transmits control commands to ESP32 over a wired interface</li>
-                        <li>Game must be playable &mdash; responsive controls, visible graphics, win/lose condition</li>
-                        <li>Bonus points for creativity, polish, and fun factor</li>
-                    </ul>
-                </div>
-
-                <div class="challenge-skills">
-                    <h4>What You'll Learn</h4>
-                    <div class="skill-tags">
-                        <span class="skill-tag">FPGA → ESP32 Communication</span>
-                        <span class="skill-tag">Button &amp; Switch Input</span>
-                        <span class="skill-tag">Game Loop &amp; Graphics</span>
-                        <span class="skill-tag">Real-Time Input Handling</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Challenge 3: Volt Meter -->
-    <div class="section-block">
-        <div class="challenge-card">
-            <div class="challenge-header">
-                <div class="challenge-badge badge-medium">Medium</div>
-                <h3 class="challenge-title">Volt Meter</h3>
-                <p class="challenge-subtitle">FPGA ADC → ESP32 Display &mdash; measure and show real voltage</p>
-            </div>
-            <div class="challenge-body">
-                <p>Turn your hardware kit into a digital volt meter. The DE10-Lite FPGA uses its onboard ADC to probe an external voltage source (e.g., a battery, a potentiometer divider, or a power supply output). It measures the voltage and sends the reading to the ESP32, which displays the voltage value on its OLED screen.</p>
-
-                <div class="challenge-requirements">
-                    <h4>Requirements</h4>
-                    <ul>
-                        <li>FPGA reads voltage through its onboard ADC (MAX 10 ADC, channels available via GPIO/Arduino header)</li>
-                        <li>Measured voltage is transmitted from FPGA to ESP32 over a wired interface</li>
-                        <li>ESP32 displays the voltage on its OLED screen (e.g., "3.27 V") with at least 2 decimal places</li>
-                        <li>Display updates in real time (at least 2 updates per second)</li>
-                        <li>Measurement range: 0-3.3 V (the ADC reference voltage)</li>
-                    </ul>
-                </div>
-
-                <div class="challenge-safety">
-                    <h4>Safety</h4>
-                    <p>Do <strong>NOT</strong> connect voltages above 3.3 V to the ADC input. Doing so will permanently damage the FPGA.</p>
-                </div>
-
-                <div class="challenge-skills">
-                    <h4>What You'll Learn</h4>
-                    <div class="skill-tags">
-                        <span class="skill-tag">MAX 10 Onboard ADC</span>
-                        <span class="skill-tag">Analog Measurement</span>
-                        <span class="skill-tag">FPGA → ESP32 Data TX</span>
-                        <span class="skill-tag">Formatted Numeric Display</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Self-Discovery Reminder -->
     <div class="section-block" style="text-align: center; padding-bottom: 4rem;">
@@ -780,9 +670,7 @@
         <h2>AI Tools</h2>
         <p class="subtitle">In this hackathon, AI isn't a shortcut &mdash; it's a core tool. You're expected to use it. The best teams will be the ones who learn to work <em>with</em> AI the fastest. Here's your toolkit.</p>
 
-        <div class="info-box warning">
-            <strong>&#x26a0;&#xfe0f; Copilot License Note:</strong> GitHub has recently reduced free Copilot access for student accounts (as of March 2026). We are working with Microsoft to secure full Copilot access for all hackathon participants during the event. Details will be updated here.
-        </div>
+
     </div>
 
     <!-- Why AI -->
@@ -908,75 +796,11 @@
             <div class="ai-skills-how">
                 <h4>How to Use Them</h4>
                 <ol>
-                    <li>Download the <code>SKILL.md</code> file from the links below</li>
+                    <li>Get the <code>SKILL.md</code> file for your topic (provided at the event)</li>
                     <li>Place it in your VS Code workspace (e.g., in a <code>skills/</code> folder or <code>.github/copilot/</code>)</li>
                     <li>Open Copilot Chat and ask questions &mdash; Copilot automatically uses the skill as context</li>
                     <li>Example: "Using the de10lite-board-and-build skill, create a new Quartus project with LED output"</li>
                 </ol>
-            </div>
-        </div>
-
-        <h4 class="ai-skills-available-title">Available Skills for VLSI Hackathon</h4>
-        <div class="card-grid">
-            <div class="card">
-                <div class="card-icon" data-icon="FPGA"></div>
-                <h3>DE10-Lite Board &amp; Build</h3>
-                <p>Board overview, pin mapping, Quartus build flow, programming, simulation, design patterns, IP blocks.</p>
-                <a href="skills/de10lite-board-and-build/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
-            </div>
-            <div class="card">
-                <div class="card-icon" data-icon="VGA"></div>
-                <h3>DE10-Lite VGA Graphics</h3>
-                <p>VGA 640×480 display, sprite engine, text screen, priority compositing, frame sync.</p>
-                <a href="skills/de10lite-vga-graphics/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
-            </div>
-            <div class="card">
-                <div class="card-icon" data-icon="ADC"></div>
-                <h3>DE10-Lite Addon Peripherals</h3>
-                <p>ADC joystick, buttons, wheel potentiometer, LCD screen via Arduino header.</p>
-                <a href="skills/de10lite-addon-peripherals/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
-            </div>
-            <div class="card">
-                <div class="card-icon" data-icon="ESP"></div>
-                <h3>ESP32 Firmware</h3>
-                <p>PlatformIO setup, OLED display, button input, buzzer, WiFi, I2C, build &amp; flash workflow.</p>
-                <a href="skills/esp32-firmware/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
-            </div>
-            <div class="card">
-                <div class="card-icon" data-icon="PCB"></div>
-                <h3>KiCad Board Design</h3>
-                <p>PCB design from schematic to Gerber production files. Bonus skill for custom hardware.</p>
-                <a href="skills/kicad-board-design/SKILL.md" target="_blank" class="card-link">Download Skill →</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Free Access for Students -->
-    <div class="section-block">
-        <h3 class="section-heading">Free Access for Students</h3>
-        <p class="subtitle">GitHub Copilot is free for verified students. Here's how to get it.</p>
-
-        <div class="steps-list">
-            <div class="step-card">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h4>GitHub Student Developer Pack</h4>
-                    <p>Apply at <a href="https://education.github.com/pack" target="_blank" rel="noopener">education.github.com/pack</a> using your university email. You'll get GitHub Copilot, GitHub Pro, and 50+ other developer tools &mdash; all free.</p>
-                </div>
-            </div>
-            <div class="step-card">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h4>Technion Students &mdash; Check for Credits</h4>
-                    <p>The Technion may offer GitHub or cloud credits through academic programs. Check with your faculty, the CS department, or the Technion IT services for any available student benefits or Azure/GitHub credits.</p>
-                </div>
-            </div>
-            <div class="step-card">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h4>Sign In to VS Code</h4>
-                    <p>Once approved, open VS Code → click the Accounts icon (bottom-left) → Sign in with GitHub. Copilot activates automatically.</p>
-                </div>
             </div>
         </div>
     </div>
