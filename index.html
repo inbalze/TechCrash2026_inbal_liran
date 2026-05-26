@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CrashTech VLSI-2026 &mdash; Technion</title>
+    <title>VLSI Hackathon 2026 &mdash; Technion</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
 
 <!-- ============ NAVBAR ============ -->
 <nav class="navbar">
-    <div class="navbar-brand">Crash<span>Tech</span> VLSI</div>
+    <div class="navbar-brand">VLSI <span>Hackathon</span></div>
     <ul class="nav-tabs" id="navTabs">
         <li><a href="#home" class="active" data-page="home">Home</a></li>
         <li><a href="#event" data-page="event">The Event</a></li>
@@ -34,7 +34,7 @@
     <div class="hero">
         <div class="hero-content">
             <div class="hero-badge">24-Hour VLSI Hackathon</div>
-            <h1>Crash<span class="highlight">Tech</span> VLSI-2026</h1>
+            <h1>VLSI <span class="highlight">Hackathon</span> 2026</h1>
             <p class="hero-sub">Where FPGA meets firmware. Build it. Prove it. Win it.</p>
             <p class="hero-tagline">Solve as many hardware challenges as you can in 24 hours. Fastest team wins.</p>
             <p class="hero-location"><strong>Technion</strong> &mdash; Israel Institute of Technology &nbsp;|&nbsp; June 4 &ndash; 5, 2026</p>
@@ -83,7 +83,7 @@
 
     <!-- Philosophy -->
     <div class="section-block">
-        <h2>What is CrashTech?</h2>
+        <h2>What is VLSI Hackathon?</h2>
         <p class="subtitle">A fast-paced engineering hackathon that crashes together FPGA hardware and embedded software.</p>
         <div class="card-grid">
             <div class="card">
@@ -169,8 +169,25 @@
         </div>
     </div>
 
+    <!-- Sponsors -->
+    <div class="section-block">
+        <h2>Sponsors</h2>
+        <p class="subtitle">Made possible by industry leaders in semiconductor and technology.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 2rem; padding: 2rem; align-items: center; justify-items: center; background: #fff; border-radius: 12px;">
+            <img src="images/sponsors/intel.png" alt="Intel" style="max-height: 44px; max-width: 120px; object-fit: contain;">
+            <img src="images/sponsors/nvidia.png" alt="NVIDIA" style="max-height: 44px; max-width: 120px; object-fit: contain;">
+            <img src="images/sponsors/mobileye.png" alt="Mobileye" style="max-height: 44px; max-width: 120px; object-fit: contain;">
+            <img src="images/sponsors/cadence.jpg" alt="Cadence" style="max-height: 44px; max-width: 120px; object-fit: contain;">
+            <img src="images/sponsors/marvell.png" alt="Marvell" style="max-height: 44px; max-width: 120px; object-fit: contain;">
+            <img src="images/sponsors/google.png" alt="Google" style="max-height: 44px; max-width: 120px; object-fit: contain;">
+            <img src="images/sponsors/apple.png" alt="Apple" style="max-height: 44px; max-width: 120px; object-fit: contain;">
+            <img src="images/sponsors/amazon.jpg" alt="Amazon" style="max-height: 44px; max-width: 120px; object-fit: contain;">
+            <img src="images/sponsors/scd.png" alt="SCD" style="max-height: 44px; max-width: 120px; object-fit: contain;">
+        </div>
+    </div>
+
     <footer class="site-footer">
-        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+        VLSI Hackathon 2026 &mdash; Technion, Israel Institute of Technology
     </footer>
 </section>
 
@@ -180,7 +197,7 @@
     <!-- Overview -->
     <div class="section-block">
         <h2>The Event</h2>
-        <p class="subtitle">CrashTech VLSI-2026 is a 24-hour chip-design hackathon at the Technion. Teams combine FPGA hardware and ESP32 firmware to solve real engineering challenges &mdash; fast.</p>
+        <p class="subtitle">VLSI Hackathon 2026 is a 24-hour chip-design hackathon at the Technion. Teams combine FPGA hardware and ESP32 firmware to solve real engineering challenges &mdash; fast.</p>
     </div>
 
     <!-- Schedule -->
@@ -237,7 +254,7 @@
     </div>
 
     <footer class="site-footer">
-        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+        VLSI Hackathon 2026 &mdash; Technion, Israel Institute of Technology
     </footer>
 </section>
 
@@ -334,6 +351,12 @@
     <div class="section-block">
         <h2>How They Connect</h2>
         <p class="subtitle">The two boards communicate through wired interfaces &mdash; this is the core engineering challenge.</p>
+
+        <!-- Wiring Diagram -->
+        <div style="text-align: center; margin: 2rem 0;">
+            <img src="images/esp32-pinmap.svg" alt="ESP32 to FPGA Wiring Diagram" style="max-width: 100%; height: auto; border-radius: 12px;">
+        </div>
+
         <div class="card-grid">
             <div class="card">
                 <div class="card-icon" data-icon="TX"></div>
@@ -373,7 +396,7 @@
     </div>
 
     <footer class="site-footer">
-        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+        VLSI Hackathon 2026 &mdash; Technion, Israel Institute of Technology
     </footer>
 </section>
 
@@ -470,7 +493,7 @@
                 <div class="step-number">6</div>
                 <div class="step-content">
                     <h4>Test Your ESP32 &mdash; OLED + Button + Buzzer</h4>
-                    <p>Create a PlatformIO project that displays "CrashTech" on the OLED, detects button presses, and beeps the buzzer. Build, flash, and verify all three peripherals work.</p>
+                    <p>Create a PlatformIO project that displays "Hello" on the OLED, detects button presses, and beeps the buzzer. Build, flash, and verify all three peripherals work.</p>
                     <div class="step-details">
                         <p class="step-tip">See the complete smoke test code in the <strong>esp32-firmware</strong> skill → "Smoke Test"</p>
                     </div>
@@ -583,7 +606,7 @@
     </div>
 
     <footer class="site-footer">
-        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+        VLSI Hackathon 2026 &mdash; Technion, Israel Institute of Technology
     </footer>
 </section>
 
@@ -745,7 +768,7 @@
     </div>
 
     <footer class="site-footer">
-        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+        VLSI Hackathon 2026 &mdash; Technion, Israel Institute of Technology
     </footer>
 </section>
 
@@ -755,7 +778,7 @@
     <!-- Header -->
     <div class="section-block">
         <h2>AI Tools</h2>
-        <p class="subtitle">In CrashTech, AI isn't a shortcut &mdash; it's a core tool. You're expected to use it. The best teams will be the ones who learn to work <em>with</em> AI the fastest. Here's your toolkit.</p>
+        <p class="subtitle">In this hackathon, AI isn't a shortcut &mdash; it's a core tool. You're expected to use it. The best teams will be the ones who learn to work <em>with</em> AI the fastest. Here's your toolkit.</p>
 
         <div class="info-box warning">
             <strong>&#x26a0;&#xfe0f; Copilot License Note:</strong> GitHub has recently reduced free Copilot access for student accounts (as of March 2026). We are working with Microsoft to secure full Copilot access for all hackathon participants during the event. Details will be updated here.
@@ -893,7 +916,7 @@
             </div>
         </div>
 
-        <h4 class="ai-skills-available-title">Available Skills for CrashTech</h4>
+        <h4 class="ai-skills-available-title">Available Skills for VLSI Hackathon</h4>
         <div class="card-grid">
             <div class="card">
                 <div class="card-icon" data-icon="FPGA"></div>
@@ -963,12 +986,12 @@
         <div style="max-width: 640px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem;">
             <div style="font-size: 3rem; margin-bottom: 0.5rem;">&#x2731;</div>
             <h3 style="color: var(--accent); margin-bottom: 0.5rem;">AI Is Expected, Not Optional</h3>
-            <p style="color: var(--text-muted);">Using AI tools is not just allowed in CrashTech &mdash; it's encouraged and expected. The challenges are designed to be solved faster with AI assistance. The teams that learn to collaborate with Copilot effectively will have a serious edge. Embrace it.</p>
+            <p style="color: var(--text-muted);">Using AI tools is not just allowed &mdash; it's encouraged and expected. The challenges are designed to be solved faster with AI assistance. The teams that learn to collaborate with Copilot effectively will have a serious edge. Embrace it.</p>
         </div>
     </div>
 
     <footer class="site-footer">
-        CrashTech VLSI-2026 &mdash; Technion, Israel Institute of Technology
+        VLSI Hackathon 2026 &mdash; Technion, Israel Institute of Technology
     </footer>
 </section>
 
@@ -995,7 +1018,7 @@
     <div class="placeholder">
         <div class="placeholder-icon" data-icon="+"></div>
         <h2>Registration Closed</h2>
-        <p>All spots are filled. Thanks for the overwhelming interest &mdash; see you at CrashTech VLSI-2026.</p>
+        <p>All spots are filled. Thanks for the overwhelming interest &mdash; see you at VLSI Hackathon 2026.</p>
     </div>
 </section>
 
