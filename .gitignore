@@ -51,9 +51,6 @@ organizer/
 # Organizer-only docs (concept notes, website spec, kits info, publication plan)
 docs/
 
-# Organizer-only projects scratch tree
-projects/
-
 # Organizer-only release checklist
 RELEASE_CHECKLIST.md
 
