@@ -121,6 +121,8 @@ void loop() {
     // -- Non-blocking UART receive state machine ---------------
     while (Serial2.available() > 0) {
         const uint8_t b = static_cast<uint8_t>(Serial2.read());
+        Serial.printf("[UART] raw byte=0x%02X  state=%s\n",
+                      b, (rxState == RxState::WAIT_LO) ? "WAIT_LO" : "WAIT_HI");
 
         switch (rxState) {
             case RxState::WAIT_LO:
