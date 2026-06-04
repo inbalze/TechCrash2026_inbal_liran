@@ -43,10 +43,9 @@ env/
 **/secrets.h
 secrets.*
 
-# Generated public-challenge staging area. NEVER commit.
+# Generated public-challenge staging area.
 # Built by scripts/build-challenges-public.ps1 from challenges/.
 # Published to participants via scripts/publish-challenges.ps1.
-challenges_public/
 
 # Organizer-only content (not for participant repo)
 organizer/
