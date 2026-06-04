@@ -30,10 +30,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <!-- 50 MHz clock source -->
-  <module name="clk_0" kind="clock_source" version="20.1" enabled="1">
-    <parameter name="clockFrequency"      value="50000000"/>
-    <parameter name="clockFrequencyKnown" value="true"/>
-    <parameter name="inputClockFrequency" value="0"/>
+  <module name="clk_0" kind="clock_source" version="17.0" enabled="1">
+    <parameter name="clockFrequency"        value="50000000"/>
+    <parameter name="clockFrequencyKnown"   value="true"/>
+    <parameter name="inputClockFrequency"   value="0"/>
     <parameter name="resetSynchronousEdges" value="NONE"/>
   </module>
 
@@ -49,17 +49,17 @@
   </module>
 
   <!-- Internal connections -->
-  <connection kind="clock" version="20.0"
+  <connection kind="clock" version="17.0"
       start="clk_0.clk"       end="modular_adc_0.clock_sink"/>
-  <connection kind="reset" version="20.0"
+  <connection kind="reset" version="17.0"
       start="clk_0.clk_reset" end="modular_adc_0.reset_sink"/>
 
-  <!-- Exports (become top-level ports of the generated wrapper) -->
-  <connection kind="export" version="20.0" start="clk_0.clk_in"                        end="clk"/>
-  <connection kind="export" version="20.0" start="clk_0.clk_in_reset"                  end="reset"/>
-  <connection kind="export" version="20.0" start="modular_adc_0.command"               end="command"/>
-  <connection kind="export" version="20.0" start="modular_adc_0.response"              end="response"/>
-  <connection kind="export" version="20.0" start="modular_adc_0.adc_pll_clock"        end="adc_pll_clock"/>
-  <connection kind="export" version="20.0" start="modular_adc_0.adc_pll_locked"       end="adc_pll_locked"/>
+  <!-- Exports — Quartus 17.1 format uses <interface> elements -->
+  <interface name="clk"            internal="clk_0.clk_in"                  type="clock"             dir="end"/>
+  <interface name="reset"          internal="clk_0.clk_in_reset"            type="reset"             dir="end"/>
+  <interface name="adc_pll_clock"  internal="modular_adc_0.adc_pll_clock"  type="clock"             dir="start"/>
+  <interface name="adc_pll_locked" internal="modular_adc_0.adc_pll_locked" type="conduit"           dir="end"/>
+  <interface name="command"        internal="modular_adc_0.command"         type="avalon_streaming"  dir="end"/>
+  <interface name="response"       internal="modular_adc_0.response"        type="avalon_streaming"  dir="start"/>
 
 </system>
