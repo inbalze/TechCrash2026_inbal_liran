@@ -1,0 +1,625 @@
+----------------
+; Command Info ;
+----------------
+Report Timing: Found 5 setup paths (5 violated).  Worst case slack is -1.160 
+
+Tcl Command:
+    report_timing -setup -file timing_setup_report.txt -npaths 5 -detail full_path
+
+Options:
+    -setup 
+    -npaths 5 
+    -detail full_path 
+    -file {timing_setup_report.txt} 
+
+Delay Model:
+    Slow 1200mV 85C Model
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Summary of Paths                                                                                                                                                                                                                      ;
++--------+-----------------------------------+-----------------------------------+------------------------------------------------------+------------------------------------------------------+--------------+------------+------------+
+; Slack  ; From Node                         ; To Node                           ; Launch Clock                                         ; Latch Clock                                          ; Relationship ; Clock Skew ; Data Delay ;
++--------+-----------------------------------+-----------------------------------+------------------------------------------------------+------------------------------------------------------+--------------+------------+------------+
+; -1.160 ; fp8_adder:dut|a_larger~1_OTERM171 ; fp8_adder:dut|lzd[1]~7_OTERM61    ; user_pll|altpll_component|auto_generated|pll1|clk[0] ; user_pll|altpll_component|auto_generated|pll1|clk[0] ; 6.666        ; 0.385      ; 8.204      ;
+; -1.124 ; fp8_adder:dut|a_larger~1_OTERM171 ; fp8_adder:dut|LessThan2~3_OTERM77 ; user_pll|altpll_component|auto_generated|pll1|clk[0] ; user_pll|altpll_component|auto_generated|pll1|clk[0] ; 6.666        ; 0.385      ; 8.168      ;
+; -1.102 ; fp8_adder:dut|a_larger~1_OTERM171 ; fp8_adder:dut|LessThan2~0_OTERM73 ; user_pll|altpll_component|auto_generated|pll1|clk[0] ; user_pll|altpll_component|auto_generated|pll1|clk[0] ; 6.666        ; 0.385      ; 8.146      ;
+; -1.079 ; fp8_adder:dut|a_larger~1_OTERM171 ; fp8_adder:dut|LessThan2~2_OTERM71 ; user_pll|altpll_component|auto_generated|pll1|clk[0] ; user_pll|altpll_component|auto_generated|pll1|clk[0] ; 6.666        ; 0.385      ; 8.123      ;
+; -1.068 ; fp8_adder:dut|a_larger~0_OTERM169 ; fp8_adder:dut|LessThan2~0_OTERM73 ; user_pll|altpll_component|auto_generated|pll1|clk[0] ; user_pll|altpll_component|auto_generated|pll1|clk[0] ; 6.666        ; 0.385      ; 8.112      ;
++--------+-----------------------------------+-----------------------------------+------------------------------------------------------+------------------------------------------------------+--------------+------------+------------+
+
+Path #1: Setup slack is -1.160 (VIOLATED)
+===============================================================================
++---------------------------------------------------------------------------+
+; Path Summary                                                              ;
++--------------------+------------------------------------------------------+
+; Property           ; Value                                                ;
++--------------------+------------------------------------------------------+
+; From Node          ; fp8_adder:dut|a_larger~1_OTERM171                    ;
+; To Node            ; fp8_adder:dut|lzd[1]~7_OTERM61                       ;
+; Launch Clock       ; user_pll|altpll_component|auto_generated|pll1|clk[0] ;
+; Latch Clock        ; user_pll|altpll_component|auto_generated|pll1|clk[0] ;
+; Data Arrival Time  ; 8.651                                                ;
+; Data Required Time ; 7.491                                                ;
+; Slack              ; -1.160 (VIOLATED)                                    ;
++--------------------+------------------------------------------------------+
+
++-------------------------------------------------------------------------------------+
+; Statistics                                                                          ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min    ; Max    ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+; Setup Relationship     ; 6.666 ;       ;             ;            ;        ;        ;
+; Clock Skew             ; 0.385 ;       ;             ;            ;        ;        ;
+; Data Delay             ; 8.204 ;       ;             ;            ;        ;        ;
+; Number of Logic Levels ;       ; 8     ;             ;            ;        ;        ;
+; Physical Delays        ;       ;       ;             ;            ;        ;        ;
+;  Arrival Path          ;       ;       ;             ;            ;        ;        ;
+;   Clock                ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 4     ; 7.679       ; 85         ; 0.000  ; 3.486  ;
+;    Cell                ;       ; 4     ; 1.303       ; 15         ; 0.000  ; 0.793  ;
+;    PLL Compensation    ;       ; 1     ; -8.535      ; 0          ; -8.535 ; -8.535 ;
+;   Data                 ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 14    ; 4.256       ; 52         ; 0.000  ; 0.800  ;
+;    Cell                ;       ; 15    ; 3.741       ; 46         ; 0.000  ; 0.605  ;
+;    uTco                ;       ; 1     ; 0.207       ; 3          ; 0.207  ; 0.207  ;
+;  Required Path         ;       ;       ;             ;            ;        ;        ;
+;   Clock                ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 4     ; 7.827       ; 86         ; 0.000  ; 3.347  ;
+;    Cell                ;       ; 4     ; 1.268       ; 14         ; 0.000  ; 0.793  ;
+;    PLL Compensation    ;       ; 1     ; -9.251      ; 0          ; -9.251 ; -9.251 ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++--------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                          ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+; Total    ; Incr     ; RF ; Type ; Fanout ; Location           ; Element                                                                    ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+; 0.000    ; 0.000    ;    ;      ;        ;                    ; launch edge time                                                           ;
+; 0.447    ; 0.447    ;    ;      ;        ;                    ; clock path                                                                 ;
+;   0.000  ;   0.000  ;    ;      ;        ;                    ; source latency                                                             ;
+;   0.000  ;   0.000  ;    ;      ; 1      ; PIN_P11            ; MAX10_CLK1_50                                                              ;
+;   0.000  ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X34_Y0_N29  ; MAX10_CLK1_50~input|i                                                      ;
+;   0.793  ;   0.793  ; RR ; CELL ; 2      ; IOIBUF_X34_Y0_N29  ; MAX10_CLK1_50~input|o                                                      ;
+;   4.279  ;   3.486  ; RR ; IC   ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|inclk[0]                     ;
+;   -4.256 ;   -8.535 ; RR ; COMP ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|observablevcoout             ;
+;   -4.256 ;   0.000  ; RR ; CELL ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|clk[0]                       ;
+;   -1.474 ;   2.782  ; RR ; IC   ; 1      ; CLKCTRL_G18        ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|inclk[0] ;
+;   -1.474 ;   0.000  ; RR ; CELL ; 186    ; CLKCTRL_G18        ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|outclk   ;
+;   -0.063 ;   1.411  ; RR ; IC   ; 1      ; FF_X43_Y21_N5      ; dut|a_larger~1_NEW_REG170|clk                                              ;
+;   0.447  ;   0.510  ; RR ; CELL ; 1      ; FF_X43_Y21_N5      ; fp8_adder:dut|a_larger~1_OTERM171                                          ;
+; 8.651    ; 8.204    ;    ;      ;        ;                    ; data path                                                                  ;
+;   0.654  ;   0.207  ;    ; uTco ; 1      ; FF_X43_Y21_N5      ; fp8_adder:dut|a_larger~1_OTERM171                                          ;
+;   0.654  ;   0.000  ; FF ; CELL ; 7      ; FF_X43_Y21_N5      ; dut|a_larger~1_NEW_REG170|q                                                ;
+;   1.270  ;   0.616  ; FF ; IC   ; 1      ; LCCOMB_X42_Y21_N12 ; dut|a_larger~5|dataa                                                       ;
+;   1.672  ;   0.402  ; FR ; CELL ; 16     ; LCCOMB_X42_Y21_N12 ; dut|a_larger~5|combout                                                     ;
+;   2.472  ;   0.800  ; RR ; IC   ; 1      ; LCCOMB_X42_Y22_N28 ; dut|man_sml4[3]~1|datab                                                    ;
+;   2.921  ;   0.449  ; RF ; CELL ; 6      ; LCCOMB_X42_Y22_N28 ; dut|man_sml4[3]~1|combout                                                  ;
+;   3.588  ;   0.667  ; FF ; IC   ; 1      ; LCCOMB_X43_Y22_N26 ; dut|sticky_s1~4|datac                                                      ;
+;   3.886  ;   0.298  ; FF ; CELL ; 1      ; LCCOMB_X43_Y22_N26 ; dut|sticky_s1~4|combout                                                    ;
+;   4.640  ;   0.754  ; FF ; IC   ; 1      ; LCCOMB_X41_Y22_N24 ; dut|sticky_s1~5|dataa                                                      ;
+;   4.995  ;   0.355  ; FF ; CELL ; 4      ; LCCOMB_X41_Y22_N24 ; dut|sticky_s1~5|combout                                                    ;
+;   5.297  ;   0.302  ; FF ; IC   ; 1      ; LCCOMB_X41_Y22_N0  ; dut|Add3~14|datab                                                          ;
+;   5.690  ;   0.393  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N0  ; dut|Add3~14|cout                                                           ;
+;   5.690  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N2  ; dut|Add3~16|cin                                                            ;
+;   5.749  ;   0.059  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N2  ; dut|Add3~16|cout                                                           ;
+;   5.749  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N4  ; dut|Add3~18|cin                                                            ;
+;   5.808  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N4  ; dut|Add3~18|cout                                                           ;
+;   5.808  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N6  ; dut|Add3~20|cin                                                            ;
+;   5.867  ;   0.059  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N6  ; dut|Add3~20|cout                                                           ;
+;   5.867  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N8  ; dut|Add3~22|cin                                                            ;
+;   5.926  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N8  ; dut|Add3~22|cout                                                           ;
+;   5.926  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N10 ; dut|Add3~24|cin                                                            ;
+;   6.531  ;   0.605  ; RF ; CELL ; 2      ; LCCOMB_X41_Y22_N10 ; dut|Add3~24|combout                                                        ;
+;   6.944  ;   0.413  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N14 ; dut|Add3~39|datac                                                          ;
+;   7.247  ;   0.303  ; FF ; CELL ; 4      ; LCCOMB_X40_Y22_N14 ; dut|Add3~39|combout                                                        ;
+;   7.557  ;   0.310  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N4  ; dut|lzd[1]~3_RTM011|datab                                                  ;
+;   8.002  ;   0.445  ; FR ; CELL ; 3      ; LCCOMB_X40_Y22_N4  ; dut|lzd[1]~3_RTM011|combout                                                ;
+;   8.396  ;   0.394  ; RR ; IC   ; 1      ; LCCOMB_X40_Y22_N22 ; dut|lzd[1]~7_RTM063|datad                                                  ;
+;   8.562  ;   0.166  ; RR ; CELL ; 1      ; LCCOMB_X40_Y22_N22 ; dut|lzd[1]~7_RTM063|combout                                                ;
+;   8.562  ;   0.000  ; RR ; IC   ; 1      ; FF_X40_Y22_N23     ; dut|lzd[1]~7_NEW_REG60|d                                                   ;
+;   8.651  ;   0.089  ; RR ; CELL ; 1      ; FF_X40_Y22_N23     ; fp8_adder:dut|lzd[1]~7_OTERM61                                             ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+
++-------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                        ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+; Total    ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                    ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+; 6.666    ; 6.666    ;    ;      ;        ;                   ; latch edge time                                                            ;
+; 7.498    ; 0.832    ;    ;      ;        ;                   ; clock path                                                                 ;
+;   6.666  ;   0.000  ;    ;      ;        ;                   ; source latency                                                             ;
+;   6.666  ;   0.000  ;    ;      ; 1      ; PIN_P11           ; MAX10_CLK1_50                                                              ;
+;   6.666  ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X34_Y0_N29 ; MAX10_CLK1_50~input|i                                                      ;
+;   7.459  ;   0.793  ; RR ; CELL ; 2      ; IOIBUF_X34_Y0_N29 ; MAX10_CLK1_50~input|o                                                      ;
+;   10.806 ;   3.347  ; RR ; IC   ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|inclk[0]                     ;
+;   1.555  ;   -9.251 ; RR ; COMP ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|observablevcoout             ;
+;   1.555  ;   0.000  ; RR ; CELL ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|clk[0]                       ;
+;   4.226  ;   2.671  ; RR ; IC   ; 1      ; CLKCTRL_G18       ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|inclk[0] ;
+;   4.226  ;   0.000  ; RR ; CELL ; 186    ; CLKCTRL_G18       ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|outclk   ;
+;   6.035  ;   1.809  ; RR ; IC   ; 1      ; FF_X40_Y22_N23    ; dut|lzd[1]~7_NEW_REG60|clk                                                 ;
+;   6.510  ;   0.475  ; RR ; CELL ; 1      ; FF_X40_Y22_N23    ; fp8_adder:dut|lzd[1]~7_OTERM61                                             ;
+;   7.498  ;   0.988  ;    ;      ;        ;                   ; clock pessimism removed                                                    ;
+; 7.478    ; -0.020   ;    ;      ;        ;                   ; clock uncertainty                                                          ;
+; 7.491    ; 0.013    ;    ; uTsu ; 1      ; FF_X40_Y22_N23    ; fp8_adder:dut|lzd[1]~7_OTERM61                                             ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+
+
+Path #2: Setup slack is -1.124 (VIOLATED)
+===============================================================================
++---------------------------------------------------------------------------+
+; Path Summary                                                              ;
++--------------------+------------------------------------------------------+
+; Property           ; Value                                                ;
++--------------------+------------------------------------------------------+
+; From Node          ; fp8_adder:dut|a_larger~1_OTERM171                    ;
+; To Node            ; fp8_adder:dut|LessThan2~3_OTERM77                    ;
+; Launch Clock       ; user_pll|altpll_component|auto_generated|pll1|clk[0] ;
+; Latch Clock        ; user_pll|altpll_component|auto_generated|pll1|clk[0] ;
+; Data Arrival Time  ; 8.615                                                ;
+; Data Required Time ; 7.491                                                ;
+; Slack              ; -1.124 (VIOLATED)                                    ;
++--------------------+------------------------------------------------------+
+
++-------------------------------------------------------------------------------------+
+; Statistics                                                                          ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min    ; Max    ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+; Setup Relationship     ; 6.666 ;       ;             ;            ;        ;        ;
+; Clock Skew             ; 0.385 ;       ;             ;            ;        ;        ;
+; Data Delay             ; 8.168 ;       ;             ;            ;        ;        ;
+; Number of Logic Levels ;       ; 8     ;             ;            ;        ;        ;
+; Physical Delays        ;       ;       ;             ;            ;        ;        ;
+;  Arrival Path          ;       ;       ;             ;            ;        ;        ;
+;   Clock                ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 4     ; 7.679       ; 85         ; 0.000  ; 3.486  ;
+;    Cell                ;       ; 4     ; 1.303       ; 15         ; 0.000  ; 0.793  ;
+;    PLL Compensation    ;       ; 1     ; -8.535      ; 0          ; -8.535 ; -8.535 ;
+;   Data                 ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 14    ; 4.082       ; 50         ; 0.000  ; 0.800  ;
+;    Cell                ;       ; 15    ; 3.879       ; 47         ; 0.000  ; 0.605  ;
+;    uTco                ;       ; 1     ; 0.207       ; 3          ; 0.207  ; 0.207  ;
+;  Required Path         ;       ;       ;             ;            ;        ;        ;
+;   Clock                ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 4     ; 7.827       ; 86         ; 0.000  ; 3.347  ;
+;    Cell                ;       ; 4     ; 1.268       ; 14         ; 0.000  ; 0.793  ;
+;    PLL Compensation    ;       ; 1     ; -9.251      ; 0          ; -9.251 ; -9.251 ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++--------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                          ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+; Total    ; Incr     ; RF ; Type ; Fanout ; Location           ; Element                                                                    ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+; 0.000    ; 0.000    ;    ;      ;        ;                    ; launch edge time                                                           ;
+; 0.447    ; 0.447    ;    ;      ;        ;                    ; clock path                                                                 ;
+;   0.000  ;   0.000  ;    ;      ;        ;                    ; source latency                                                             ;
+;   0.000  ;   0.000  ;    ;      ; 1      ; PIN_P11            ; MAX10_CLK1_50                                                              ;
+;   0.000  ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X34_Y0_N29  ; MAX10_CLK1_50~input|i                                                      ;
+;   0.793  ;   0.793  ; RR ; CELL ; 2      ; IOIBUF_X34_Y0_N29  ; MAX10_CLK1_50~input|o                                                      ;
+;   4.279  ;   3.486  ; RR ; IC   ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|inclk[0]                     ;
+;   -4.256 ;   -8.535 ; RR ; COMP ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|observablevcoout             ;
+;   -4.256 ;   0.000  ; RR ; CELL ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|clk[0]                       ;
+;   -1.474 ;   2.782  ; RR ; IC   ; 1      ; CLKCTRL_G18        ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|inclk[0] ;
+;   -1.474 ;   0.000  ; RR ; CELL ; 186    ; CLKCTRL_G18        ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|outclk   ;
+;   -0.063 ;   1.411  ; RR ; IC   ; 1      ; FF_X43_Y21_N5      ; dut|a_larger~1_NEW_REG170|clk                                              ;
+;   0.447  ;   0.510  ; RR ; CELL ; 1      ; FF_X43_Y21_N5      ; fp8_adder:dut|a_larger~1_OTERM171                                          ;
+; 8.615    ; 8.168    ;    ;      ;        ;                    ; data path                                                                  ;
+;   0.654  ;   0.207  ;    ; uTco ; 1      ; FF_X43_Y21_N5      ; fp8_adder:dut|a_larger~1_OTERM171                                          ;
+;   0.654  ;   0.000  ; FF ; CELL ; 7      ; FF_X43_Y21_N5      ; dut|a_larger~1_NEW_REG170|q                                                ;
+;   1.270  ;   0.616  ; FF ; IC   ; 1      ; LCCOMB_X42_Y21_N12 ; dut|a_larger~5|dataa                                                       ;
+;   1.672  ;   0.402  ; FR ; CELL ; 16     ; LCCOMB_X42_Y21_N12 ; dut|a_larger~5|combout                                                     ;
+;   2.472  ;   0.800  ; RR ; IC   ; 1      ; LCCOMB_X42_Y22_N28 ; dut|man_sml4[3]~1|datab                                                    ;
+;   2.921  ;   0.449  ; RF ; CELL ; 6      ; LCCOMB_X42_Y22_N28 ; dut|man_sml4[3]~1|combout                                                  ;
+;   3.588  ;   0.667  ; FF ; IC   ; 1      ; LCCOMB_X43_Y22_N26 ; dut|sticky_s1~4|datac                                                      ;
+;   3.886  ;   0.298  ; FF ; CELL ; 1      ; LCCOMB_X43_Y22_N26 ; dut|sticky_s1~4|combout                                                    ;
+;   4.640  ;   0.754  ; FF ; IC   ; 1      ; LCCOMB_X41_Y22_N24 ; dut|sticky_s1~5|dataa                                                      ;
+;   4.995  ;   0.355  ; FF ; CELL ; 4      ; LCCOMB_X41_Y22_N24 ; dut|sticky_s1~5|combout                                                    ;
+;   5.297  ;   0.302  ; FF ; IC   ; 1      ; LCCOMB_X41_Y22_N0  ; dut|Add3~14|datab                                                          ;
+;   5.690  ;   0.393  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N0  ; dut|Add3~14|cout                                                           ;
+;   5.690  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N2  ; dut|Add3~16|cin                                                            ;
+;   5.749  ;   0.059  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N2  ; dut|Add3~16|cout                                                           ;
+;   5.749  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N4  ; dut|Add3~18|cin                                                            ;
+;   5.808  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N4  ; dut|Add3~18|cout                                                           ;
+;   5.808  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N6  ; dut|Add3~20|cin                                                            ;
+;   5.867  ;   0.059  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N6  ; dut|Add3~20|cout                                                           ;
+;   5.867  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N8  ; dut|Add3~22|cin                                                            ;
+;   5.926  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N8  ; dut|Add3~22|cout                                                           ;
+;   5.926  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N10 ; dut|Add3~24|cin                                                            ;
+;   6.531  ;   0.605  ; RF ; CELL ; 2      ; LCCOMB_X41_Y22_N10 ; dut|Add3~24|combout                                                        ;
+;   6.944  ;   0.413  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N14 ; dut|Add3~39|datac                                                          ;
+;   7.247  ;   0.303  ; FF ; CELL ; 4      ; LCCOMB_X40_Y22_N14 ; dut|Add3~39|combout                                                        ;
+;   7.557  ;   0.310  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N4  ; dut|lzd[1]~3_RTM011|datab                                                  ;
+;   8.002  ;   0.445  ; FR ; CELL ; 3      ; LCCOMB_X40_Y22_N4  ; dut|lzd[1]~3_RTM011|combout                                                ;
+;   8.222  ;   0.220  ; RR ; IC   ; 1      ; LCCOMB_X40_Y22_N20 ; dut|LessThan2~3|datac                                                      ;
+;   8.526  ;   0.304  ; RR ; CELL ; 1      ; LCCOMB_X40_Y22_N20 ; dut|LessThan2~3|combout                                                    ;
+;   8.526  ;   0.000  ; RR ; IC   ; 1      ; FF_X40_Y22_N21     ; dut|LessThan2~3_NEW_REG76|d                                                ;
+;   8.615  ;   0.089  ; RR ; CELL ; 1      ; FF_X40_Y22_N21     ; fp8_adder:dut|LessThan2~3_OTERM77                                          ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+
++-------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                        ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+; Total    ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                    ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+; 6.666    ; 6.666    ;    ;      ;        ;                   ; latch edge time                                                            ;
+; 7.498    ; 0.832    ;    ;      ;        ;                   ; clock path                                                                 ;
+;   6.666  ;   0.000  ;    ;      ;        ;                   ; source latency                                                             ;
+;   6.666  ;   0.000  ;    ;      ; 1      ; PIN_P11           ; MAX10_CLK1_50                                                              ;
+;   6.666  ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X34_Y0_N29 ; MAX10_CLK1_50~input|i                                                      ;
+;   7.459  ;   0.793  ; RR ; CELL ; 2      ; IOIBUF_X34_Y0_N29 ; MAX10_CLK1_50~input|o                                                      ;
+;   10.806 ;   3.347  ; RR ; IC   ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|inclk[0]                     ;
+;   1.555  ;   -9.251 ; RR ; COMP ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|observablevcoout             ;
+;   1.555  ;   0.000  ; RR ; CELL ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|clk[0]                       ;
+;   4.226  ;   2.671  ; RR ; IC   ; 1      ; CLKCTRL_G18       ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|inclk[0] ;
+;   4.226  ;   0.000  ; RR ; CELL ; 186    ; CLKCTRL_G18       ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|outclk   ;
+;   6.035  ;   1.809  ; RR ; IC   ; 1      ; FF_X40_Y22_N21    ; dut|LessThan2~3_NEW_REG76|clk                                              ;
+;   6.510  ;   0.475  ; RR ; CELL ; 1      ; FF_X40_Y22_N21    ; fp8_adder:dut|LessThan2~3_OTERM77                                          ;
+;   7.498  ;   0.988  ;    ;      ;        ;                   ; clock pessimism removed                                                    ;
+; 7.478    ; -0.020   ;    ;      ;        ;                   ; clock uncertainty                                                          ;
+; 7.491    ; 0.013    ;    ; uTsu ; 1      ; FF_X40_Y22_N21    ; fp8_adder:dut|LessThan2~3_OTERM77                                          ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+
+
+Path #3: Setup slack is -1.102 (VIOLATED)
+===============================================================================
++---------------------------------------------------------------------------+
+; Path Summary                                                              ;
++--------------------+------------------------------------------------------+
+; Property           ; Value                                                ;
++--------------------+------------------------------------------------------+
+; From Node          ; fp8_adder:dut|a_larger~1_OTERM171                    ;
+; To Node            ; fp8_adder:dut|LessThan2~0_OTERM73                    ;
+; Launch Clock       ; user_pll|altpll_component|auto_generated|pll1|clk[0] ;
+; Latch Clock        ; user_pll|altpll_component|auto_generated|pll1|clk[0] ;
+; Data Arrival Time  ; 8.593                                                ;
+; Data Required Time ; 7.491                                                ;
+; Slack              ; -1.102 (VIOLATED)                                    ;
++--------------------+------------------------------------------------------+
+
++-------------------------------------------------------------------------------------+
+; Statistics                                                                          ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min    ; Max    ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+; Setup Relationship     ; 6.666 ;       ;             ;            ;        ;        ;
+; Clock Skew             ; 0.385 ;       ;             ;            ;        ;        ;
+; Data Delay             ; 8.146 ;       ;             ;            ;        ;        ;
+; Number of Logic Levels ;       ; 8     ;             ;            ;        ;        ;
+; Physical Delays        ;       ;       ;             ;            ;        ;        ;
+;  Arrival Path          ;       ;       ;             ;            ;        ;        ;
+;   Clock                ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 4     ; 7.679       ; 85         ; 0.000  ; 3.486  ;
+;    Cell                ;       ; 4     ; 1.303       ; 15         ; 0.000  ; 0.793  ;
+;    PLL Compensation    ;       ; 1     ; -8.535      ; 0          ; -8.535 ; -8.535 ;
+;   Data                 ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 15    ; 4.077       ; 50         ; 0.000  ; 0.800  ;
+;    Cell                ;       ; 16    ; 3.862       ; 47         ; 0.000  ; 0.605  ;
+;    uTco                ;       ; 1     ; 0.207       ; 3          ; 0.207  ; 0.207  ;
+;  Required Path         ;       ;       ;             ;            ;        ;        ;
+;   Clock                ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 4     ; 7.827       ; 86         ; 0.000  ; 3.347  ;
+;    Cell                ;       ; 4     ; 1.268       ; 14         ; 0.000  ; 0.793  ;
+;    PLL Compensation    ;       ; 1     ; -9.251      ; 0          ; -9.251 ; -9.251 ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++--------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                          ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+; Total    ; Incr     ; RF ; Type ; Fanout ; Location           ; Element                                                                    ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+; 0.000    ; 0.000    ;    ;      ;        ;                    ; launch edge time                                                           ;
+; 0.447    ; 0.447    ;    ;      ;        ;                    ; clock path                                                                 ;
+;   0.000  ;   0.000  ;    ;      ;        ;                    ; source latency                                                             ;
+;   0.000  ;   0.000  ;    ;      ; 1      ; PIN_P11            ; MAX10_CLK1_50                                                              ;
+;   0.000  ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X34_Y0_N29  ; MAX10_CLK1_50~input|i                                                      ;
+;   0.793  ;   0.793  ; RR ; CELL ; 2      ; IOIBUF_X34_Y0_N29  ; MAX10_CLK1_50~input|o                                                      ;
+;   4.279  ;   3.486  ; RR ; IC   ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|inclk[0]                     ;
+;   -4.256 ;   -8.535 ; RR ; COMP ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|observablevcoout             ;
+;   -4.256 ;   0.000  ; RR ; CELL ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|clk[0]                       ;
+;   -1.474 ;   2.782  ; RR ; IC   ; 1      ; CLKCTRL_G18        ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|inclk[0] ;
+;   -1.474 ;   0.000  ; RR ; CELL ; 186    ; CLKCTRL_G18        ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|outclk   ;
+;   -0.063 ;   1.411  ; RR ; IC   ; 1      ; FF_X43_Y21_N5      ; dut|a_larger~1_NEW_REG170|clk                                              ;
+;   0.447  ;   0.510  ; RR ; CELL ; 1      ; FF_X43_Y21_N5      ; fp8_adder:dut|a_larger~1_OTERM171                                          ;
+; 8.593    ; 8.146    ;    ;      ;        ;                    ; data path                                                                  ;
+;   0.654  ;   0.207  ;    ; uTco ; 1      ; FF_X43_Y21_N5      ; fp8_adder:dut|a_larger~1_OTERM171                                          ;
+;   0.654  ;   0.000  ; FF ; CELL ; 7      ; FF_X43_Y21_N5      ; dut|a_larger~1_NEW_REG170|q                                                ;
+;   1.270  ;   0.616  ; FF ; IC   ; 1      ; LCCOMB_X42_Y21_N12 ; dut|a_larger~5|dataa                                                       ;
+;   1.672  ;   0.402  ; FR ; CELL ; 16     ; LCCOMB_X42_Y21_N12 ; dut|a_larger~5|combout                                                     ;
+;   2.472  ;   0.800  ; RR ; IC   ; 1      ; LCCOMB_X42_Y22_N28 ; dut|man_sml4[3]~1|datab                                                    ;
+;   2.882  ;   0.410  ; RR ; CELL ; 6      ; LCCOMB_X42_Y22_N28 ; dut|man_sml4[3]~1|combout                                                  ;
+;   3.555  ;   0.673  ; RR ; IC   ; 1      ; LCCOMB_X43_Y22_N26 ; dut|sticky_s1~4|datac                                                      ;
+;   3.859  ;   0.304  ; RR ; CELL ; 1      ; LCCOMB_X43_Y22_N26 ; dut|sticky_s1~4|combout                                                    ;
+;   4.590  ;   0.731  ; RR ; IC   ; 1      ; LCCOMB_X41_Y22_N24 ; dut|sticky_s1~5|dataa                                                      ;
+;   4.955  ;   0.365  ; RR ; CELL ; 4      ; LCCOMB_X41_Y22_N24 ; dut|sticky_s1~5|combout                                                    ;
+;   5.211  ;   0.256  ; RR ; IC   ; 1      ; LCCOMB_X41_Y22_N0  ; dut|Add3~14|datab                                                          ;
+;   5.735  ;   0.524  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N0  ; dut|Add3~14|cout                                                           ;
+;   5.735  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N2  ; dut|Add3~16|cin                                                            ;
+;   5.794  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N2  ; dut|Add3~16|cout                                                           ;
+;   5.794  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N4  ; dut|Add3~18|cin                                                            ;
+;   5.853  ;   0.059  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N4  ; dut|Add3~18|cout                                                           ;
+;   5.853  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N6  ; dut|Add3~20|cin                                                            ;
+;   5.912  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N6  ; dut|Add3~20|cout                                                           ;
+;   5.912  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N8  ; dut|Add3~22|cin                                                            ;
+;   5.971  ;   0.059  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N8  ; dut|Add3~22|cout                                                           ;
+;   5.971  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N10 ; dut|Add3~24|cin                                                            ;
+;   6.030  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N10 ; dut|Add3~24|cout                                                           ;
+;   6.030  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N12 ; dut|Add3~26|cin                                                            ;
+;   6.635  ;   0.605  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N12 ; dut|Add3~26|combout                                                        ;
+;   7.064  ;   0.429  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N2  ; dut|Add3~34|datac                                                          ;
+;   7.367  ;   0.303  ; FF ; CELL ; 5      ; LCCOMB_X40_Y22_N2  ; dut|Add3~34|combout                                                        ;
+;   7.690  ;   0.323  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N0  ; dut|lzd~4_RTM015|datab                                                     ;
+;   8.094  ;   0.404  ; FF ; CELL ; 3      ; LCCOMB_X40_Y22_N0  ; dut|lzd~4_RTM015|combout                                                   ;
+;   8.343  ;   0.249  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N12 ; dut|LessThan2~0_RTM075|datad                                               ;
+;   8.504  ;   0.161  ; FR ; CELL ; 1      ; LCCOMB_X40_Y22_N12 ; dut|LessThan2~0_RTM075|combout                                             ;
+;   8.504  ;   0.000  ; RR ; IC   ; 1      ; FF_X40_Y22_N13     ; dut|LessThan2~0_NEW_REG72|d                                                ;
+;   8.593  ;   0.089  ; RR ; CELL ; 1      ; FF_X40_Y22_N13     ; fp8_adder:dut|LessThan2~0_OTERM73                                          ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+
++-------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                        ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+; Total    ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                    ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+; 6.666    ; 6.666    ;    ;      ;        ;                   ; latch edge time                                                            ;
+; 7.498    ; 0.832    ;    ;      ;        ;                   ; clock path                                                                 ;
+;   6.666  ;   0.000  ;    ;      ;        ;                   ; source latency                                                             ;
+;   6.666  ;   0.000  ;    ;      ; 1      ; PIN_P11           ; MAX10_CLK1_50                                                              ;
+;   6.666  ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X34_Y0_N29 ; MAX10_CLK1_50~input|i                                                      ;
+;   7.459  ;   0.793  ; RR ; CELL ; 2      ; IOIBUF_X34_Y0_N29 ; MAX10_CLK1_50~input|o                                                      ;
+;   10.806 ;   3.347  ; RR ; IC   ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|inclk[0]                     ;
+;   1.555  ;   -9.251 ; RR ; COMP ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|observablevcoout             ;
+;   1.555  ;   0.000  ; RR ; CELL ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|clk[0]                       ;
+;   4.226  ;   2.671  ; RR ; IC   ; 1      ; CLKCTRL_G18       ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|inclk[0] ;
+;   4.226  ;   0.000  ; RR ; CELL ; 186    ; CLKCTRL_G18       ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|outclk   ;
+;   6.035  ;   1.809  ; RR ; IC   ; 1      ; FF_X40_Y22_N13    ; dut|LessThan2~0_NEW_REG72|clk                                              ;
+;   6.510  ;   0.475  ; RR ; CELL ; 1      ; FF_X40_Y22_N13    ; fp8_adder:dut|LessThan2~0_OTERM73                                          ;
+;   7.498  ;   0.988  ;    ;      ;        ;                   ; clock pessimism removed                                                    ;
+; 7.478    ; -0.020   ;    ;      ;        ;                   ; clock uncertainty                                                          ;
+; 7.491    ; 0.013    ;    ; uTsu ; 1      ; FF_X40_Y22_N13    ; fp8_adder:dut|LessThan2~0_OTERM73                                          ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+
+
+Path #4: Setup slack is -1.079 (VIOLATED)
+===============================================================================
++---------------------------------------------------------------------------+
+; Path Summary                                                              ;
++--------------------+------------------------------------------------------+
+; Property           ; Value                                                ;
++--------------------+------------------------------------------------------+
+; From Node          ; fp8_adder:dut|a_larger~1_OTERM171                    ;
+; To Node            ; fp8_adder:dut|LessThan2~2_OTERM71                    ;
+; Launch Clock       ; user_pll|altpll_component|auto_generated|pll1|clk[0] ;
+; Latch Clock        ; user_pll|altpll_component|auto_generated|pll1|clk[0] ;
+; Data Arrival Time  ; 8.570                                                ;
+; Data Required Time ; 7.491                                                ;
+; Slack              ; -1.079 (VIOLATED)                                    ;
++--------------------+------------------------------------------------------+
+
++-------------------------------------------------------------------------------------+
+; Statistics                                                                          ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min    ; Max    ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+; Setup Relationship     ; 6.666 ;       ;             ;            ;        ;        ;
+; Clock Skew             ; 0.385 ;       ;             ;            ;        ;        ;
+; Data Delay             ; 8.123 ;       ;             ;            ;        ;        ;
+; Number of Logic Levels ;       ; 8     ;             ;            ;        ;        ;
+; Physical Delays        ;       ;       ;             ;            ;        ;        ;
+;  Arrival Path          ;       ;       ;             ;            ;        ;        ;
+;   Clock                ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 4     ; 7.679       ; 85         ; 0.000  ; 3.486  ;
+;    Cell                ;       ; 4     ; 1.303       ; 15         ; 0.000  ; 0.793  ;
+;    PLL Compensation    ;       ; 1     ; -8.535      ; 0          ; -8.535 ; -8.535 ;
+;   Data                 ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 15    ; 4.079       ; 50         ; 0.000  ; 0.800  ;
+;    Cell                ;       ; 16    ; 3.837       ; 47         ; 0.000  ; 0.605  ;
+;    uTco                ;       ; 1     ; 0.207       ; 3          ; 0.207  ; 0.207  ;
+;  Required Path         ;       ;       ;             ;            ;        ;        ;
+;   Clock                ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 4     ; 7.827       ; 86         ; 0.000  ; 3.347  ;
+;    Cell                ;       ; 4     ; 1.268       ; 14         ; 0.000  ; 0.793  ;
+;    PLL Compensation    ;       ; 1     ; -9.251      ; 0          ; -9.251 ; -9.251 ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++--------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                          ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+; Total    ; Incr     ; RF ; Type ; Fanout ; Location           ; Element                                                                    ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+; 0.000    ; 0.000    ;    ;      ;        ;                    ; launch edge time                                                           ;
+; 0.447    ; 0.447    ;    ;      ;        ;                    ; clock path                                                                 ;
+;   0.000  ;   0.000  ;    ;      ;        ;                    ; source latency                                                             ;
+;   0.000  ;   0.000  ;    ;      ; 1      ; PIN_P11            ; MAX10_CLK1_50                                                              ;
+;   0.000  ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X34_Y0_N29  ; MAX10_CLK1_50~input|i                                                      ;
+;   0.793  ;   0.793  ; RR ; CELL ; 2      ; IOIBUF_X34_Y0_N29  ; MAX10_CLK1_50~input|o                                                      ;
+;   4.279  ;   3.486  ; RR ; IC   ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|inclk[0]                     ;
+;   -4.256 ;   -8.535 ; RR ; COMP ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|observablevcoout             ;
+;   -4.256 ;   0.000  ; RR ; CELL ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|clk[0]                       ;
+;   -1.474 ;   2.782  ; RR ; IC   ; 1      ; CLKCTRL_G18        ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|inclk[0] ;
+;   -1.474 ;   0.000  ; RR ; CELL ; 186    ; CLKCTRL_G18        ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|outclk   ;
+;   -0.063 ;   1.411  ; RR ; IC   ; 1      ; FF_X43_Y21_N5      ; dut|a_larger~1_NEW_REG170|clk                                              ;
+;   0.447  ;   0.510  ; RR ; CELL ; 1      ; FF_X43_Y21_N5      ; fp8_adder:dut|a_larger~1_OTERM171                                          ;
+; 8.570    ; 8.123    ;    ;      ;        ;                    ; data path                                                                  ;
+;   0.654  ;   0.207  ;    ; uTco ; 1      ; FF_X43_Y21_N5      ; fp8_adder:dut|a_larger~1_OTERM171                                          ;
+;   0.654  ;   0.000  ; FF ; CELL ; 7      ; FF_X43_Y21_N5      ; dut|a_larger~1_NEW_REG170|q                                                ;
+;   1.270  ;   0.616  ; FF ; IC   ; 1      ; LCCOMB_X42_Y21_N12 ; dut|a_larger~5|dataa                                                       ;
+;   1.672  ;   0.402  ; FR ; CELL ; 16     ; LCCOMB_X42_Y21_N12 ; dut|a_larger~5|combout                                                     ;
+;   2.472  ;   0.800  ; RR ; IC   ; 1      ; LCCOMB_X42_Y22_N28 ; dut|man_sml4[3]~1|datab                                                    ;
+;   2.882  ;   0.410  ; RR ; CELL ; 6      ; LCCOMB_X42_Y22_N28 ; dut|man_sml4[3]~1|combout                                                  ;
+;   3.555  ;   0.673  ; RR ; IC   ; 1      ; LCCOMB_X43_Y22_N26 ; dut|sticky_s1~4|datac                                                      ;
+;   3.859  ;   0.304  ; RR ; CELL ; 1      ; LCCOMB_X43_Y22_N26 ; dut|sticky_s1~4|combout                                                    ;
+;   4.590  ;   0.731  ; RR ; IC   ; 1      ; LCCOMB_X41_Y22_N24 ; dut|sticky_s1~5|dataa                                                      ;
+;   4.955  ;   0.365  ; RR ; CELL ; 4      ; LCCOMB_X41_Y22_N24 ; dut|sticky_s1~5|combout                                                    ;
+;   5.211  ;   0.256  ; RR ; IC   ; 1      ; LCCOMB_X41_Y22_N0  ; dut|Add3~14|datab                                                          ;
+;   5.735  ;   0.524  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N0  ; dut|Add3~14|cout                                                           ;
+;   5.735  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N2  ; dut|Add3~16|cin                                                            ;
+;   5.794  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N2  ; dut|Add3~16|cout                                                           ;
+;   5.794  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N4  ; dut|Add3~18|cin                                                            ;
+;   5.853  ;   0.059  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N4  ; dut|Add3~18|cout                                                           ;
+;   5.853  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N6  ; dut|Add3~20|cin                                                            ;
+;   5.912  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N6  ; dut|Add3~20|cout                                                           ;
+;   5.912  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N8  ; dut|Add3~22|cin                                                            ;
+;   5.971  ;   0.059  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N8  ; dut|Add3~22|cout                                                           ;
+;   5.971  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N10 ; dut|Add3~24|cin                                                            ;
+;   6.030  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N10 ; dut|Add3~24|cout                                                           ;
+;   6.030  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N12 ; dut|Add3~26|cin                                                            ;
+;   6.635  ;   0.605  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N12 ; dut|Add3~26|combout                                                        ;
+;   7.064  ;   0.429  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N2  ; dut|Add3~34|datac                                                          ;
+;   7.367  ;   0.303  ; FF ; CELL ; 5      ; LCCOMB_X40_Y22_N2  ; dut|Add3~34|combout                                                        ;
+;   7.690  ;   0.323  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N0  ; dut|lzd~4_RTM015|datab                                                     ;
+;   8.094  ;   0.404  ; FF ; CELL ; 3      ; LCCOMB_X40_Y22_N0  ; dut|lzd~4_RTM015|combout                                                   ;
+;   8.345  ;   0.251  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N24 ; dut|LessThan2~2|datad                                                      ;
+;   8.476  ;   0.131  ; FF ; CELL ; 1      ; LCCOMB_X40_Y22_N24 ; dut|LessThan2~2|combout                                                    ;
+;   8.476  ;   0.000  ; FF ; IC   ; 1      ; FF_X40_Y22_N25     ; dut|LessThan2~2_NEW_REG70|d                                                ;
+;   8.570  ;   0.094  ; FF ; CELL ; 1      ; FF_X40_Y22_N25     ; fp8_adder:dut|LessThan2~2_OTERM71                                          ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+
++-------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                        ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+; Total    ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                    ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+; 6.666    ; 6.666    ;    ;      ;        ;                   ; latch edge time                                                            ;
+; 7.498    ; 0.832    ;    ;      ;        ;                   ; clock path                                                                 ;
+;   6.666  ;   0.000  ;    ;      ;        ;                   ; source latency                                                             ;
+;   6.666  ;   0.000  ;    ;      ; 1      ; PIN_P11           ; MAX10_CLK1_50                                                              ;
+;   6.666  ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X34_Y0_N29 ; MAX10_CLK1_50~input|i                                                      ;
+;   7.459  ;   0.793  ; RR ; CELL ; 2      ; IOIBUF_X34_Y0_N29 ; MAX10_CLK1_50~input|o                                                      ;
+;   10.806 ;   3.347  ; RR ; IC   ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|inclk[0]                     ;
+;   1.555  ;   -9.251 ; RR ; COMP ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|observablevcoout             ;
+;   1.555  ;   0.000  ; RR ; CELL ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|clk[0]                       ;
+;   4.226  ;   2.671  ; RR ; IC   ; 1      ; CLKCTRL_G18       ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|inclk[0] ;
+;   4.226  ;   0.000  ; RR ; CELL ; 186    ; CLKCTRL_G18       ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|outclk   ;
+;   6.035  ;   1.809  ; RR ; IC   ; 1      ; FF_X40_Y22_N25    ; dut|LessThan2~2_NEW_REG70|clk                                              ;
+;   6.510  ;   0.475  ; RR ; CELL ; 1      ; FF_X40_Y22_N25    ; fp8_adder:dut|LessThan2~2_OTERM71                                          ;
+;   7.498  ;   0.988  ;    ;      ;        ;                   ; clock pessimism removed                                                    ;
+; 7.478    ; -0.020   ;    ;      ;        ;                   ; clock uncertainty                                                          ;
+; 7.491    ; 0.013    ;    ; uTsu ; 1      ; FF_X40_Y22_N25    ; fp8_adder:dut|LessThan2~2_OTERM71                                          ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+
+
+Path #5: Setup slack is -1.068 (VIOLATED)
+===============================================================================
++---------------------------------------------------------------------------+
+; Path Summary                                                              ;
++--------------------+------------------------------------------------------+
+; Property           ; Value                                                ;
++--------------------+------------------------------------------------------+
+; From Node          ; fp8_adder:dut|a_larger~0_OTERM169                    ;
+; To Node            ; fp8_adder:dut|LessThan2~0_OTERM73                    ;
+; Launch Clock       ; user_pll|altpll_component|auto_generated|pll1|clk[0] ;
+; Latch Clock        ; user_pll|altpll_component|auto_generated|pll1|clk[0] ;
+; Data Arrival Time  ; 8.559                                                ;
+; Data Required Time ; 7.491                                                ;
+; Slack              ; -1.068 (VIOLATED)                                    ;
++--------------------+------------------------------------------------------+
+
++-------------------------------------------------------------------------------------+
+; Statistics                                                                          ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min    ; Max    ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+; Setup Relationship     ; 6.666 ;       ;             ;            ;        ;        ;
+; Clock Skew             ; 0.385 ;       ;             ;            ;        ;        ;
+; Data Delay             ; 8.112 ;       ;             ;            ;        ;        ;
+; Number of Logic Levels ;       ; 8     ;             ;            ;        ;        ;
+; Physical Delays        ;       ;       ;             ;            ;        ;        ;
+;  Arrival Path          ;       ;       ;             ;            ;        ;        ;
+;   Clock                ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 4     ; 7.679       ; 85         ; 0.000  ; 3.486  ;
+;    Cell                ;       ; 4     ; 1.303       ; 15         ; 0.000  ; 0.793  ;
+;    PLL Compensation    ;       ; 1     ; -8.535      ; 0          ; -8.535 ; -8.535 ;
+;   Data                 ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 15    ; 3.986       ; 49         ; 0.000  ; 0.799  ;
+;    Cell                ;       ; 16    ; 3.919       ; 48         ; 0.000  ; 0.605  ;
+;    uTco                ;       ; 1     ; 0.207       ; 3          ; 0.207  ; 0.207  ;
+;  Required Path         ;       ;       ;             ;            ;        ;        ;
+;   Clock                ;       ;       ;             ;            ;        ;        ;
+;    IC                  ;       ; 4     ; 7.827       ; 86         ; 0.000  ; 3.347  ;
+;    Cell                ;       ; 4     ; 1.268       ; 14         ; 0.000  ; 0.793  ;
+;    PLL Compensation    ;       ; 1     ; -9.251      ; 0          ; -9.251 ; -9.251 ;
++------------------------+-------+-------+-------------+------------+--------+--------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++--------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                          ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+; Total    ; Incr     ; RF ; Type ; Fanout ; Location           ; Element                                                                    ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+; 0.000    ; 0.000    ;    ;      ;        ;                    ; launch edge time                                                           ;
+; 0.447    ; 0.447    ;    ;      ;        ;                    ; clock path                                                                 ;
+;   0.000  ;   0.000  ;    ;      ;        ;                    ; source latency                                                             ;
+;   0.000  ;   0.000  ;    ;      ; 1      ; PIN_P11            ; MAX10_CLK1_50                                                              ;
+;   0.000  ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X34_Y0_N29  ; MAX10_CLK1_50~input|i                                                      ;
+;   0.793  ;   0.793  ; RR ; CELL ; 2      ; IOIBUF_X34_Y0_N29  ; MAX10_CLK1_50~input|o                                                      ;
+;   4.279  ;   3.486  ; RR ; IC   ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|inclk[0]                     ;
+;   -4.256 ;   -8.535 ; RR ; COMP ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|observablevcoout             ;
+;   -4.256 ;   0.000  ; RR ; CELL ; 1      ; PLL_1              ; user_pll|altpll_component|auto_generated|pll1|clk[0]                       ;
+;   -1.474 ;   2.782  ; RR ; IC   ; 1      ; CLKCTRL_G18        ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|inclk[0] ;
+;   -1.474 ;   0.000  ; RR ; CELL ; 186    ; CLKCTRL_G18        ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|outclk   ;
+;   -0.063 ;   1.411  ; RR ; IC   ; 1      ; FF_X42_Y21_N31     ; dut|a_larger~0_NEW_REG168|clk                                              ;
+;   0.447  ;   0.510  ; RR ; CELL ; 1      ; FF_X42_Y21_N31     ; fp8_adder:dut|a_larger~0_OTERM169                                          ;
+; 8.559    ; 8.112    ;    ;      ;        ;                    ; data path                                                                  ;
+;   0.654  ;   0.207  ;    ; uTco ; 1      ; FF_X42_Y21_N31     ; fp8_adder:dut|a_larger~0_OTERM169                                          ;
+;   0.654  ;   0.000  ; FF ; CELL ; 2      ; FF_X42_Y21_N31     ; dut|a_larger~0_NEW_REG168|q                                                ;
+;   1.180  ;   0.526  ; FF ; IC   ; 1      ; LCCOMB_X42_Y21_N12 ; dut|a_larger~5|datab                                                       ;
+;   1.604  ;   0.424  ; FF ; CELL ; 16     ; LCCOMB_X42_Y21_N12 ; dut|a_larger~5|combout                                                     ;
+;   2.403  ;   0.799  ; FF ; IC   ; 1      ; LCCOMB_X42_Y22_N28 ; dut|man_sml4[3]~1|datab                                                    ;
+;   2.848  ;   0.445  ; FR ; CELL ; 6      ; LCCOMB_X42_Y22_N28 ; dut|man_sml4[3]~1|combout                                                  ;
+;   3.521  ;   0.673  ; RR ; IC   ; 1      ; LCCOMB_X43_Y22_N26 ; dut|sticky_s1~4|datac                                                      ;
+;   3.825  ;   0.304  ; RR ; CELL ; 1      ; LCCOMB_X43_Y22_N26 ; dut|sticky_s1~4|combout                                                    ;
+;   4.556  ;   0.731  ; RR ; IC   ; 1      ; LCCOMB_X41_Y22_N24 ; dut|sticky_s1~5|dataa                                                      ;
+;   4.921  ;   0.365  ; RR ; CELL ; 4      ; LCCOMB_X41_Y22_N24 ; dut|sticky_s1~5|combout                                                    ;
+;   5.177  ;   0.256  ; RR ; IC   ; 1      ; LCCOMB_X41_Y22_N0  ; dut|Add3~14|datab                                                          ;
+;   5.701  ;   0.524  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N0  ; dut|Add3~14|cout                                                           ;
+;   5.701  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N2  ; dut|Add3~16|cin                                                            ;
+;   5.760  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N2  ; dut|Add3~16|cout                                                           ;
+;   5.760  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N4  ; dut|Add3~18|cin                                                            ;
+;   5.819  ;   0.059  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N4  ; dut|Add3~18|cout                                                           ;
+;   5.819  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N6  ; dut|Add3~20|cin                                                            ;
+;   5.878  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N6  ; dut|Add3~20|cout                                                           ;
+;   5.878  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N8  ; dut|Add3~22|cin                                                            ;
+;   5.937  ;   0.059  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N8  ; dut|Add3~22|cout                                                           ;
+;   5.937  ;   0.000  ; FF ; IC   ; 2      ; LCCOMB_X41_Y22_N10 ; dut|Add3~24|cin                                                            ;
+;   5.996  ;   0.059  ; FR ; CELL ; 1      ; LCCOMB_X41_Y22_N10 ; dut|Add3~24|cout                                                           ;
+;   5.996  ;   0.000  ; RR ; IC   ; 2      ; LCCOMB_X41_Y22_N12 ; dut|Add3~26|cin                                                            ;
+;   6.601  ;   0.605  ; RF ; CELL ; 1      ; LCCOMB_X41_Y22_N12 ; dut|Add3~26|combout                                                        ;
+;   7.030  ;   0.429  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N2  ; dut|Add3~34|datac                                                          ;
+;   7.333  ;   0.303  ; FF ; CELL ; 5      ; LCCOMB_X40_Y22_N2  ; dut|Add3~34|combout                                                        ;
+;   7.656  ;   0.323  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N0  ; dut|lzd~4_RTM015|datab                                                     ;
+;   8.060  ;   0.404  ; FF ; CELL ; 3      ; LCCOMB_X40_Y22_N0  ; dut|lzd~4_RTM015|combout                                                   ;
+;   8.309  ;   0.249  ; FF ; IC   ; 1      ; LCCOMB_X40_Y22_N12 ; dut|LessThan2~0_RTM075|datad                                               ;
+;   8.470  ;   0.161  ; FR ; CELL ; 1      ; LCCOMB_X40_Y22_N12 ; dut|LessThan2~0_RTM075|combout                                             ;
+;   8.470  ;   0.000  ; RR ; IC   ; 1      ; FF_X40_Y22_N13     ; dut|LessThan2~0_NEW_REG72|d                                                ;
+;   8.559  ;   0.089  ; RR ; CELL ; 1      ; FF_X40_Y22_N13     ; fp8_adder:dut|LessThan2~0_OTERM73                                          ;
++----------+----------+----+------+--------+--------------------+----------------------------------------------------------------------------+
+
++-------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                        ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+; Total    ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                    ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+; 6.666    ; 6.666    ;    ;      ;        ;                   ; latch edge time                                                            ;
+; 7.498    ; 0.832    ;    ;      ;        ;                   ; clock path                                                                 ;
+;   6.666  ;   0.000  ;    ;      ;        ;                   ; source latency                                                             ;
+;   6.666  ;   0.000  ;    ;      ; 1      ; PIN_P11           ; MAX10_CLK1_50                                                              ;
+;   6.666  ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X34_Y0_N29 ; MAX10_CLK1_50~input|i                                                      ;
+;   7.459  ;   0.793  ; RR ; CELL ; 2      ; IOIBUF_X34_Y0_N29 ; MAX10_CLK1_50~input|o                                                      ;
+;   10.806 ;   3.347  ; RR ; IC   ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|inclk[0]                     ;
+;   1.555  ;   -9.251 ; RR ; COMP ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|observablevcoout             ;
+;   1.555  ;   0.000  ; RR ; CELL ; 1      ; PLL_1             ; user_pll|altpll_component|auto_generated|pll1|clk[0]                       ;
+;   4.226  ;   2.671  ; RR ; IC   ; 1      ; CLKCTRL_G18       ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|inclk[0] ;
+;   4.226  ;   0.000  ; RR ; CELL ; 186    ; CLKCTRL_G18       ; user_pll|altpll_component|auto_generated|wire_pll1_clk[0]~clkctrl|outclk   ;
+;   6.035  ;   1.809  ; RR ; IC   ; 1      ; FF_X40_Y22_N13    ; dut|LessThan2~0_NEW_REG72|clk                                              ;
+;   6.510  ;   0.475  ; RR ; CELL ; 1      ; FF_X40_Y22_N13    ; fp8_adder:dut|LessThan2~0_OTERM73                                          ;
+;   7.498  ;   0.988  ;    ;      ;        ;                   ; clock pessimism removed                                                    ;
+; 7.478    ; -0.020   ;    ;      ;        ;                   ; clock uncertainty                                                          ;
+; 7.491    ; 0.013    ;    ; uTsu ; 1      ; FF_X40_Y22_N13    ; fp8_adder:dut|LessThan2~0_OTERM73                                          ;
++----------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------+
+
+

@@ -1,0 +1,16 @@
+Analysis & Synthesis Status : Successful - Fri Jun 05 02:24:02 2026
+Quartus Prime Version : 17.1.0 Build 590 10/25/2017 SJ Lite Edition
+Revision Name : fp8_adder
+Top-level Entity Name : fp8_top
+Family : MAX 10
+Total logic elements : 326
+    Total combinational functions : 284
+    Dedicated logic registers : 134
+Total registers : 134
+Total pins : 65
+Total virtual pins : 0
+Total memory bits : 622,592
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 1
+UFM blocks : 0
+ADC blocks : 0

@@ -1,25 +1,18 @@
 // ============================================================================
-// FP8 Adder Challenge — Editable PLL  (Task 7 — overclocked)
+// FP8 Adder Challenge — Editable PLL  (Task 7)
 // ============================================================================
-// Modified from baseline (25 MHz) to 125 MHz for maximum test throughput.
+// Target: 100 MHz  (easily adjustable to 125 MHz — see comment below)
 //
-// Frequency calculation:
-//   Output = 50 MHz * CLK0_MULTIPLY_BY / CLK0_DIVIDE_BY
-//          = 50 MHz *        5          /       2
-//          = 125 MHz
+// Frequency = 50 MHz * CLK0_MULTIPLY_BY / CLK0_DIVIDE_BY
 //
-// MAX 10 PLL constraints:
-//   VCO range (speed grade 7): 600 MHz – 1250 MHz
-//   VCO = 50 MHz * 5 = 250 MHz  → below 600 MHz; apply output divider.
-//   Use internal_divide=1, clk0_divide=2, multiply=5 (altpll auto-handles VCO).
+//   100 MHz: MULTIPLY_BY=4, DIVIDE_BY=2  (VCO = 50*4 = 200 MHz — Quartus
+//            auto-scales internally to satisfy VCO 600-1250 MHz range;
+//            Quartus typically uses MULTIPLY=12, output_div=6 → VCO=600 MHz)
 //
-//   Alternatively: MULTIPLY=5, DIVIDE=2 → VCO = 50 * 5 = 250 MHz with
-//   Quartus internally multiplying the VCO further.  altpll picks the first
-//   valid VCO; for 125 MHz output Quartus typically uses VCO=750 MHz
-//   (multiply=15, output_divide=6) which is comfortably within spec.
+//   125 MHz: Change MULTIPLY_BY=5, DIVIDE_BY=2
+//            (Quartus uses VCO≈750 MHz — within spec for C7 grade)
 //
-// If 125 MHz fails timing on the specific device, reduce to 100 MHz by
-// setting MULTIPLY_BY=2, DIVIDE_BY=1.
+// To change to 125 MHz: set CLK0_MULTIPLY_BY = 5 (DIVIDE_BY stays 2).
 // ============================================================================
 
 module challenge_pll (
@@ -28,7 +21,10 @@ module challenge_pll (
     output wire locked
 );
 
-    localparam integer CLK0_MULTIPLY_BY = 5;   // 50 MHz * 5 / 2 = 125 MHz
+    // ---- Frequency selection ----
+    // 100 MHz: MULTIPLY=4, DIVIDE=2
+    // 125 MHz: MULTIPLY=5, DIVIDE=2  (change only this line)
+    localparam integer CLK0_MULTIPLY_BY = 5;
     localparam integer CLK0_DIVIDE_BY   = 2;
 
     wire [5:0] pll_clk_bus;
@@ -48,19 +44,13 @@ module challenge_pll (
         .clkloss        (),
         .clkswitch      (1'b0),
         .configupdate   (1'b0),
-        .enable0        (),
-        .enable1        (),
+        .enable0        (1'b1),
+        .enable1        (1'b1),
         .extclk         (),
         .extclkena      (4'b1111),
         .fbin           (1'b1),
-        .fbmimicbidir   (),
         .fbout          (),
-        .fref           (),
         .pfdena         (1'b1),
-        .phasecounterselect (4'b1111),
-        .phasedone      (),
-        .phasestep      (1'b1),
-        .phaseupdown    (1'b1),
         .pllena         (1'b1),
         .scanaclr       (1'b0),
         .scanclk        (1'b0),
@@ -75,7 +65,6 @@ module challenge_pll (
         .vcooverrange   (),
         .vcounderrange  ()
     );
-
     defparam
         altpll_component.bandwidth_type          = "AUTO",
         altpll_component.clk0_divide_by          = CLK0_DIVIDE_BY,
@@ -83,7 +72,7 @@ module challenge_pll (
         altpll_component.clk0_multiply_by        = CLK0_MULTIPLY_BY,
         altpll_component.clk0_phase_shift        = "0",
         altpll_component.compensate_clock        = "CLK0",
-        altpll_component.inclk0_input_frequency  = 20000,
+        altpll_component.inclk0_input_frequency  = 20000,   // 50 MHz = 20000 ps period
         altpll_component.intended_device_family  = "MAX 10",
         altpll_component.lpm_hint                = "CBX_MODULE_PREFIX=challenge_pll",
         altpll_component.lpm_type                = "altpll",
@@ -97,14 +86,11 @@ module challenge_pll (
         altpll_component.port_clkswitch          = "PORT_UNUSED",
         altpll_component.port_configupdate       = "PORT_UNUSED",
         altpll_component.port_fbin               = "PORT_UNUSED",
+        altpll_component.port_fbout              = "PORT_UNUSED",
         altpll_component.port_inclk0             = "PORT_USED",
         altpll_component.port_inclk1             = "PORT_UNUSED",
         altpll_component.port_locked             = "PORT_USED",
         altpll_component.port_pfdena             = "PORT_UNUSED",
-        altpll_component.port_phasecounterselect = "PORT_UNUSED",
-        altpll_component.port_phasedone          = "PORT_UNUSED",
-        altpll_component.port_phasestep          = "PORT_UNUSED",
-        altpll_component.port_phaseupdown        = "PORT_UNUSED",
         altpll_component.port_pllena             = "PORT_UNUSED",
         altpll_component.port_scanaclr           = "PORT_UNUSED",
         altpll_component.port_scanclk            = "PORT_UNUSED",
@@ -120,6 +106,7 @@ module challenge_pll (
         altpll_component.port_clk3               = "PORT_UNUSED",
         altpll_component.port_clk4               = "PORT_UNUSED",
         altpll_component.port_clk5               = "PORT_UNUSED",
+        altpll_component.self_reset_on_loss_lock = "OFF",
         altpll_component.width_clock             = 6;
 
 endmodule

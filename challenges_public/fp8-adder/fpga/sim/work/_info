@@ -1,0 +1,50 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/liran/TechCrash2026_inbal_liran/challenges_public/fp8-adder/fpga/sim
+vfp8_adder
+Z1 !s110 1780606232
+!i10b 1
+!s100 FL<dHhAnIeU9D<kk]SE602
+IQWEi=GOb?>d5n0Vd<Gib?2
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+w1780606201
+8C:\Users\liran\TechCrash2026_inbal_liran\tasks\task7faster\fpga\src\fp8_adder.v
+FC:\Users\liran\TechCrash2026_inbal_liran\tasks\task7faster\fpga\src\fp8_adder.v
+L0 34
+Z3 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z4 !s108 1780606232.000000
+Z5 !s107 C:\Users\liran\TechCrash2026_inbal_liran\challenges_public\fp8-adder\fpga\sim\fp8_adder_tb.v|C:\Users\liran\TechCrash2026_inbal_liran\tasks\task7faster\fpga\src\fp8_adder.v|
+Z6 !s90 C:\Users\liran\TechCrash2026_inbal_liran\tasks\task7faster\fpga\src\fp8_adder.v|C:\Users\liran\TechCrash2026_inbal_liran\challenges_public\fp8-adder\fpga\sim\fp8_adder_tb.v|
+!i113 1
+Z7 tCvgOpt 0
+vfp8_adder_tb
+R1
+!i10b 1
+!s100 VkBMGVoVA@h1kW7MzJc`E3
+IVmHI=99Vz<0LmhDa>`_9@0
+R2
+R0
+w1780557015
+8C:\Users\liran\TechCrash2026_inbal_liran\challenges_public\fp8-adder\fpga\sim\fp8_adder_tb.v
+FC:\Users\liran\TechCrash2026_inbal_liran\challenges_public\fp8-adder\fpga\sim\fp8_adder_tb.v
+L0 3
+R3
+r1
+!s85 0
+31
+R4
+R5
+R6
+!i113 1
+R7

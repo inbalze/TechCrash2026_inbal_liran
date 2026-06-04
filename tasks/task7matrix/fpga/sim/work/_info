@@ -1,0 +1,71 @@
+m255
+K4
+z2
+!s11f vlog 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/Users/liran/TechCrash2026_inbal_liran/tasks/task7faster/fpga/sim
+vfp8_adder
+Z0 !s110 1780614196
+!i10b 1
+!s100 <O@7IjFo[B_;85KHn[;HB3
+Ija:<cKhCSPG<TUQFcKXH^0
+Z1 VDg1SIo80bB@j0V0VzS_@n1
+Z2 dC:/Users/liran/TechCrash2026_inbal_liran/tasks/task7matrix/fpga/sim
+w1780614168
+8../src/fp8_adder.v
+F../src/fp8_adder.v
+L0 1
+Z3 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z4 !s108 1780614196.000000
+Z5 !s107 fp8_adder_tb.v|../src/fp8_adder.v|
+Z6 !s90 ../src/fp8_adder.v|fp8_adder_tb.v|
+!i113 1
+Z7 tCvgOpt 0
+vfp8_adder_tb
+R0
+!i10b 1
+!s100 VkBMGVoVA@h1kW7MzJc`E3
+INS@YYJ`1ozZe3b0iY889]1
+R1
+R2
+w1780557015
+8fp8_adder_tb.v
+Ffp8_adder_tb.v
+L0 3
+R3
+r1
+!s85 0
+31
+R4
+R5
+R6
+!i113 1
+R7
+vtb_lut_generator
+!s110 1780614162
+!i10b 1
+!s100 NS5MOi=89KGE4lTi:?k^J1
+IWJ5O1b0Q0Wmjm[G0iDi8N2
+R1
+R2
+w1780614151
+8tb_lut_generator.v
+Ftb_lut_generator.v
+L0 3
+R3
+r1
+!s85 0
+31
+!s108 1780614162.000000
+!s107 tb_lut_generator.v|../src/fp8_adder.v|
+!s90 ../src/fp8_adder.v|tb_lut_generator.v|
+!i113 1
+R7

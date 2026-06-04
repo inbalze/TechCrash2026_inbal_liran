@@ -1,0 +1,11 @@
+# vsim -c work.fp8_adder_tb -do "run -all; quit -f" 
+# Start time: 23:50:33 on Jun 04,2026
+# Loading work.fp8_adder_tb
+# Loading work.fp8_adder
+# run -all
+# SUMMARY pass=4096 fail=0 total_wait_cycles=8192
+# FP8 adder testbench PASSED
+# ** Note: $finish    : C:/Users/liran/TechCrash2026_inbal_liran/challenges_public/fp8-adder/fpga/sim/fp8_adder_tb.v(122)
+#    Time: 409710 ns  Iteration: 1  Instance: /fp8_adder_tb
+# End time: 23:50:35 on Jun 04,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0

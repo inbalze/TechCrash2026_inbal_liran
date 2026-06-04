@@ -1,28 +1,34 @@
 // ============================================================================
-// FP8 E4M3 Adder — 1-CYCLE PIPELINED IMPLEMENTATION
+// FP8 E4M3 Adder — 2-STAGE PIPELINED IMPLEMENTATION
 // ============================================================================
-// Task 7 — CrashTech VLSI-2026 optimised replacement for fp8_adder.v
+// Task 7 — CrashTech VLSI-2026  (2-stage pipeline, 100/125 MHz target)
 //
 // Format: FP8 E4M3  (1 sign | 4 exponent | 3 mantissa)
 //   Bias = 7.  No Infinity: exponent 0xF is a valid finite value.
-//   NaN   = any value with exp=0xF and mantissa=0x7  (i.e., |x|[6:0]==7'h7F)
+//   NaN = S.1111.111  (|x|[6:0] == 7'h7F).
 //
-// Architecture: FULLY COMBINATIONAL datapath, result registered on the
-//   SAME clock edge that sees start=1.  done is asserted the FOLLOWING
-//   cycle (TC_WAIT_ADD sees done=1 immediately and advances to TC_CHECK).
-//   This gives the minimum 1-cycle latency permitted by the test harness.
+// Pipeline stages separated by a single always_ff boundary:
 //
-//   done  is de-asserted one cycle after being asserted (self-clearing FF).
-//   busy  mirrors the single in-flight cycle (busy high only during
-//         computation, for compatibility — effectively 1 clock wide).
+//   Stage 1 (Align & Add) — comb on {a,b}; registered at end:
+//     - Unpack, NaN/zero detection
+//     - Exponent comparison + swap
+//     - Barrel-shift smaller mantissa (8-bit extended, sticky bit)
+//     - 9-bit add/subtract into mant_sum_p1
+//     - Propagate: exp_big, sign_big, sticky, zero/nan flags
 //
-// E4M3 edge cases handled:
-//   1. NaN input (exp=0xF, man=0x7) → NaN output (0x7F regardless of sign)
-//   2. +0 + -0 = +0  (IEEE-like rule: both zero → positive zero)
-//   3. Any +0 operand → result is the other operand
-//   4. Result magnitude overflow → clamp to max-finite 0x7E (= 448.0)
-//   5. Subnormal (exp=0): hidden bit = 0, effective exponent = 1 (E4M3 spec)
-//   6. Round-to-nearest-even on the 3-bit mantissa output
+//   Stage 2 (Normalise & Pack) — comb on stage-1 regs; registered at end:
+//     - Carry/LZD detection
+//     - Left/right normalisation shift
+//     - GRS round-to-nearest-even
+//     - Overflow saturation (clamp to 0x7E)
+//     - Build final 8-bit result → output register
+//     - Assert done; de-assert next cycle
+//
+// Handshake with test_controller:
+//   TC_LAUNCH: start=1   (a/b stable from TC_WAIT_MEM)
+//   TC_WAIT_ADD cycle 1: stage-1 pipeline regs loaded
+//   TC_WAIT_ADD cycle 2: done=1 fires → TC_CHECK advances
+//   Total adder latency: 2 cycles after start.
 // ============================================================================
 
 module fp8_adder (
@@ -37,248 +43,223 @@ module fp8_adder (
 );
 
     // =========================================================================
-    // COMBINATIONAL DATAPATH
-    // All wires are purely combinational — they read the registered a/b copies
-    // that are latched when start fires.  The output of comb_result is
-    // registered on the SAME posedge as start, producing a 1-cycle result.
+    // STAGE 1 COMBINATIONAL — Unpack, align, add/subtract
     // =========================================================================
 
-    // Registered copies of inputs (for busy state reuse — not used in comb path)
-    reg [7:0] a_r, b_r;
-    // Combinational path reads directly from module inputs a, b
-    wire [7:0] ai = a;
-    wire [7:0] bi = b;
+    wire        sa = a[7];
+    wire [3:0]  ea = a[6:3];
+    wire [2:0]  ma = a[2:0];
 
-    // ---- Unpack ----
-    wire        sa = ai[7];
-    wire [3:0]  ea = ai[6:3];
-    wire [2:0]  ma = ai[2:0];
+    wire        sb = b[7];
+    wire [3:0]  eb = b[6:3];
+    wire [2:0]  mb = b[2:0];
 
-    wire        sb = bi[7];
-    wire [3:0]  eb = bi[6:3];
-    wire [2:0]  mb = bi[2:0];
+    // NaN: |x|[6:0] == 7'h7F
+    wire nan_a = (ea == 4'hF) & (ma == 3'h7);
+    wire nan_b = (eb == 4'hF) & (mb == 3'h7);
+    wire s1_any_nan = nan_a | nan_b;
 
-    // ---- NaN detection (|x| bits[6:0] == 7'h7F) ----
-    wire nan_a = (ea == 4'hF) && (ma == 3'h7);
-    wire nan_b = (eb == 4'hF) && (mb == 3'h7);
-    wire any_nan = nan_a | nan_b;
+    // Zero: |x|[6:0] == 0
+    wire zero_a = (a[6:0] == 7'h00);
+    wire zero_b = (b[6:0] == 7'h00);
 
-    // ---- Zero detection ----
-    wire zero_a = (ai[6:0] == 7'h00);
-    wire zero_b = (bi[6:0] == 7'h00);
+    // Pass-through flags (NaN/zero bypass the pipeline)
+    wire s1_zero_a  = zero_a;
+    wire s1_zero_b  = zero_b;
+    wire [7:0] s1_a = a;    // kept for zero-passthrough
+    wire [7:0] s1_b = b;
 
-    // ---- Hidden bit (0 for subnormals, 1 for normals) ----
-    // E4M3: when exp==0 the implied bit is 0 and eff_exp = 1 (not 0)
+    // Hidden bits (subnormal exp=0 → hidden=0, eff_exp=1)
     wire hidden_a = (ea != 4'h0);
     wire hidden_b = (eb != 4'h0);
-
-    // ---- Effective (unbiased) exponent for alignment ----
-    // For normals: eff_exp = ea (biased exponent; we keep it biased throughout)
-    // For subnormals: eff_exp = 1 (effective biased exponent in E4M3)
     wire [3:0] eff_ea = (ea == 4'h0) ? 4'd1 : ea;
     wire [3:0] eff_eb = (eb == 4'h0) ? 4'd1 : eb;
 
-    // ---- Determine which operand has the larger exponent ----
-    // Swap so that A is always >= B in magnitude for alignment
-    wire a_larger = (eff_ea > eff_eb) || ((eff_ea == eff_eb) && ({hidden_a,ma} >= {hidden_b,mb}));
+    // Swap so larger magnitude is A
+    wire a_larger = (eff_ea > eff_eb) |
+                    ((eff_ea == eff_eb) & ({hidden_a, ma} >= {hidden_b, mb}));
 
-    wire [3:0]  exp_big  = a_larger ? eff_ea    : eff_eb;
-    wire [3:0]  exp_sml  = a_larger ? eff_eb    : eff_ea;
-    wire [3:0]  man_big3 = a_larger ? {hidden_a, ma} : {hidden_b, mb};
-    wire [3:0]  man_sml3 = a_larger ? {hidden_b, mb} : {hidden_a, ma};
-    wire        sign_big = a_larger ? sa : sb;
-    wire        sign_sml = a_larger ? sb : sa;
+    wire [3:0] s1_exp_big  = a_larger ? eff_ea           : eff_eb;
+    wire [3:0] s1_exp_sml  = a_larger ? eff_eb           : eff_ea;
+    wire [3:0] man_big4    = a_larger ? {hidden_a, ma}   : {hidden_b, mb};
+    wire [3:0] man_sml4    = a_larger ? {hidden_b, mb}   : {hidden_a, ma};
+    wire       s1_sign_big = a_larger ? sa               : sb;
+    wire       s1_sign_sml = a_larger ? sb               : sa;
+    wire       s1_same_sgn = (s1_sign_big == s1_sign_sml);
 
-    // ---- Alignment shift ----
-    // Max useful shift is 7 (3 mantissa bits + 1 hidden bit + guard/round/sticky).
-    // We extend mantissas to 8 bits: [hidden . m2 m1 m0 . G R S sticky]
-    // Representation: {hidden, man[2:0], 4'b0} = 8-bit left-justified
-    // Then right-shift small operand by exp_diff.
-    wire [3:0] exp_diff = exp_big - exp_sml;   // 0..15; >7 means small is negligible
+    // Alignment shift (barrel shift small mantissa right by exp_diff)
+    wire [3:0] exp_diff    = s1_exp_big - s1_exp_sml;  // 0..15
+    wire [7:0] mant_big    = {man_big4, 4'b0};          // [7]=hidden [6:4]=m [3:0]=GRS
+    wire [7:0] mant_sml_u  = {man_sml4, 4'b0};
 
-    // 8-bit extended mantissas (big has full precision; small will be shifted)
-    wire [7:0] mant_big = {man_big3, 4'b0};    // [7]=hidden [6:4]=m2..m0 [3:0]=guard+round+sticky
-    wire [7:0] mant_sml_unshifted = {man_sml3, 4'b0};
+    wire [7:0] mant_sml_sh;
+    wire       sticky_s1;
+    assign {mant_sml_sh, sticky_s1} =
+        (exp_diff == 4'd0) ? {mant_sml_u,        1'b0}                          :
+        (exp_diff == 4'd1) ? {1'b0, mant_sml_u[7:1], mant_sml_u[0]}            :
+        (exp_diff == 4'd2) ? {2'b0, mant_sml_u[7:2], |mant_sml_u[1:0]}         :
+        (exp_diff == 4'd3) ? {3'b0, mant_sml_u[7:3], |mant_sml_u[2:0]}         :
+        (exp_diff == 4'd4) ? {4'b0, mant_sml_u[7:4], |mant_sml_u[3:0]}         :
+        (exp_diff == 4'd5) ? {5'b0, mant_sml_u[7:5], |mant_sml_u[4:0]}         :
+        (exp_diff == 4'd6) ? {6'b0, mant_sml_u[7:6], |mant_sml_u[5:0]}         :
+        (exp_diff == 4'd7) ? {7'b0, mant_sml_u[7],   |mant_sml_u[6:0]}         :
+                             {8'b0,                   |mant_sml_u[7:0]}         ;
 
-    // Right-shift small mantissa; collect OR of lost bits into sticky
-    // We shift up to 8 positions; anything shifted ≥8 positions is pure sticky.
-    wire [7:0] mant_sml_shifted;
-    wire       sticky_sml;
+    // 9-bit add/subtract
+    wire [8:0] s1_mant_sum =
+        s1_same_sgn ? ({1'b0, mant_big} + {1'b0, mant_sml_sh})
+                    : ({1'b0, mant_big} - {1'b0, mant_sml_sh} - {8'd0, sticky_s1});
 
-    assign {mant_sml_shifted, sticky_sml} =
-        (exp_diff == 4'd0) ? {mant_sml_unshifted, 1'b0} :
-        (exp_diff == 4'd1) ? {1'b0, mant_sml_unshifted[7:1], mant_sml_unshifted[0]}             :
-        (exp_diff == 4'd2) ? {2'b0, mant_sml_unshifted[7:2], |mant_sml_unshifted[1:0]}          :
-        (exp_diff == 4'd3) ? {3'b0, mant_sml_unshifted[7:3], |mant_sml_unshifted[2:0]}          :
-        (exp_diff == 4'd4) ? {4'b0, mant_sml_unshifted[7:4], |mant_sml_unshifted[3:0]}          :
-        (exp_diff == 4'd5) ? {5'b0, mant_sml_unshifted[7:5], |mant_sml_unshifted[4:0]}          :
-        (exp_diff == 4'd6) ? {6'b0, mant_sml_unshifted[7:6], |mant_sml_unshifted[5:0]}          :
-        (exp_diff == 4'd7) ? {7'b0, mant_sml_unshifted[7],   |mant_sml_unshifted[6:0]}          :
-                             {8'b0,                           |mant_sml_unshifted[7:0]}          ;
-
-    // ---- Add or subtract aligned mantissas ----
-    wire same_sign = (sign_big == sign_sml);
-
-    // 9-bit to detect carry / borrow; bit 8 is carry/borrow
-    wire [8:0] mant_sum =
-        same_sign ? ({1'b0, mant_big} + {1'b0, mant_sml_shifted})
-                  : ({1'b0, mant_big} - {1'b0, mant_sml_shifted});
-
-    wire result_sign = sign_big;
-
-    // ---- Detect zero result (exact cancellation) ----
-    wire exact_zero = !same_sign && (mant_sum[7:0] == 8'h00) && !sticky_sml;
-
-    // ---- Normalise ----
-    // After add: possible overflow into bit8 → shift right 1, inc exp
-    // After subtract: need to shift left (LZD on 8-bit mant_sum[7:0])
-
-    // Leading-zero detect on bits [7:4] (the meaningful part: hidden + 3 mantissa + guard)
-    // We look at bits [7:4] of mant_sum — these are the "integer" part
-    // [7] = carry out of addition, or hidden bit after subtraction
-    // We need to find the position of the leading 1 in mant_sum[7:0]
-
-    wire carry_out = mant_sum[8];      // only set after addition
-
-    // Post-add: if carry, shift right 1 and increment exponent
-    // Post-sub: shift left until hidden bit is in position 7
-
-    // LZD — find number of leading zeros in mant_sum[7:0]
-    // Returns 0 if bit7=1, 1 if bit6 is leading 1, etc.
-    wire [2:0] lzd;
-    assign lzd = mant_sum[7] ? 3'd0 :
-                 mant_sum[6] ? 3'd1 :
-                 mant_sum[5] ? 3'd2 :
-                 mant_sum[4] ? 3'd3 :
-                 mant_sum[3] ? 3'd4 :
-                 mant_sum[2] ? 3'd5 :
-                 mant_sum[1] ? 3'd6 :
-                               3'd7 ;
-
-    // After subtraction: new exponent = exp_big - lzd
-    // After addition (carry): exp_big + 1
-    // Need signed arithmetic to detect subnormal underflow
-
-    // We normalise the 8-bit mantissa + sticky bit to produce
-    // a 4-bit hidden+mantissa field and 4-bit guard+round+sticky
-
-    // --- Post-addition (carry case): shift right by 1 ---
-    wire [7:0] norm_mant_carry = {1'b1, mant_sum[7:1]};   // hidden=1 implied
-    wire [3:0] norm_exp_carry;
-    assign norm_exp_carry = (exp_big == 4'hF) ? 4'hF        // clamp at max exponent
-                                              : exp_big + 4'd1;
-    wire [1:0] round_bits_carry = {mant_sum[0], sticky_sml};
-
-    // --- Post-subtraction (no carry): shift left by lzd ---
-    // Left-shift mant_sum by lzd to normalise; the result must keep:
-    // bits [7:4] = {1'b1, mantissa[2:0]}
-    // Shift: produce a 12-bit wide field so we can extract round bits
-    wire [10:0] norm_shift_wide =
-        (lzd == 3'd0) ? {mant_sum[7:0], 3'b0}  :
-        (lzd == 3'd1) ? {mant_sum[6:0], 4'b0}  :
-        (lzd == 3'd2) ? {mant_sum[5:0], 5'b0}  :
-        (lzd == 3'd3) ? {mant_sum[4:0], 6'b0}  :
-        (lzd == 3'd4) ? {mant_sum[3:0], 7'b0}  :
-        (lzd == 3'd5) ? {mant_sum[2:0], 8'b0}  :
-        (lzd == 3'd6) ? {mant_sum[1:0], 9'b0}  :
-                        {mant_sum[0],  10'b0}  ;
-    // norm_shift_wide[10:7] = {hidden, m2, m1, m0}
-    // norm_shift_wide[6:4]  = {G, R, S_upper}
-    // norm_shift_wide[3:0]  = lower sticky bits
-    wire [3:0] man_field_sub  = norm_shift_wide[10:7];     // {hidden, man[2:0]}
-    wire [2:0] round_bits_sub = {norm_shift_wide[6], norm_shift_wide[5],
-                                 |{norm_shift_wide[4:0], sticky_sml}};
-
-    // Exponent after left normalisation; can go below 1 → subnormal
-    wire signed [4:0] new_exp_sub_signed = {1'b0, exp_big} - {2'b0, lzd};
-    wire              sub_subnormal = new_exp_sub_signed <= 5'sd0;
-    wire [3:0]        norm_exp_sub  = sub_subnormal ? 4'd0 : new_exp_sub_signed[3:0];
-
-    // ---- Round-to-nearest-even (3-bit mantissa output = bits [6:4] of mant) ----
-    // GRS = {Guard, Round, Sticky}
-    // Round up if: G=1 && (R|S=1) [round up if > halfway]
-    //              OR G=1 && R=0 && S=0 && mantissa_lsb=1 [tie → round up if odd]
-
-    // Mux normalised fields
-    wire [3:0] pre_round_man4;  // {hidden, man[2:0]}
-    wire [3:0] pre_round_exp;
-    wire [2:0] grs;             // {Guard, Round, Sticky}
-
-    assign pre_round_man4 = carry_out ? norm_mant_carry[7:4]
-                                      : man_field_sub;
-    assign pre_round_exp  = carry_out ? norm_exp_carry
-                                      : norm_exp_sub;
-    assign grs            = carry_out ? {round_bits_carry, sticky_sml}
-                                      : round_bits_sub;
-
-    wire round_up = grs[2] && (grs[1] || grs[0] || pre_round_man4[0]);
-    wire [3:0] rounded_man4 = pre_round_man4 + {3'b0, round_up};
-
-    // If rounding caused an overflow in the mantissa (4'h10 = carry into hidden bit)
-    wire round_carry = rounded_man4[3];   // bit3 = hidden bit position after addition
-
-    // Final mantissa (3 bits) and exponent
-    wire [2:0] final_man;
-    wire [3:0] final_exp;
-
-    assign final_man = round_carry ? rounded_man4[2:0]   // mantissa wrapped OK; exp bumped
-                                   : rounded_man4[2:0];
-    assign final_exp = round_carry ? pre_round_exp + 4'd1
-                                   : pre_round_exp;
-
-    // ---- Overflow / saturation ----
-    // Max finite = exp=0xF, man=0x6 (0x7E = 448.0)
-    // NaN = exp=0xF, man=0x7; we must NOT produce NaN as a result.
-    wire overflow = (final_exp == 4'hF && final_man == 3'h7) || (final_exp > 4'hF);
-    wire [6:0] sat_result = overflow ? 7'h7E : {final_exp, final_man};
-
-    // ---- Build combinational result ----
-    wire [7:0] comb_result;
-    assign comb_result =
-        any_nan       ? 8'h7F                              : // NaN (canonical positive)
-        exact_zero    ? ((!sa && !sb) ? 8'h00 : 8'h00)    : // +0 + -0 = +0
-        zero_a        ? bi                                  : // 0 + b = b
-        zero_b        ? ai                                  : // a + 0 = a
-                        {result_sign, sat_result};
+    // Exact-zero detection (subtraction cancellation)
+    wire s1_exact_zero = ~s1_same_sgn & (s1_mant_sum[7:0] == 8'h00) & ~sticky_s1;
 
     // =========================================================================
-    // REGISTERED OUTPUT STAGE
-    // The combinational path reads directly from inputs a, b.
-    // On the posedge where start=1, comb_result is already valid
-    // (a and b are stable per the test harness — adder_a/b are
-    // registered in TC_WAIT_MEM and held stable through TC_LAUNCH).
-    // We register comb_result on that same edge and assert done one
-    // cycle later (TC_WAIT_ADD sees done=1 on the very next clock).
-    //
-    // Pipeline:
-    //   Cycle 0: TC_LAUNCH fires start=1, a/b stable → comb_result valid
-    //   Cycle 1: (TC_WAIT_ADD) result registered, done=1 → TC_CHECK
-    // Total adder contribution: 1 cycle.
+    // STAGE 1 → STAGE 2 PIPELINE REGISTERS
     // =========================================================================
-    reg result_valid_next;   // one-cycle delay flag
+    reg [8:0] p1_mant_sum;    // 9-bit mantissa sum
+    reg [3:0] p1_exp_big;     // exponent of larger operand
+    reg       p1_sign_big;    // sign of result
+    reg       p1_sticky;      // sticky bit from alignment shift
+    reg       p1_same_sgn;    // add or subtract
+    reg       p1_any_nan;     // NaN bypass
+    reg       p1_exact_zero;  // exact zero
+    reg       p1_zero_a;      // zero-passthrough flags
+    reg       p1_zero_b;
+    reg [7:0] p1_a;           // original inputs (for zero passthrough)
+    reg [7:0] p1_b;
+    reg       p1_valid;       // stage-1 data valid (start was seen)
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            a_r               <= 8'h00;
-            b_r               <= 8'h00;
-            result            <= 8'h00;
-            done              <= 1'b0;
-            busy              <= 1'b0;
-            result_valid_next <= 1'b0;
+            p1_mant_sum  <= 9'd0;
+            p1_exp_big   <= 4'd0;
+            p1_sign_big  <= 1'b0;
+            p1_sticky    <= 1'b0;
+            p1_same_sgn  <= 1'b1;
+            p1_any_nan   <= 1'b0;
+            p1_exact_zero<= 1'b0;
+            p1_zero_a    <= 1'b0;
+            p1_zero_b    <= 1'b0;
+            p1_a         <= 8'h00;
+            p1_b         <= 8'h00;
+            p1_valid     <= 1'b0;
         end else begin
-            done              <= 1'b0;              // default: de-assert
-            result_valid_next <= 1'b0;
-
+            p1_valid     <= start;           // data valid one cycle after start
             if (start) begin
-                // Latch result of current a/b into output register
-                result            <= comb_result;
-                result_valid_next <= 1'b1;
-                busy              <= 1'b1;
+                p1_mant_sum   <= s1_mant_sum;
+                p1_exp_big    <= s1_exp_big;
+                p1_sign_big   <= s1_sign_big;
+                p1_sticky     <= sticky_s1;
+                p1_same_sgn   <= s1_same_sgn;
+                p1_any_nan    <= s1_any_nan;
+                p1_exact_zero <= s1_exact_zero;
+                p1_zero_a     <= s1_zero_a;
+                p1_zero_b     <= s1_zero_b;
+                p1_a          <= s1_a;
+                p1_b          <= s1_b;
             end
+        end
+    end
 
-            if (result_valid_next) begin
-                done <= 1'b1;
-                busy <= 1'b0;
+    // =========================================================================
+    // STAGE 2 COMBINATIONAL — Normalise, round, pack
+    // =========================================================================
+
+    wire carry_out = p1_mant_sum[8];   // addition carry
+
+    // --- LZD on p1_mant_sum[7:0] ---
+    wire [2:0] lzd;
+    assign lzd = p1_mant_sum[7] ? 3'd0 :
+                 p1_mant_sum[6] ? 3'd1 :
+                 p1_mant_sum[5] ? 3'd2 :
+                 p1_mant_sum[4] ? 3'd3 :
+                 p1_mant_sum[3] ? 3'd4 :
+                 p1_mant_sum[2] ? 3'd5 :
+                 p1_mant_sum[1] ? 3'd6 :
+                                  3'd7 ;
+
+    // --- Addition (carry) path: shift right 1, bump exp ---
+    // After right-shift by 1: new {hidden,m2,m1,m0} = {1, mant_sum[7:5]}
+    // GRS bits: G=mant_sum[4], R=mant_sum[3], S=|{mant_sum[2:0],sticky}
+    wire [3:0] pre_man4_carry = {1'b1, p1_mant_sum[7:5]};
+    wire [4:0] norm_exp_carry = {1'b0, p1_exp_big} + 5'd1;
+    wire [2:0] grs_carry      = {p1_mant_sum[4], p1_mant_sum[3],
+                                 |(p1_mant_sum[2:0] | {2'b0, p1_sticky})};
+
+    wire signed [4:0] new_exp_sub_s = {1'b0, p1_exp_big} - {2'b0, lzd};
+    wire              sub_subnormal = (new_exp_sub_s <= 5'sd0);
+    wire [3:0]        norm_exp_sub  = sub_subnormal ? 4'd0 : new_exp_sub_s[3:0];
+
+    wire [2:0] sub_shift = sub_subnormal ? (p1_exp_big[2:0] - 3'd1) : lzd;
+
+    // --- Subtraction path: shift left by sub_shift ---
+    wire [10:0] norm_wide =
+        (sub_shift == 3'd0) ? {p1_mant_sum[7:0], 3'b0} :
+        (sub_shift == 3'd1) ? {p1_mant_sum[6:0], 4'b0} :
+        (sub_shift == 3'd2) ? {p1_mant_sum[5:0], 5'b0} :
+        (sub_shift == 3'd3) ? {p1_mant_sum[4:0], 6'b0} :
+        (sub_shift == 3'd4) ? {p1_mant_sum[3:0], 7'b0} :
+        (sub_shift == 3'd5) ? {p1_mant_sum[2:0], 8'b0} :
+        (sub_shift == 3'd6) ? {p1_mant_sum[1:0], 9'b0} :
+                              {p1_mant_sum[0],  10'b0} ;
+
+    wire [3:0] man_field_sub  = norm_wide[10:7];
+    wire [2:0] grs_sub        = {norm_wide[6], norm_wide[5],
+                                 |(norm_wide[4:0] | {4'b0, p1_sticky})};
+
+    // --- Mux normalised fields ---
+    wire [3:0] pre_man4 = carry_out ? pre_man4_carry : man_field_sub;
+    wire [4:0] pre_exp  = carry_out ? norm_exp_carry  : {1'b0, norm_exp_sub};
+    wire [2:0] grs      = carry_out ? grs_carry       : grs_sub;
+
+    // --- Round-to-nearest-even ---
+    wire round_up = grs[2] & (grs[1] | grs[0] | pre_man4[0]);
+
+    // 5-bit addition to correctly detect rounding overflow.
+    // pre_man4 = {hidden=1, m2, m1, m0}. Overflow only when 4'b1111 + 1 = 5'b10000.
+    // rman[3] (4-bit) is ALWAYS 1 for normal (no-overflow) results and 0 on overflow,
+    // so we must use the 5th carry bit — NOT rman[3].
+    wire [4:0] rman5   = {1'b0, pre_man4} + {4'b0, round_up};
+    wire       rcarry  = rman5[4];   // true overflow: 1.111 + 1 → 10.000
+
+    wire [2:0] final_man = rman5[2:0];
+
+    // Exponent after rounding (5-bit to detect exp overflow beyond 15)
+    wire [4:0] final_exp_w = pre_exp + {4'b0, rcarry};
+    wire [3:0] final_exp   = final_exp_w[3:0];
+
+    // --- Overflow / saturation (max finite = 0x7E = S.1111.110 = 448.0) ---
+    // NaN = exp=0xF, man=0x7; clamp there to 0x7E to avoid producing NaN.
+    wire overflow = final_exp_w[4] |
+                    (final_exp == 4'hF & final_man == 3'h7);
+    wire [6:0] sat_mag = overflow ? 7'h7E : {final_exp, final_man};
+
+    // --- Build stage-2 combinational result ---
+    wire [7:0] s2_result =
+        p1_any_nan    ? 8'h7F :
+        p1_exact_zero ? 8'h00 :
+        p1_zero_a     ? p1_b  :
+        p1_zero_b     ? p1_a  :
+                        {p1_sign_big, sat_mag};
+
+    // =========================================================================
+    // STAGE 2 OUTPUT REGISTERS + done/busy
+    // =========================================================================
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            result <= 8'h00;
+            done   <= 1'b0;
+            busy   <= 1'b0;
+        end else begin
+            done <= 1'b0;           // default: de-assert
+
+            if (start)
+                busy <= 1'b1;       // busy from start
+
+            if (p1_valid) begin
+                result <= s2_result;
+                done   <= 1'b1;     // done 2 cycles after start
+                busy   <= 1'b0;
             end
         end
     end
