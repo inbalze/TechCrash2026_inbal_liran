@@ -53,8 +53,14 @@ static RxState rxState   = RxState::WAIT_SYNC1;
 static uint8_t rxBuf[FRAME_LEN];
 static int     rxCount   = 0;   // bytes collected in RECV_DATA
 
-// ---- EMA filter (alpha = 0.75 → τ ≈ 1.3 samples, ~20 ms lag) ----
-static constexpr float EMA_ALPHA = 0.75f;
+// ---- EMA filter -------------------------------------------
+// Alpha controls the smoothing/responsiveness trade-off:
+//   higher alpha (→1.0) = more responsive, more jitter
+//   lower  alpha (→0.0) = smoother, more lag
+// At 100 Hz poll rate, alpha=0.15 gives τ ≈ 60 ms — smooth enough
+// to eliminate sensor noise while still tracking deliberate tilts.
+// Tune upward (e.g. 0.2–0.3) if the cube feels sluggish.
+static constexpr float EMA_ALPHA = 0.15f;
 static float ema_x = 0.0f;
 static float ema_y = 0.0f;
 static float ema_z = +256.0f;  // initialise near +1g (flat on table, ADXL Z reads +256 at rest)
@@ -167,9 +173,11 @@ void loop() {
     }
 
     // ---- Render once per fresh frame -------------------------
+    // buildRotMatrix() in onFrameReceived() already normalises ema_x/y/z
+    // into a unit gravity vector and builds gR. renderCube() just reads gR.
     if (newFrame) {
         newFrame = false;
-        renderDebugCoordinates();  // swap back to renderCube() when done debugging
+        renderCube();
     }
 }
 

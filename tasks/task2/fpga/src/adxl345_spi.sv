@@ -60,10 +60,9 @@ module adxl345_spi #(
     localparam int INIT_BITS  = 16;
     localparam logic [15:0] INIT_TX = 16'h2D08;  // 0x2D = reg addr (write), 0x08 = Measure
 
-    // *** DEVID SANITY CHECK — restore to 0xF2 when done ***
-    // Single-byte read of register 0x00 (DEVID): READ=1, MB=0, addr=0x00
-    // Expected response byte: 0xE5 (229). Maps into x_data[7:0] on OLED.
-    localparam logic [7:0] CMD = 8'b1000_0000;  // 0x80 = READ|SINGLE|0x00
+    // Command byte: READ | MULTI-BYTE | register 0x32 (DATAX0)
+    // READ=1 (bit7), MULTI=1 (bit6), addr=0x32 (bits5:0) → 0xF2
+    localparam logic [7:0] CMD = 8'b1111_0010;  // 0xF2
 
     // ---- State machine -----------------------------------------
     typedef enum logic [2:0] {
@@ -133,14 +132,16 @@ module adxl345_spi #(
                         half_cnt <= '0;
                         sclk_r   <= ~sclk_r;
                         if (sclk_r == 1'b1) begin
-                            // Leading edge (HIGH→LOW): SCLK falls; MOSI holds current bit
-                            // (TX advances on the trailing edge so data is stable here)
+                            // Leading edge (HIGH→LOW): advance MOSI to the next bit.
+                            // Guard: skip the very first falling edge (bit_cnt==0) so
+                            // the pre-loaded MSB (init_shift[15]) stays valid until
+                            // the slave captures it on the first rising edge.
+                            if (bit_cnt != 0)
+                                init_shift <= {init_shift[14:0], 1'b0};
                         end else begin
-                            // Trailing edge (LOW→HIGH): slave captures; advance TX and count
-                            init_shift <= {init_shift[14:0], 1'b0};
+                            // Trailing edge (LOW→HIGH): slave captures current MOSI.
+                            // Count bits; on the last bit reset half_cnt for t_CSH hold.
                             if (bit_cnt == INIT_BITS - 1) begin
-                                // Last bit done. Reset half_cnt so INIT_DONE can reuse
-                                // it to time the CS_N hold (t_CSH >= 100 ns).
                                 half_cnt <= '0;
                                 state    <= INIT_DONE;
                             end else begin
@@ -191,24 +192,30 @@ module adxl345_spi #(
                 end
 
                 // --------------------------------------------------
-                // SPI Mode 3 (CPOL=1, CPHA=1):
-                //   - Data is held stable on MOSI from the falling edge to the rising edge.
-                //   - Slave captures MOSI on the rising edge (trailing).
-                //   - Master advances TX on the rising edge so the NEXT bit is ready
-                //     before the NEXT falling edge.
-                //   Pre-loaded MSB (in START) is valid on MOSI before the first falling edge,
-                //   captured by the slave on the first rising edge — correct Mode 3 behaviour.
+                // SPI Mode 3 (CPOL=1, CPHA=1) — corrected edge assignment:
+                //   FALLING edge: master advances MOSI to the next bit.
+                //     MOSI is then stable for a full half-period (250 ns) before
+                //     the rising edge, satisfying setup time with margin.
+                //   RISING edge: slave captures MOSI; master samples MISO.
+                //     MOSI will not change until the next falling edge, so hold
+                //     time is a full half-period (250 ns). No more race condition.
+                //   First-bit guard: MSB is pre-loaded in START; the first falling
+                //     edge is skipped (bit_cnt==0) so the slave captures it correctly
+                //     on the first rising edge.
                 SHIFT: begin
                     if (half_cnt == HALF - 1) begin
                         half_cnt <= '0;
                         sclk_r   <= ~sclk_r;
 
                         if (sclk_r == 1'b1) begin
-                            // Leading edge (HIGH→LOW): SCLK falls; MOSI holds current bit stable
+                            // Leading edge (HIGH→LOW): advance MOSI to next bit.
+                            // Guard: skip first falling edge so pre-loaded MSB is
+                            // captured correctly on the first rising edge.
+                            if (bit_cnt != 0)
+                                tx_shift <= {tx_shift[FRAME_BITS-2:0], 1'b0};
                         end else begin
-                            // Trailing edge (LOW→HIGH): sample RX and advance TX to next bit
+                            // Trailing edge (LOW→HIGH): sample MISO; count bits.
                             rx_shift <= {rx_shift[FRAME_BITS-2:0], spi_miso};
-                            tx_shift <= {tx_shift[FRAME_BITS-2:0], 1'b0};
                             if (bit_cnt == FRAME_BITS - 1) begin
                                 state <= DONE;
                             end else begin
@@ -224,11 +231,17 @@ module adxl345_spi #(
                 DONE: begin
                     spi_cs_n   <= 1'b1;
                     sclk_r     <= 1'b1;
-                    // *** DEVID CHECK: rx_shift[47:40] = first response byte (DEVID = 0xE5 = 229)
-                    // If x_data shows 229 on OLED, SPI read path is working.
-                    x_data     <= {8'b0, rx_shift[47:40]};  // DEVID in low byte
-                    y_data     <= '0;
-                    z_data     <= '0;
+                    // rx_shift layout (ADXL345 little-endian, 7 bytes = 56 bits):
+                    //   [55:48] = echo byte during CMD TX (ignore)
+                    //   [47:40] = DATAX0 (X low byte)
+                    //   [39:32] = DATAX1 (X high byte)
+                    //   [31:24] = DATAY0 (Y low byte)
+                    //   [23:16] = DATAY1 (Y high byte)
+                    //   [15: 8] = DATAZ0 (Z low byte)
+                    //   [ 7: 0] = DATAZ1 (Z high byte)
+                    x_data     <= {rx_shift[39:32], rx_shift[47:40]};
+                    y_data     <= {rx_shift[23:16], rx_shift[31:24]};
+                    z_data     <= {rx_shift[ 7: 0], rx_shift[15: 8]};
                     data_valid <= 1'b1;
                     state      <= WAIT;
                 end
