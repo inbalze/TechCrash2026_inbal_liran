@@ -1,6 +1,9 @@
 # Secret competition challenges -- NEVER publish
 challenges/
 
+# Event Day challenges file -- remove this line to reveal on competition day
+eventday-challenges.html
+
 # OS
 Thumbs.db
 Desktop.ini

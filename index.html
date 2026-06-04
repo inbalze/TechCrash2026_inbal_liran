@@ -66,6 +66,18 @@
                 <a href="#getstarted" class="btn btn-secondary" data-page="getstarted">Get Started</a>
             </div>
 
+            <!-- QR Code -->
+            <div style="margin: 2rem auto; text-align: center;">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScnWei3ztGu5K-ehtkAbAV6Ot8mwFRsBbUlSlC-Ros1WYbW4A/viewform?usp=dialog" target="_blank" rel="noopener">
+                    <img src="images/crashtech_qr.png" alt="Pre-Event Form QR Code" style="width: 180px; height: 180px; border-radius: 12px;">
+                </a>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScnWei3ztGu5K-ehtkAbAV6Ot8mwFRsBbUlSlC-Ros1WYbW4A/viewform?usp=dialog" target="_blank" rel="noopener" style="color: #4f46e5;">Pre-Event Form</a>
+                    &nbsp;|&nbsp;
+                    <a href="%D7%AA%D7%A7%D7%A0%D7%95%D7%9F%20%D7%94%D7%90%D7%A7%D7%AA%D7%95%D7%9F%20%D7%AA%D7%9B%D7%A0%D7%95%D7%9F%20%D7%A9%D7%91%D7%91%D7%99%D7%9D%202026.pdf" target="_blank" style="color: #4f46e5;">תקנון / Rules (PDF)</a>
+                </p>
+            </div>
+
             <!-- Hardware Teaser -->
             <div class="hero-hw-teaser">
                 <a href="#hardware" data-page="hardware" class="hero-hw-card">
@@ -165,6 +177,10 @@
             <a class="quick-link" href="#eventday" data-page="eventday">
                 <span class="quick-link-icon" data-icon="!"></span>
                 <span class="quick-link-label">Event Day</span>
+            </a>
+            <a class="quick-link" href="%D7%AA%D7%A7%D7%A0%D7%95%D7%9F%20%D7%94%D7%90%D7%A7%D7%AA%D7%95%D7%9F%20%D7%AA%D7%9B%D7%A0%D7%95%D7%9F%20%D7%A9%D7%91%D7%91%D7%99%D7%9D%202026.pdf" target="_blank">
+                <span class="quick-link-icon" data-icon="&#128220;"></span>
+                <span class="quick-link-label">תקנון / Rules</span>
             </a>
         </div>
     </div>
@@ -821,11 +837,24 @@
 
 <!-- ============ EVENT DAY ============ -->
 <section class="page-section" id="eventday">
-    <div class="placeholder">
-        <div class="placeholder-icon" data-icon="!"></div>
-        <h2>Event Day</h2>
-        <p>Competition hub &mdash; challenges, scoring, and real-time updates. Active only during the 24-hour event.</p>
+    <div id="eventday-content">
+        <div class="placeholder">
+            <div class="placeholder-icon" data-icon="!"></div>
+            <h2>Event Day</h2>
+            <p>Competition hub &mdash; challenges, scoring, and real-time updates. Active only during the 24-hour event.</p>
+            <p style="margin-top:1rem;opacity:0.7;">Challenges will appear here when the competition begins.</p>
+        </div>
     </div>
+    <script>
+    (function() {
+        fetch('eventday-challenges.html')
+            .then(function(r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+            .then(function(html) {
+                document.getElementById('eventday-content').innerHTML = html;
+            })
+            .catch(function() { /* file not deployed yet, keep placeholder */ });
+    })();
+    </script>
 </section>
 
 <!-- ============ LEADERBOARD ============ -->
