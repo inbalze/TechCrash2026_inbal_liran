@@ -53,16 +53,15 @@ static RxState rxState   = RxState::WAIT_SYNC1;
 static uint8_t rxBuf[FRAME_LEN];
 static int     rxCount   = 0;   // bytes collected in RECV_DATA
 
-// ---- EMA filter (alpha = 0.2 → τ ≈ 5 samples) -------------
-// Stored as fixed-point: value = ema_fp / 256.0f
-static constexpr float EMA_ALPHA = 0.2f;
+// ---- EMA filter (alpha = 0.75 → τ ≈ 1.3 samples, ~20 ms lag) ----
+static constexpr float EMA_ALPHA = 0.75f;
 static float ema_x = 0.0f;
 static float ema_y = 0.0f;
-static float ema_z = -256.0f;  // initialise near −1g (flat on table)
+static float ema_z = +256.0f;  // initialise near +1g (flat on table, ADXL Z reads +256 at rest)
 
 // ---- Cube geometry ------------------------------------------
 // 8 vertices of a unit cube centred at origin, scale 20 px
-static constexpr float CUBE_S = 20.0f;
+static constexpr float CUBE_S = 22.0f;
 
 static const float CUBE_V[8][3] = {
     {-1, -1, -1},
@@ -83,13 +82,14 @@ static const uint8_t CUBE_E[12][2] = {
 };
 
 // ---- Projection parameters ----------------------------------
-static constexpr float FOV_D    = 90.0f;  // "eye" distance for perspective
+static constexpr float FOV_D    = 5.0f;   // "eye" distance for perspective (keep close to ±1 model depth)
 static constexpr int   CENTER_X = SCREEN_W / 2;
 static constexpr int   CENTER_Y = SCREEN_H / 2;
 
 // ---- Forward declarations -----------------------------------
 static void onFrameReceived(const uint8_t* buf);
 static void renderCube();
+static void renderDebugCoordinates();
 static void project(const float v[3], const float R[3][3],
                     int& px, int& py);
 static void buildRotMatrix(float gx, float gy, float gz,
@@ -169,7 +169,7 @@ void loop() {
     // ---- Render once per fresh frame -------------------------
     if (newFrame) {
         newFrame = false;
-        renderCube();
+        renderDebugCoordinates();  // swap back to renderCube() when done debugging
     }
 }
 
@@ -196,9 +196,42 @@ static void onFrameReceived(const uint8_t* buf) {
     ema_y += EMA_ALPHA * (static_cast<float>(raw_y) - ema_y);
     ema_z += EMA_ALPHA * (static_cast<float>(raw_z) - ema_z);
 
+    // Debug: print raw accelerometer values every 50 frames
+    static uint32_t dbgCount = 0;
+    if (++dbgCount % 50 == 0) {
+        Serial.printf("[ADXL] raw x=%d y=%d z=%d | ema x=%.1f y=%.1f z=%.1f\n",
+                      raw_x, raw_y, raw_z, ema_x, ema_y, ema_z);
+    }
+
     // Build rotation matrix from gravity vector (no gimbal lock)
     buildRotMatrix(ema_x, ema_y, ema_z, gR);
     newFrame = true;
+}
+
+// =============================================================
+// renderDebugCoordinates — show live EMA X/Y/Z on OLED
+// Swap renderCube() for this in loop() to verify tilt data.
+// =============================================================
+static void renderDebugCoordinates() {
+    if (!oledOk) return;
+
+    oled.clearDisplay();
+    oled.setTextSize(1);
+    oled.setTextColor(SSD1306_WHITE);
+
+    oled.setCursor(0, 0);
+    oled.print("EMA X: ");
+    oled.println(static_cast<int>(ema_x));
+
+    oled.setCursor(0, 20);
+    oled.print("EMA Y: ");
+    oled.println(static_cast<int>(ema_y));
+
+    oled.setCursor(0, 40);
+    oled.print("EMA Z: ");
+    oled.println(static_cast<int>(ema_z));
+
+    oled.display();
 }
 
 // =============================================================
@@ -230,17 +263,18 @@ static void buildRotMatrix(float gx, float gy, float gz,
     const float ny = gy / glen;
     const float nz = gz / glen;
 
-    // Reference "down" direction in model space = (0, 0, -1)
-    // Rotation axis k = (0,0,-1) × (nx,ny,nz)
-    //   = ( 0·nz − (−1)·ny,  (−1)·nx − 0·nz,  0·ny − 0·nx )
-    //   = ( ny, -nx, 0 )
-    float kx = ny;
-    float ky = -nx;
+    // Reference "up" direction in model space = (0, 0, +1)
+    // ADXL345 flat on table → Z = +256 (+1g), so reference must be +Z.
+    // Rotation axis k = (0,0,+1) × (nx,ny,nz)
+    //   = ( 0·nz − 1·ny,  1·nx − 0·nz,  0·ny − 0·nx )
+    //   = ( -ny, nx, 0 )
+    float kx = -ny;
+    float ky =  nx;
     float kz = 0.0f;
     const float klen = sqrtf(kx*kx + ky*ky + kz*kz);
 
-    // cosθ = (0,0,-1)·(nx,ny,nz) = -nz
-    const float cosA = -nz;
+    // cosθ = (0,0,+1)·(nx,ny,nz) = +nz
+    const float cosA = nz;
 
     if (klen < 1e-6f) {
         // Gravity is already along ±Z — either identity or 180° flip

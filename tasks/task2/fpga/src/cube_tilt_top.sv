@@ -9,8 +9,8 @@
 // ADXL345 SPI (onboard chip, dedicated pins, NOT Arduino header):
 //   GSENSOR_CS_N  → PIN_AB16
 //   GSENSOR_SCLK  → PIN_AB15
-//   GSENSOR_SDO   → PIN_V11  (MOSI)
-//   GSENSOR_SDI   → PIN_V12  (MISO)
+//   GSENSOR_SDO   → PIN_V11  (MISO: sensor output, FPGA reads)
+//   GSENSOR_SDI   → PIN_V12  (MOSI: FPGA output, sensor reads)
 //   GSENSOR_INT[0]→ PIN_Y13  (interrupt — unused here, tri-state)
 //   GSENSOR_INT[1]→ PIN_AB17 (interrupt — unused here, tri-state)
 //
@@ -34,8 +34,8 @@ module cube_tilt_top (
     // ADXL345 dedicated pins
     output          GSENSOR_CS_N,
     output          GSENSOR_SCLK,
-    output          GSENSOR_SDO,
-    input           GSENSOR_SDI,
+    input           GSENSOR_SDO,   // MISO: sensor data output → FPGA reads
+    output          GSENSOR_SDI,   // MOSI: FPGA data output → sensor reads
     input   [2:1]   GSENSOR_INT,
 
     // Arduino header (UART TX only)
@@ -76,8 +76,8 @@ module cube_tilt_top (
         .rst_n     (rst_n),
         .spi_cs_n  (GSENSOR_CS_N),
         .spi_sclk  (GSENSOR_SCLK),
-        .spi_mosi  (GSENSOR_SDO),
-        .spi_miso  (GSENSOR_SDI),
+        .spi_mosi  (GSENSOR_SDI),   // FPGA drives sensor's data input
+        .spi_miso  (GSENSOR_SDO),   // FPGA reads sensor's data output
         .x_data    (x_raw),
         .y_data    (y_raw),
         .z_data    (z_raw),
