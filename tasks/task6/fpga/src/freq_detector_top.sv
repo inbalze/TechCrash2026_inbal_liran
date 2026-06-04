@@ -125,6 +125,11 @@ module freq_detector_top (
     wire [20:0] freq_product = {13'b0, new_xing} * 21'd8000;
     wire [11:0] freq_calc    = freq_product[20:9];   // × 8000 >> 9 = ÷ 512
 
+    // Timeout-latch path: uses xing_cnt (already settled), NOT new_xing
+    // (rx_data is stale at timeout so cur_crossing must not be included).
+    wire [20:0] freq_product_final = {13'b0, xing_cnt} * 21'd8000;
+    wire [11:0] freq_calc_final    = freq_product_final[20:9];
+
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             idle_cnt     <= '0;
@@ -139,12 +144,21 @@ module freq_detector_top (
             bcd_start <= 1'b0;
 
             // ---- Idle counter ----
-            if (rx_valid)
+            if (rx_valid) begin
                 idle_cnt <= '0;
-            else if (idle_cnt < IDLE_TIMEOUT - 1)
+            end else if (idle_cnt < IDLE_TIMEOUT - 1) begin
                 idle_cnt <= idle_cnt + 17'd1;
-            else
+                // Dynamic Gap Latch: fire one cycle before timeout so that
+                // gap_detected asserts on the very next cycle.
+                // Noise guard: ignore short bursts (floating line / ESP32 reset).
+                if (idle_cnt == IDLE_TIMEOUT - 2 && frame_cnt > 9'd100) begin
+                    xing_latch <= xing_cnt;
+                    freq_hz    <= freq_calc_final;
+                    bcd_start  <= 1'b1;
+                end
+            end else begin
                 gap_detected <= 1'b1;
+            end
 
             // ---- Sample ingestion ----
             if (rx_valid) begin
@@ -162,13 +176,7 @@ module freq_detector_top (
                     if (cross_to_pos) hys_state <= 1'b1;
                     if (cross_to_neg) hys_state <= 1'b0;
                     frame_cnt <= frame_cnt + 9'd1;
-
-                    if (frame_cnt == 9'd255) begin
-                        xing_latch <= new_xing;
-                        freq_hz    <= freq_calc;
-                        bcd_start  <= 1'b1;     // trigger BCD converter
-                    end
-
+                    // No latch here — latch fires at idle timeout instead.
                 end
                 // frame_cnt == 256: extra bytes before gap → discard
 
