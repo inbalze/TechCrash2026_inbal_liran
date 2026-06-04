@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CrashTech VLSI-2026 — Challenge 5: FPGA Volt-Meter
+  Qsys Platform Designer system for MAX 10 Modular ADC (Quartus 17.1)
+
+  BEFORE COMPILING:
+    1. Open this file in Platform Designer (Tools → Platform Designer in Quartus 17.1).
+    2. Click "Generate HDL…" → Synthesis → Verilog → Generate.
+    3. Close Platform Designer; then compile the Quartus project.
+
+  Exported ports on the generated volt_adc_sys module:
+    clk_clk                  — clock input  (connect to MAX10_CLK1_50)
+    reset_reset_n            — active-low reset
+    adc_pll_clock_clk        — ADC PLL clock (connect to same 50 MHz clock)
+    adc_pll_locked_export    — PLL locked flag (tie to 1'b1 for direct-clock use)
+    command_valid            — assert to request a conversion
+    command_ready            — ADC accepted the command
+    command_channel[4:0]     — channel to sample (5'd1 = ADCIN1 = Arduino A0)
+    command_startofpacket    — tie to 1'b1
+    command_endofpacket      — tie to 1'b1
+    response_valid           — new 12-bit result is available
+    response_data[11:0]      — ADC result (0–4095)
+    response_channel[4:0]    — echoed channel number
+    response_startofpacket   — Avalon-ST framing (unused)
+    response_endofpacket     — Avalon-ST framing (unused)
+-->
+<system
+    name="volt_adc_sys"
+    xsi:schemaLocation="http://www.altera.com/sopc-builder/help/xml_tags/schemaLocation.html"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <!-- 50 MHz clock source -->
+  <module name="clk_0" kind="clock_source" version="20.1" enabled="1">
+    <parameter name="clockFrequency"      value="50000000"/>
+    <parameter name="clockFrequencyKnown" value="true"/>
+    <parameter name="inputClockFrequency" value="0"/>
+    <parameter name="resetSynchronousEdges" value="NONE"/>
+  </module>
+
+  <!-- Modular ADC Core — 1 channel, standard sequencer, prescalar=10 -->
+  <!-- prescalar=10 → ADC clock = 50MHz / (10×2) = 2.5 MHz (valid: 1–5 MHz) -->
+  <module name="modular_adc_0" kind="altera_modular_adc" version="17.1" enabled="1">
+    <parameter name="NUM_CHANNELS"                value="1"/>
+    <parameter name="SEQUENCER_TYPE"              value="STANDARD"/>
+    <parameter name="TSE_ENABLE"                  value="0"/>
+    <parameter name="PRESCALAR"                   value="10"/>
+    <parameter name="CHANNEL_SETTING_NUMBER_0"    value="SINGLE_ENDED"/>
+    <parameter name="SAMPLE_STORE_ENABLED"        value="0"/>
+  </module>
+
+  <!-- Internal connections -->
+  <connection kind="clock" version="20.0"
+      start="clk_0.clk"       end="modular_adc_0.clock_sink"/>
+  <connection kind="reset" version="20.0"
+      start="clk_0.clk_reset" end="modular_adc_0.reset_sink"/>
+
+  <!-- Exports (become top-level ports of the generated wrapper) -->
+  <connection kind="export" version="20.0" start="clk_0.clk_in"                        end="clk"/>
+  <connection kind="export" version="20.0" start="clk_0.clk_in_reset"                  end="reset"/>
+  <connection kind="export" version="20.0" start="modular_adc_0.command"               end="command"/>
+  <connection kind="export" version="20.0" start="modular_adc_0.response"              end="response"/>
+  <connection kind="export" version="20.0" start="modular_adc_0.adc_pll_clock"        end="adc_pll_clock"/>
+  <connection kind="export" version="20.0" start="modular_adc_0.adc_pll_locked"       end="adc_pll_locked"/>
+
+</system>
