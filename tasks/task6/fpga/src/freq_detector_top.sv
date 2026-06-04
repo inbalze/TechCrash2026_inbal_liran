@@ -46,7 +46,7 @@ module freq_detector_top (
     output  [7:0]   HEX0, HEX1, HEX2, HEX3, HEX4, HEX5,
     inout   [15:0]  ARDUINO_IO,
     inout           ARDUINO_RESET_N,
-    inout   [35:0]  GPIO            // JP1 40-pin header
+    inout           GPIO_0           // JP1 pin 1 = PIN_V10 — UART RX
 );
 
     wire clk   = MAX10_CLK1_50;
@@ -55,9 +55,7 @@ module freq_detector_top (
     // ---- Tri-state all header pins ---------------------------------
     assign ARDUINO_IO    = 16'bz;
     assign ARDUINO_RESET_N = 1'bz;
-    // GPIO[0]: UART RX input — drive to Z so the ESP32 signal propagates.
-    // GPIO[35:1]: unused.
-    assign GPIO          = 36'bz;
+    // GPIO_0: UART RX input — inout driven to Z so ESP32 signal propagates.
 
     // ==============================================================
     // 1. UART RX — 115200 baud, 8N1, on JP1 GPIO[0] (PIN_V10)
@@ -71,7 +69,7 @@ module freq_detector_top (
     ) u_rx (
         .clk     (clk),
         .rst_n   (rst_n),
-        .rx_in   (GPIO[0]),          // JP1 pin 1 ← ESP32 GPIO32 TX
+        .rx_in   (GPIO_0),          // JP1 pin 1 ← ESP32 GPIO32 TX
         .rx_data (rx_data),
         .rx_valid(rx_valid)
     );
@@ -127,6 +125,11 @@ module freq_detector_top (
     wire [20:0] freq_product = {13'b0, new_xing} * 21'd8000;
     wire [11:0] freq_calc    = freq_product[20:9];   // × 8000 >> 9 = ÷ 512
 
+    // Timeout-latch path: uses xing_cnt (already settled), NOT new_xing
+    // (rx_data is stale at timeout so cur_crossing must not be included).
+    wire [20:0] freq_product_final = {13'b0, xing_cnt} * 21'd8000;
+    wire [11:0] freq_calc_final    = freq_product_final[20:9];
+
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             idle_cnt     <= '0;
@@ -141,12 +144,21 @@ module freq_detector_top (
             bcd_start <= 1'b0;
 
             // ---- Idle counter ----
-            if (rx_valid)
+            if (rx_valid) begin
                 idle_cnt <= '0;
-            else if (idle_cnt < IDLE_TIMEOUT - 1)
+            end else if (idle_cnt < IDLE_TIMEOUT - 1) begin
                 idle_cnt <= idle_cnt + 17'd1;
-            else
+                // Dynamic Gap Latch: fire one cycle before timeout so that
+                // gap_detected asserts on the very next cycle.
+                // Noise guard: ignore short bursts (floating line / ESP32 reset).
+                if (idle_cnt == IDLE_TIMEOUT - 2 && frame_cnt > 9'd100) begin
+                    xing_latch <= xing_cnt;
+                    freq_hz    <= freq_calc_final;
+                    bcd_start  <= 1'b1;
+                end
+            end else begin
                 gap_detected <= 1'b1;
+            end
 
             // ---- Sample ingestion ----
             if (rx_valid) begin
@@ -164,13 +176,7 @@ module freq_detector_top (
                     if (cross_to_pos) hys_state <= 1'b1;
                     if (cross_to_neg) hys_state <= 1'b0;
                     frame_cnt <= frame_cnt + 9'd1;
-
-                    if (frame_cnt == 9'd255) begin
-                        xing_latch <= new_xing;
-                        freq_hz    <= freq_calc;
-                        bcd_start  <= 1'b1;     // trigger BCD converter
-                    end
-
+                    // No latch here — latch fires at idle timeout instead.
                 end
                 // frame_cnt == 256: extra bytes before gap → discard
 
@@ -201,7 +207,8 @@ module freq_detector_top (
     // ==============================================================
     logic bcd_start_r;
     always_ff @(posedge clk or negedge rst_n)
-        bcd_start_r <= rst_n ? bcd_start : 1'b0;
+        if (!rst_n) bcd_start_r <= 1'b0;
+        else        bcd_start_r <= bcd_start;
 
     localparam BCD_IDLE = 2'd0;
     localparam BCD_CONV = 2'd1;

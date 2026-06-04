@@ -38,10 +38,19 @@
 
 #include <Arduino.h>
 #include <math.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
 // ---- Pin definitions (authorised GPIO subset) ---------------
 static constexpr int      PIN_ADC     = 34;     // ADC1_CH6, input-only GPIO
 static constexpr int      PIN_FPGA_TX = 32;     // UART2 TX → FPGA JP1 GPIO[0] (PIN_V10)
+static constexpr int      PIN_SDA     = 26;     // I2C SDA → SSD1306 OLED
+static constexpr int      PIN_SCL     = 27;     // I2C SCL → SSD1306 OLED
+
+// ---- OLED (SSD1306 128×64, I2C 0x3C) ----------------------
+static Adafruit_SSD1306 oled(128, 64, &Wire, -1);
+static int oled_freq_last = -1;  // only redraw when value changes
 
 // ---- EMA filter state --------------------------------------
 // Persistent across loop() calls. Initialised to mid-scale so the
@@ -75,8 +84,22 @@ void setup() {
     // UART2: TX-only. -1 for RX pin means no RX GPIO is allocated.
     FpgaSerial.begin(UART_BAUD, SERIAL_8N1, /*RX=*/-1, PIN_FPGA_TX);
 
-    Serial.printf("[freq_detector] UART2 TX on GPIO%d at %u baud\n",
-                  PIN_FPGA_TX, UART_BAUD);
+    // OLED: SSD1306 128×64 via I2C
+    Wire.begin(PIN_SDA, PIN_SCL);
+    if (!oled.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+        Serial.println("[OLED] SSD1306 init failed");
+    } else {
+        oled.clearDisplay();
+        oled.setTextColor(SSD1306_WHITE);
+        oled.setTextSize(2);
+        oled.setCursor(4, 10);
+        oled.print("Freq Det");
+        oled.setTextSize(1);
+        oled.setCursor(4, 50);
+        oled.print("Waiting...");
+        oled.display();
+        Serial.println("[OLED] OK");
+    }
 }
 
 // =============================================================
@@ -128,6 +151,44 @@ void loop() {
 
     Serial.printf("[TX] freq=%4d Hz  adc_raw=%4d  ema=%.1f\n",
                   freq_hz, adc_raw, ema_val);
+
+    // ---- 6. Update OLED (only when freq changes) -------------
+    // Runs during the idle gap so it does NOT delay the UART burst.
+    // Bar graph: each of 10 segments = 190 Hz (100–2000 Hz range).
+    if (freq_hz != oled_freq_last) {
+        oled_freq_last = freq_hz;
+
+        oled.clearDisplay();
+
+        // ---- Large frequency label ----
+        oled.setTextSize(3);
+        oled.setTextColor(SSD1306_WHITE);
+        char buf[8];
+        snprintf(buf, sizeof(buf), "%4d", freq_hz);
+        // centre the 4-digit + space string: 4 chars × 18px = 72px, offset = (128-72)/2 = 28
+        oled.setCursor(10, 8);
+        oled.print(buf);
+
+        // ---- "Hz" label ----
+        oled.setTextSize(2);
+        oled.setCursor(90, 14);
+        oled.print("Hz");
+
+        // ---- Horizontal bar graph ----
+        // Maps 100–2000 Hz → 0–118 px wide bar
+        const int bar_w = (int)((long)(freq_hz - FREQ_MIN) * 118 / (FREQ_MAX - FREQ_MIN));
+        if (bar_w > 0) oled.fillRect(5, 46, bar_w, 10, SSD1306_WHITE);
+        oled.drawRect(4, 45, 120, 12, SSD1306_WHITE);  // outline
+
+        // ---- "100" and "2000" range labels ----
+        oled.setTextSize(1);
+        oled.setCursor(4, 58);
+        oled.print("100");
+        oled.setCursor(100, 58);
+        oled.print("2000");
+
+        oled.display();
+    }
 
     // ---- 6. Idle gap — FPGA frame-sync pulse -----------------
     // 20 ms >> FPGA idle threshold (2 ms) → always fires. ✓
