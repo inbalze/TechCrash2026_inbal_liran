@@ -1,25 +1,32 @@
 // =============================================================
-// CrashTech VLSI-2026 — Challenge 6: Frequency Detector (ESP32)
+// CrashTech VLSI-2026 — Challenge 6: Frequency Detector (ESP32)  v2
 //
 // Role: sine-wave generator and UART burst transmitter.
 //
 // Loop behaviour (repeats ~every 42 ms):
 //   1. Read potentiometer on GPIO34 (ADC1_CH6, 12-bit, 0–4095).
-//   2. Map ADC value linearly to a target frequency: 100–2000 Hz.
-//   3. Generate 256 signed 8-bit samples of a sine wave:
+//   2. Apply Exponential Moving Average (alpha=0.1) to smooth ADC jitter.
+//   3. Map smoothed ADC value linearly to target frequency: 100–2000 Hz.
+//   4. Generate 256 signed 8-bit samples of a sine wave:
 //        x[i] = (int8_t)(sin(2π · f · i / 8000) × 127)
 //      using a fixed sample rate of 8000 Hz.
-//   4. Burst all 256 bytes to the FPGA via UART2 TX at 115200 baud.
-//   5. flush() — blocks until the last stop-bit is transmitted
+//   5. Burst all 256 bytes to the FPGA via UART2 TX at 115200 baud.
+//      FPGA UART RX is now on JP1 GPIO[0] = PIN_V10.
+//   6. flush() — blocks until the last stop-bit is transmitted
 //      (~22.2 ms), guaranteeing a clean end-of-burst.
-//   6. delay(20) — 20 ms of silence = FPGA frame-sync gap (2 ms
+//   7. delay(20) — 20 ms of silence = FPGA frame-sync gap (2 ms
 //      threshold on FPGA → always triggers with this gap). ✓
 //
 // Total burst period ≈ 22 ms (TX) + 20 ms (gap) = 42 ms.
 //
+// EMA filter (alpha = 0.1):
+//   ema_val = 0.1 × adc_raw + 0.9 × ema_val
+//   Time constant τ ≈ 9 loop periods ≈ 380 ms. Eliminates ADC jitter
+//   without introducing audible lag when the pot is turned slowly.
+//
 // Pin assignments (all within authorised set [12-14, 25-27, 32-35]):
 //   GPIO 34 — ADC1_CH6 input (potentiometer wiper, input-only pin)
-//   GPIO 32 — UART2 TX → FPGA ARDUINO_IO[0] (PIN_AB5)
+//   GPIO 32 — UART2 TX → FPGA JP1 GPIO[0] (PIN_V10)
 //
 // Frequency math verification:
 //   crossings in 256 samples ≈ 2 × N_cycles = 2 × (256 × f / 8000)
@@ -34,7 +41,13 @@
 
 // ---- Pin definitions (authorised GPIO subset) ---------------
 static constexpr int      PIN_ADC     = 34;     // ADC1_CH6, input-only GPIO
-static constexpr int      PIN_FPGA_TX = 32;     // UART2 TX → FPGA ARDUINO_IO[0]
+static constexpr int      PIN_FPGA_TX = 32;     // UART2 TX → FPGA JP1 GPIO[0] (PIN_V10)
+
+// ---- EMA filter state --------------------------------------
+// Persistent across loop() calls. Initialised to mid-scale so the
+// first burst is at a reasonable frequency rather than 100 Hz.
+static float ema_val = 2047.5f;     // mid-scale (≈ 1050 Hz initial target)
+static constexpr float EMA_ALPHA = 0.1f;  // low-pass; τ ≈ 9 loop periods ≈ 380 ms
 
 // ---- DSP & UART parameters ----------------------------------
 static constexpr uint32_t UART_BAUD   = 115200;
@@ -71,13 +84,20 @@ void loop() {
     // ---- 1. Read potentiometer --------------------------------
     const int adc_raw = analogRead(PIN_ADC);
 
-    // ---- 2. Map ADC to target frequency (linear) -------------
-    // adc_raw ∈ [0, 4095] → freq_hz ∈ [FREQ_MIN, FREQ_MAX]
+    // ---- 2. EMA low-pass filter (α = 0.1) --------------------
+    // Smooths jitter from the 12-bit SAR ADC.  A single raw-ADC
+    // spike of ±200 LSB (≈ ±93 Hz) is attenuated to < ±1 Hz after
+    // ~10 loop periods (420 ms).
+    ema_val = EMA_ALPHA * (float)adc_raw + (1.0f - EMA_ALPHA) * ema_val;
+    const int adc_smooth = (int)(ema_val + 0.5f);  // round to nearest int
+
+    // ---- 3. Map smoothed ADC to target frequency (linear) ----
+    // adc_smooth ∈ [0, 4095] → freq_hz ∈ [FREQ_MIN, FREQ_MAX]
     // Use 32-bit intermediate to avoid overflow.
     int freq_hz = FREQ_MIN +
-                  (int)((int32_t)adc_raw * (FREQ_MAX - FREQ_MIN) / 4095);
+                  (int)((int32_t)adc_smooth * (FREQ_MAX - FREQ_MIN) / 4095);
 
-    // Clamp (defensive against ADC noise at rail)
+    // Clamp (defensive against EMA transiently exceeding rails)
     if (freq_hz < FREQ_MIN) freq_hz = FREQ_MIN;
     if (freq_hz > FREQ_MAX) freq_hz = FREQ_MAX;
 
@@ -106,7 +126,8 @@ void loop() {
     // is complete before the gap begins.
     FpgaSerial.flush();
 
-    Serial.printf("[TX] freq=%4d Hz  adc=%4d\n", freq_hz, adc_raw);
+    Serial.printf("[TX] freq=%4d Hz  adc_raw=%4d  ema=%.1f\n",
+                  freq_hz, adc_raw, ema_val);
 
     // ---- 6. Idle gap — FPGA frame-sync pulse -----------------
     // 20 ms >> FPGA idle threshold (2 ms) → always fires. ✓
