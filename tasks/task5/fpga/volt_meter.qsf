@@ -20,6 +20,7 @@ set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name LAST_QUARTUS_VERSION "17.1.0 Lite Edition"
 
 # ---- Source files ----
+set_global_assignment -name VERILOG_FILE src/adc_pll.v
 set_global_assignment -name SYSTEMVERILOG_FILE src/volt_meter_top.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/uart_tx_volt.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/seven_segment.sv

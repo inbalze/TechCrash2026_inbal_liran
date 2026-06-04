@@ -34,6 +34,16 @@ module volt_meter_top (
     wire clk   = MAX10_CLK1_50;
     wire rst_n = KEY[0];
 
+    // ---- PLL for ADC clock ----------------------------------------
+    wire adc_pll_clk;
+    wire adc_pll_locked;
+
+    adc_pll u_adc_pll (
+        .inclk0 (clk),
+        .c0     (adc_pll_clk),
+        .locked (adc_pll_locked)
+    );
+
     // ---- Arduino header IO ----------------------------------------
     wire uart_tx_wire;
     assign ARDUINO_IO[0]    = 1'bz;
@@ -56,15 +66,15 @@ module volt_meter_top (
     logic        resp_valid;
     logic [11:0] resp_data;
 
-    // Always request channel 1 (ADCIN1 = Arduino A0)
-    assign cmd_valid = 1'b1;
+    // Wait for PLL lock before asserting command valid to prevent sequencer lock-up
+    assign cmd_valid = adc_pll_locked;
 
     // Instantiate Qsys-generated ADC wrapper
     volt_adc_sys u_adc_sys (
         .clk_clk                (clk),
         .reset_reset_n          (rst_n),
-        .adc_pll_clock_clk      (clk),   // direct-clock, no external PLL
-        .adc_pll_locked_export  (1'b1),  // assert locked (direct-clock mode)
+        .adc_pll_clock_clk      (adc_pll_clk),
+        .adc_pll_locked_export  (adc_pll_locked),
         .command_valid          (cmd_valid),
         .command_ready          (cmd_ready),
         .command_channel        (5'd1),  // ADCIN1 = Arduino A0
@@ -86,15 +96,17 @@ module volt_meter_top (
 
     // ==============================================================
     // 2.  Convert raw 12-bit → millivolts
-    //     mv ≈ raw × 3300 / 4096  (error < 3 mV at full scale)
-    //     Intermediate product is 24-bit; max = 4095 × 3300 = 13 513 500 < 2^24.
+    //     DE10-Lite has a 1:1 resistor divider (100k/100k) on each ADCIN pin,
+    //     halving the input voltage before the MAX 10's 2.5 V internal reference.
+    //     Recovery: mv = raw × (2500 × 2) / 4096 = raw × 5000 / 4096
+    //     Max practical product (3.3 V input → raw ≈ 2703): 2703 × 5000 = 13 515 000 < 2^24.
     //     mv = product[23:12] (integer part after >>12)
     // ==============================================================
     logic [23:0] mv_product;
     logic [11:0] adc_mv;
 
     always_comb begin
-        mv_product = {12'b0, adc_raw} * 24'd3300;
+        mv_product = {12'b0, adc_raw} * 24'd5000;
         adc_mv     = mv_product[23:12];
     end
 
