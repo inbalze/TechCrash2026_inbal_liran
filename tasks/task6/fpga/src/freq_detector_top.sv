@@ -46,7 +46,7 @@ module freq_detector_top (
     output  [7:0]   HEX0, HEX1, HEX2, HEX3, HEX4, HEX5,
     inout   [15:0]  ARDUINO_IO,
     inout           ARDUINO_RESET_N,
-    inout   [35:0]  GPIO            // JP1 40-pin header
+    inout           GPIO_0           // JP1 pin 1 = PIN_V10 — UART RX
 );
 
     wire clk   = MAX10_CLK1_50;
@@ -55,9 +55,7 @@ module freq_detector_top (
     // ---- Tri-state all header pins ---------------------------------
     assign ARDUINO_IO    = 16'bz;
     assign ARDUINO_RESET_N = 1'bz;
-    // GPIO[0]: UART RX input — drive to Z so the ESP32 signal propagates.
-    // GPIO[35:1]: unused.
-    assign GPIO          = 36'bz;
+    // GPIO_0: UART RX input — inout driven to Z so ESP32 signal propagates.
 
     // ==============================================================
     // 1. UART RX — 115200 baud, 8N1, on JP1 GPIO[0] (PIN_V10)
@@ -71,7 +69,7 @@ module freq_detector_top (
     ) u_rx (
         .clk     (clk),
         .rst_n   (rst_n),
-        .rx_in   (GPIO[0]),          // JP1 pin 1 ← ESP32 GPIO32 TX
+        .rx_in   (GPIO_0),          // JP1 pin 1 ← ESP32 GPIO32 TX
         .rx_data (rx_data),
         .rx_valid(rx_valid)
     );
@@ -201,7 +199,8 @@ module freq_detector_top (
     // ==============================================================
     logic bcd_start_r;
     always_ff @(posedge clk or negedge rst_n)
-        bcd_start_r <= rst_n ? bcd_start : 1'b0;
+        if (!rst_n) bcd_start_r <= 1'b0;
+        else        bcd_start_r <= bcd_start;
 
     localparam BCD_IDLE = 2'd0;
     localparam BCD_CONV = 2'd1;
