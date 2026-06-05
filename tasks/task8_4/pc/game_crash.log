@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "c:\Users\Inbal\Desktop\degree\semester 4\hackaton\TechCrash2026_inbal_liran\tasks\task8_4\pc\game.py", line 486, in <module>
+    Game(sys.argv[1] if len(sys.argv) > 1 else 'COM5').run()
+  File "c:\Users\Inbal\Desktop\degree\semester 4\hackaton\TechCrash2026_inbal_liran\tasks\task8_4\pc\game.py", line 462, in run
+    self.serial.stop(); pygame.quit(); sys.exit()
+SystemExit

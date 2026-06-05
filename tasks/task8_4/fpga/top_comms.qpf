@@ -1,0 +1,4 @@
+QUARTUS_VERSION = "17.1"
+DATE = "00:00:00  June 05, 2026"
+
+PROJECT_REVISION = "top_comms"
