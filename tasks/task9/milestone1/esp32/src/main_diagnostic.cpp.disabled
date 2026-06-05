@@ -1,0 +1,65 @@
+#include <Arduino.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET    -1
+#define SCREEN_ADDRESS 0x3C
+
+// Pin Definitions
+#define RX_PIN 35
+#define SDA_PIN 26
+#define SCL_PIN 27
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+HardwareSerial FpgaSerial(2);
+
+void setup() {
+    Serial.begin(115200);
+    
+    // Initialize OLED with I2C
+    Wire.begin(SDA_PIN, SCL_PIN, 400000);
+    if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+        Serial.println(F("SSD1306 allocation failed"));
+        for(;;);
+    }
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_WHITE);
+    display.setCursor(0, 0);
+    display.println("DIAGNOSTIC SYSTEM");
+    display.println("Waiting for UART...");
+    display.display();
+
+    // Initialize UART RX on GPIO 33 (TX mapped to unused GPIO 12 in authorized set)
+    FpgaSerial.begin(115200, SERIAL_8N1, RX_PIN, 12);
+    Serial.println("Diagnostic system ready.");
+}
+
+void loop() {
+    while (FpgaSerial.available()) {
+        uint8_t rx_byte = FpgaSerial.read();
+        Serial.printf("Received: 0x%02X\n", rx_byte);
+        display.clearDisplay();
+        display.setCursor(0, 0);
+        
+        if (rx_byte == 0xFF) {
+            display.setTextSize(2);
+            display.println("FLAP");
+            display.println("PRESSED!");
+        } else if (rx_byte <= 0x0F) {
+            display.setTextSize(2);
+            display.println("DIFFICULTY:");
+            display.setTextSize(3);
+            display.printf("  %d", rx_byte);
+        } else {
+            display.setTextSize(1);
+            display.println("UNKNOWN BYTE:");
+            display.printf("0x%02X", rx_byte);
+        }
+        display.display();
+    }
+    delay(5);
+}
