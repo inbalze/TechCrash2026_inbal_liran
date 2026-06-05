@@ -1,0 +1,22 @@
+{
+	"system" : {
+		"platform" : "windows64",
+		"os_name" : "Windows 10",
+		"os_version" : "10.0"
+	},
+	"error" : {
+		"executable" : "quartus_sta",
+		"comment" : "not_applicable",
+		"error_message" : "Access Violation at 0X00007FF88D5AE768",
+		"source_file" : "unknown",
+		"line" : "0",
+		"stack_trace" : "\t0x7ff88d5ae767: TSM_STA + 0x8e767 (STA_DESIGN_ANALYSIS_MANAGER::setup_instance_name_aggregation_map + 0xd3)\n\t0x7ff88d5d6814: TSM_STA + 0xb6814 (sta_create_timing_netlist + 0x9a8)\n\t 0x5b9561e2: tcl86 + 0x161e2 (TclNRRunCallbacks + 0x62)\n\t 0x5b957a65: tcl86 + 0x17a65 (TclEvalEx + 0xa65)\n\t 0x5b9e6f8b: tcl86 + 0xa6f8b (Tcl_FSEvalFileEx + 0x22b)\n\t 0x5b9e5646: tcl86 + 0xa5646 (Tcl_EvalFile + 0x36)\n\t0x7ff8f0b82606: comp_qexe + 0x12606 (?qexe_evaluate_tcl_script@@YA_NAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z + 0x376)\n\t0x7ff8f0b81864: comp_qexe + 0x11864 (qexe_do_tcl + 0x334)\n\t0x7ff8f0b86755: comp_qexe + 0x16755 (?qexe_run_tcl_option@@YA_NPEAVQEXE_FRAMEWORK@@PEBDPEAV?$list@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$allocator@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@std@@_N@Z + 0x585)\n\t0x7ff8f08180c3: comp_qcu + 0x380c3 (?qcu_run_tcl_option@@YA_NPEAVQCU_FRAMEWORK@@PEBDPEAV?$list@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$allocator@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@std@@_N@Z + 0x1003)\n\t0x7ff8f0b860aa: comp_qexe + 0x160aa (qexe_run + 0x39a)\n\t0x7ff8f0b86e51: comp_qexe + 0x16e51 (?qexe_standard_main@@YAHPEAVQEXE_FRAMEWORK@@PEAPEBUQEXE_OPTION_DEFINITION@@HPEAPEBD@Z + 0xc1)\n\t0x7ff61ec7dbae: quartus_sta + 0xdbae (?qsta_main@@YAHHPEAPEBD@Z + 0x6e)\n\t0x7ff8ebdf2e98: CCL_MSG + 0x12e98 (?msg_main_thread@@YAPEAXPEAX@Z + 0x18)\n\t0x7ff8ebdf467e: CCL_MSG + 0x1467e (?msg_thread_wrapper@@YAPEAXP6APEAXPEAX@Z0@Z + 0x6e)\n\t0x7ff8ebd76660: ccl_mem + 0x16660 (?mem_thread_wrapper@@YAPEAXP6APEAXPEAX@Z0@Z + 0x70)\n\t0x7ff8ebdf2761: CCL_MSG + 0x12761 (?msg_exe_main@@YAHHPEAPEBDP6AHH0@Z@Z + 0xa1)\n\t0x7ff61ec7e2f2: quartus_sta + 0xe2f2 (__tmainCRTStartup + 0x10e)\n\t0x7ff90eb0e956: KERNEL32 + 0x2e956 (BaseThreadInitThunk + 0x16)\n\t0x7ff90fc27c1b: ntdll + 0x87c1b (RtlUserThreadStart + 0x2b)\n",
+		"subsystem" : "unknown"
+	},
+	"quartus" : {
+		"quartus_bits" : "64",
+		"version" : "17.1.0",
+		"build" : "590",
+		"edition" : "Lite Edition"
+	}
+}

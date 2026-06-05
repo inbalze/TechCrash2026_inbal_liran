@@ -1,0 +1,26 @@
+# do run_fp8_adder_tb.do
+# vlib work
+# ** Warning: (vlib-34) Library already exists at "work".
+# vlog ../src/fp8_adder.v fp8_adder_tb.v
+# Start time: 02:03:16 on Jun 05,2026
+# vlog ../src/fp8_adder.v fp8_adder_tb.v 
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# -- Compiling module fp8_adder
+# -- Compiling module fp8_adder_tb
+# 
+# Top level modules:
+# 	fp8_adder_tb
+# End time: 02:03:16 on Jun 05,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vsim -c work.fp8_adder_tb -do "run -all; quit -f"
+# vsim -c work.fp8_adder_tb -do "run -all; quit -f" 
+# Start time: 02:03:16 on Jun 05,2026
+# Loading work.fp8_adder_tb
+# Loading work.fp8_adder
+# run -all
+# SUMMARY pass=4096 fail=0 total_wait_cycles=4096
+# FP8 adder testbench PASSED
+# ** Note: $finish    : fp8_adder_tb.v(122)
+#    Time: 327790 ns  Iteration: 1  Instance: /fp8_adder_tb
+# End time: 02:03:16 on Jun 05,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0

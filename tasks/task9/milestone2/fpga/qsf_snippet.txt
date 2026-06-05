@@ -1,0 +1,25 @@
+# ─── Clock ───
+set_location_assignment PIN_P11 -to MAX10_CLK1_50
+
+# ─── Keys (active low) ───
+set_location_assignment PIN_B8  -to KEY[0]
+set_location_assignment PIN_A7  -to KEY[1]
+
+# ─── Switches (SW[3:0] used for difficulty) ───
+set_location_assignment PIN_C10 -to SW[0]
+set_location_assignment PIN_C11 -to SW[1]
+set_location_assignment PIN_D12 -to SW[2]
+set_location_assignment PIN_C12 -to SW[3]
+
+# ─── 7-Segment Displays (HEX0 for difficulty display) ───
+set_location_assignment PIN_C14 -to HEX0[0]
+set_location_assignment PIN_E15 -to HEX0[1]
+set_location_assignment PIN_C15 -to HEX0[2]
+set_location_assignment PIN_C16 -to HEX0[3]
+set_location_assignment PIN_E16 -to HEX0[4]
+set_location_assignment PIN_D17 -to HEX0[5]
+set_location_assignment PIN_C17 -to HEX0[6]
+
+# ─── Arduino Header (UART TX routed to ARDUINO_IO[1]) ───
+set_location_assignment PIN_AB6 -to ARDUINO_IO[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ARDUINO_IO[*]
