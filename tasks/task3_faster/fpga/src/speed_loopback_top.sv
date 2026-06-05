@@ -44,85 +44,16 @@ module speed_loopback_top(
     reg [31:0] sum;
 
     // ---- Parallel TX (FPGA -> ESP32 on ARDUINO_IO[10:2]) ----
-    localparam [12:0] PAR_SETUP_CYC = 13'd2;
-    localparam [12:0] PAR_WR_HI_CYC = 13'd8;
-    localparam [12:0] PAR_WR_LO_CYC = 13'd10;
-
-    localparam PAR_IDLE  = 2'd0,
-               PAR_SETUP = 2'd1,
-               PAR_HIGH  = 2'd2,
-               PAR_LOW   = 2'd3;
-
-    reg        par_start;
-    reg  [7:0] par_data;
-    reg        par_busy;
+    // Custom Streaming Protocol: NO handshaking. WR toggles every 6 cycles (120 ns/byte)
     reg  [7:0] par_bus;
     reg        par_wr;
-    reg  [1:0] par_state;
-    reg  [12:0] par_cnt;
-
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            par_busy  <= 1'b0;
-            par_bus   <= 8'd0;
-            par_wr    <= 1'b0;
-            par_state <= PAR_IDLE;
-            par_cnt   <= 13'd0;
-        end else begin
-            case (par_state)
-                PAR_IDLE: begin
-                    par_wr <= 1'b0;
-                    if (par_start) begin
-                        par_bus   <= par_data;
-                        par_busy  <= 1'b1;
-                        par_cnt   <= PAR_SETUP_CYC - 13'd1;
-                        par_state <= PAR_SETUP;
-                    end
-                end
-
-                PAR_SETUP: begin
-                    if (par_cnt == 13'd0) begin
-                        par_wr    <= 1'b1;
-                        par_cnt   <= PAR_WR_HI_CYC - 13'd1;
-                        par_state <= PAR_HIGH;
-                    end else begin
-                        par_cnt <= par_cnt - 13'd1;
-                    end
-                end
-
-                PAR_HIGH: begin
-                    if (par_cnt == 13'd0) begin
-                        par_wr    <= 1'b0;
-                        par_cnt   <= PAR_WR_LO_CYC - 13'd1;
-                        par_state <= PAR_LOW;
-                    end else begin
-                        par_cnt <= par_cnt - 13'd1;
-                    end
-                end
-
-                PAR_LOW: begin
-                    if (par_cnt == 13'd0) begin
-                        par_busy  <= 1'b0;
-                        par_state <= PAR_IDLE;
-                    end else begin
-                        par_cnt <= par_cnt - 13'd1;
-                    end
-                end
-
-                default: begin
-                    par_wr    <= 1'b0;
-                    par_busy  <= 1'b0;
-                    par_state <= PAR_IDLE;
-                end
-            endcase
-        end
-    end
+    reg  [2:0] wr_timer;
 
     // ---- UART RX (ESP32 -> FPGA on ARDUINO_IO[0]) ----
     wire [7:0] rx_data;
     wire       rx_valid;
 
-    uart_rx #(.CLK_FREQ(50_000_000), .BAUD(57_600)) u_rx (
+    uart_rx #(.CLK_FREQ(50_000_000), .BAUD(2_000_000)) u_rx (
         .clk(clk), .rst_n(rst_n),
         .rx_in(ARDUINO_IO[0]),
         .rx_data(rx_data), .rx_valid(rx_valid)
@@ -179,12 +110,12 @@ module speed_loopback_top(
             hdr_idx       <= 0;
             pass          <= 0;
             rx_checksum   <= 0;
-            par_start     <= 0;
-            par_data      <= 0;
+            par_bus       <= 0;
+            par_wr        <= 0;
+            wr_timer      <= 0;
             timer_running <= 0;
             timer_reset   <= 0;
         end else begin
-            par_start   <= 0;       // default: one-cycle pulse
             timer_reset <= 0;
 
             // ---- Start / Restart ----
@@ -195,6 +126,8 @@ module speed_loopback_top(
                 send_count    <= 0;
                 hdr_idx       <= 0;
                 pass          <= 0;
+                par_wr        <= 0;
+                wr_timer      <= 0;
                 timer_reset   <= 1;
                 timer_running <= 1;
             end else begin
@@ -203,31 +136,48 @@ module speed_loopback_top(
 
                     // Send 4-byte header: total_count little-endian
                     S_HDR: begin
-                        if (!par_busy && !par_start) begin
+                        if (wr_timer == 3'd0) begin
                             case (hdr_idx)
-                                2'd0: par_data <= total_count[7:0];
-                                2'd1: par_data <= total_count[15:8];
-                                2'd2: par_data <= total_count[23:16];
-                                2'd3: par_data <= total_count[31:24];
+                                2'd0: par_bus <= total_count[7:0];
+                                2'd1: par_bus <= total_count[15:8];
+                                2'd2: par_bus <= total_count[23:16];
+                                2'd3: par_bus <= total_count[31:24];
                             endcase
-                            par_start <= 1;
+                            par_wr <= 1;
+                            wr_timer <= 3'd1;
+                        end else if (wr_timer == 3'd3) begin
+                            par_wr <= 0;
+                            wr_timer <= 3'd4;
+                        end else if (wr_timer == 3'd5) begin
+                            wr_timer <= 3'd0;
                             if (hdr_idx == 2'd3)
                                 state <= S_DATA;
                             hdr_idx <= hdr_idx + 1;
+                        end else begin
+                            wr_timer <= wr_timer + 1;
                         end
                     end
 
                     // Send N random bytes
                     S_DATA: begin
-                        if (!par_busy && !par_start) begin
-                            if (send_count < total_count) begin
-                                par_data   <= lfsr[7:0];
-                                par_start  <= 1;
-                                sum        <= sum + {24'd0, lfsr[7:0]};
-                                lfsr       <= {lfsr[14:0], lfsr_feedback};
+                        if (send_count < total_count) begin
+                            if (wr_timer == 3'd0) begin
+                                par_bus <= lfsr[7:0];
+                                sum <= sum + {24'd0, lfsr[7:0]};
+                                lfsr <= {lfsr[14:0], lfsr_feedback};
+                                par_wr <= 1;
+                                wr_timer <= 3'd1;
+                            end else if (wr_timer == 3'd3) begin
+                                par_wr <= 0;
+                                wr_timer <= 3'd4;
+                            end else if (wr_timer == 3'd5) begin
+                                wr_timer <= 3'd0;
                                 send_count <= send_count + 1;
+                                if (send_count + 1 == total_count) begin
+                                    state <= S_WAIT;
+                                end
                             end else begin
-                                state <= S_WAIT;
+                                wr_timer <= wr_timer + 1;
                             end
                         end
                     end

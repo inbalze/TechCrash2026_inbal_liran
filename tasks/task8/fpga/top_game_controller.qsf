@@ -1,0 +1,53 @@
+set_global_assignment -name FAMILY "MAX 10"
+set_global_assignment -name DEVICE 10M50DAF484C7G
+set_global_assignment -name TOP_LEVEL_ENTITY top_game_controller
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name LAST_QUARTUS_VERSION "17.1.0 Lite Edition"
+
+set_global_assignment -name SYSTEMVERILOG_FILE top_game_controller.sv
+set_global_assignment -name SYSTEMVERILOG_FILE uart_tx.sv
+
+# ---- Clock ----
+set_location_assignment PIN_P11 -to MAX10_CLK1_50
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to MAX10_CLK1_50
+
+# ---- Switches ----
+set_location_assignment PIN_C10 -to SW[0]
+set_location_assignment PIN_C11 -to SW[1]
+set_location_assignment PIN_D12 -to SW[2]
+set_location_assignment PIN_C12 -to SW[3]
+set_location_assignment PIN_A12 -to SW[4]
+set_location_assignment PIN_B12 -to SW[5]
+set_location_assignment PIN_A13 -to SW[6]
+set_location_assignment PIN_A14 -to SW[7]
+set_location_assignment PIN_B14 -to SW[8]
+set_location_assignment PIN_F15 -to SW[9]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to SW[*]
+
+# ---- Keys ----
+set_location_assignment PIN_B8 -to KEY[0]
+set_location_assignment PIN_A7 -to KEY[1]
+set_instance_assignment -name IO_STANDARD "3.3 V SCHMITT TRIGGER" -to KEY[*]
+
+# ---- Arduino Header ----
+set_location_assignment PIN_AB5  -to ARDUINO_IO[0]
+set_location_assignment PIN_AB6  -to ARDUINO_IO[1]
+set_location_assignment PIN_AB7  -to ARDUINO_IO[2]
+set_location_assignment PIN_AB8  -to ARDUINO_IO[3]
+set_location_assignment PIN_AB9  -to ARDUINO_IO[4]
+set_location_assignment PIN_Y10  -to ARDUINO_IO[5]
+set_location_assignment PIN_AA11 -to ARDUINO_IO[6]
+set_location_assignment PIN_AA12 -to ARDUINO_IO[7]
+set_location_assignment PIN_AB17 -to ARDUINO_IO[8]
+set_location_assignment PIN_AA17 -to ARDUINO_IO[9]
+set_location_assignment PIN_AB19 -to ARDUINO_IO[10]
+set_location_assignment PIN_AA19 -to ARDUINO_IO[11]
+set_location_assignment PIN_Y19  -to ARDUINO_IO[12]
+set_location_assignment PIN_AB20 -to ARDUINO_IO[13]
+set_location_assignment PIN_AB21 -to ARDUINO_IO[14]
+set_location_assignment PIN_AA20 -to ARDUINO_IO[15]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ARDUINO_IO[*]

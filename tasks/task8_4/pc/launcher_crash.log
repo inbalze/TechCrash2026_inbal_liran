@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "c:\Users\Inbal\Desktop\degree\semester 4\hackaton\TechCrash2026_inbal_liran\tasks\task8_4\pc\launcher.py", line 434, in <module>
+    main()
+  File "c:\Users\Inbal\Desktop\degree\semester 4\hackaton\TechCrash2026_inbal_liran\tasks\task8_4\pc\launcher.py", line 395, in main
+    choice = show_menu(screen, clock, serial_thread)
+  File "c:\Users\Inbal\Desktop\degree\semester 4\hackaton\TechCrash2026_inbal_liran\tasks\task8_4\pc\launcher.py", line 248, in show_menu
+    sys.exit()
+SystemExit
